@@ -13,7 +13,7 @@ def get_gaussian_kernel(k=3, mu=0, sigma=1, normalize=True):
     distance = (x ** 2 + y ** 2) ** 0.5
 
     # compute the 2 dimension gaussian
-    gaussian_2D = np.exp(-(distance - mu) ** 2 / (2 * sigma ** 2))
+    gaussian_2D = np.exp(-((distance - mu) ** 2) / (2 * sigma ** 2))
     gaussian_2D = gaussian_2D / (2 * np.pi * sigma ** 2)
 
     # normalize part (mathematically)
@@ -28,7 +28,7 @@ def get_sobel_kernel(k=3):
     # compute a grid the numerator and the axis-distances
     x, y = np.meshgrid(range, range)
     sobel_2D_numerator = x
-    sobel_2D_denominator = (x ** 2 + y ** 2)
+    sobel_2D_denominator = x ** 2 + y ** 2
     sobel_2D_denominator[:, k // 2] = 1  # avoid division by zero
     sobel_2D = sobel_2D_numerator / sobel_2D_denominator
     return sobel_2D
@@ -42,7 +42,7 @@ def get_thin_kernels(start=0, end=360, step=45):
     # get 0° angle directional kernel
     thin_kernel_0 = np.zeros((k_increased, k_increased))
     thin_kernel_0[k_increased // 2, k_increased // 2] = 1
-    thin_kernel_0[k_increased // 2, k_increased // 2 + 1:] = -1
+    thin_kernel_0[k_increased // 2, k_increased // 2 + 1 :] = -1
 
     # rotate the 0° angle directional kernel to get the other ones
     thin_kernels = []
@@ -52,52 +52,55 @@ def get_thin_kernels(start=0, end=360, step=45):
         center = (w // 2, h // 2)
         # apply rotation
         rotation_matrix = cv2.getRotationMatrix2D(center, angle, 1)
-        kernel_angle_increased = cv2.warpAffine(thin_kernel_0, rotation_matrix, (w, h), cv2.INTER_NEAREST)
+        kernel_angle_increased = cv2.warpAffine(
+            thin_kernel_0, rotation_matrix, (w, h), cv2.INTER_NEAREST
+        )
 
         # get the k=3 kerne
         kernel_angle = kernel_angle_increased[1:-1, 1:-1]
-        is_diag = (abs(kernel_angle) == 1)  # because of the interpolation
+        is_diag = abs(kernel_angle) == 1  # because of the interpolation
         kernel_angle = kernel_angle * is_diag  # because of the interpolation
         thin_kernels.append(kernel_angle)
     return thin_kernels
 
 
 class CannyFilter(nn.Module):
-    def __init__(self,
-                 k_gaussian=3,
-                 mu=0,
-                 sigma=1,
-                 k_sobel=3,
-                 use_cuda=False):
+    def __init__(self, k_gaussian=3, mu=0, sigma=1, k_sobel=3, use_cuda=False):
         super(CannyFilter, self).__init__()
         # device
-        self.device = 'cuda' if use_cuda else 'cpu'
+        self.device = "cuda" if use_cuda else "cpu"
 
         # gaussian
 
         gaussian_2D = get_gaussian_kernel(k_gaussian, mu, sigma)
-        self.gaussian_filter = nn.Conv2d(in_channels=1,
-                                         out_channels=1,
-                                         kernel_size=k_gaussian,
-                                         padding=k_gaussian // 2,
-                                         bias=False)
+        self.gaussian_filter = nn.Conv2d(
+            in_channels=1,
+            out_channels=1,
+            kernel_size=k_gaussian,
+            padding=k_gaussian // 2,
+            bias=False,
+        )
         self.gaussian_filter.weight = torch.nn.Parameter(torch.from_numpy(gaussian_2D))
 
         # sobel
 
         sobel_2D = get_sobel_kernel(k_sobel)
-        self.sobel_filter_x = nn.Conv2d(in_channels=1,
-                                        out_channels=1,
-                                        kernel_size=k_sobel,
-                                        padding=k_sobel // 2,
-                                        bias=False)
+        self.sobel_filter_x = nn.Conv2d(
+            in_channels=1,
+            out_channels=1,
+            kernel_size=k_sobel,
+            padding=k_sobel // 2,
+            bias=False,
+        )
         self.sobel_filter_x.weight = torch.nn.Parameter(torch.from_numpy(sobel_2D))
 
-        self.sobel_filter_y = nn.Conv2d(in_channels=1,
-                                        out_channels=1,
-                                        kernel_size=k_sobel,
-                                        padding=k_sobel // 2,
-                                        bias=False)
+        self.sobel_filter_y = nn.Conv2d(
+            in_channels=1,
+            out_channels=1,
+            kernel_size=k_sobel,
+            padding=k_sobel // 2,
+            bias=False,
+        )
         self.sobel_filter_y.weight = torch.nn.Parameter(torch.from_numpy(sobel_2D.T))
 
         # thin
@@ -105,22 +108,22 @@ class CannyFilter(nn.Module):
         thin_kernels = get_thin_kernels()
         directional_kernels = np.stack(thin_kernels)
 
-        self.directional_filter = nn.Conv2d(in_channels=1,
-                                            out_channels=8,
-                                            kernel_size=thin_kernels[0].shape,
-                                            padding=thin_kernels[0].shape[-1] // 2,
-                                            bias=False)
+        self.directional_filter = nn.Conv2d(
+            in_channels=1,
+            out_channels=8,
+            kernel_size=thin_kernels[0].shape,
+            padding=thin_kernels[0].shape[-1] // 2,
+            bias=False,
+        )
         self.directional_filter.requires_grad_(False)
         self.directional_filter.weight[:, 0] = torch.from_numpy(directional_kernels)
 
         # hysteresis
 
         hysteresis = np.ones((3, 3)) + 0.25
-        self.hysteresis = nn.Conv2d(in_channels=1,
-                                    out_channels=1,
-                                    kernel_size=3,
-                                    padding=1,
-                                    bias=False)
+        self.hysteresis = nn.Conv2d(
+            in_channels=1, out_channels=1, kernel_size=3, padding=1, bias=False
+        )
         self.hysteresis.weight = torch.nn.Parameter(torch.from_numpy(hysteresis))
 
     def forward(self, img, low_threshold=None, high_threshold=None, hysteresis=False):
@@ -138,10 +141,10 @@ class CannyFilter(nn.Module):
         # gaussian
 
         for c in range(C):
-            blurred[:, c:c + 1] = self.gaussian_filter(img[c:c + 1])
+            blurred[:, c : c + 1] = self.gaussian_filter(img[c : c + 1])
 
-            grad_x = grad_x + self.sobel_filter_x(blurred[:, c:c + 1])
-            grad_y = grad_y + self.sobel_filter_y(blurred[:, c:c + 1])
+            grad_x = grad_x + self.sobel_filter_x(blurred[:, c : c + 1])
+            grad_y = grad_y + self.sobel_filter_y(blurred[:, c : c + 1])
 
         # thick edges
 
