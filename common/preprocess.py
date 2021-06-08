@@ -1,8 +1,7 @@
 import torch
-from torch import nn
 import torchvision.transforms as transforms
 
-from read_data import *
+from common.read_data import *
 
 
 def preprocess_test(img):

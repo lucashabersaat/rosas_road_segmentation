@@ -1,7 +1,6 @@
-import numpy as np
 from sklearn.linear_model import LogisticRegression
 
-from read_data import *
+from common.read_data import *
 
 
 def extract_features(x):
@@ -19,7 +18,7 @@ if __name__ == "__main__":
 
     show_patched_image(train_patches[: 25 * 25], clf.predict(x_train[: 25 * 25]))
 
-    test_path = "test_images/test_images"
+    test_path = "data/test_images/test_images"
     test_filenames = sorted(glob(test_path + "/*png"))
     test_images = load_all_from_path(test_path)
     test_patches = image_to_patches(test_images)
@@ -30,5 +29,5 @@ if __name__ == "__main__":
     create_submission(
         test_pred,
         test_filenames,
-        submission_filename="submissions/logreg_submission.csv",
+        submission_filename="data/submissions/logreg_submission.csv",
     )

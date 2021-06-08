@@ -1,4 +1,4 @@
-from read_data import *
+from common.read_data import *
 from conv_neural_networks import ImageDataSet
 from conv_neural_networks import np_to_tensor
 from conv_neural_networks import accuracy_fn
@@ -93,10 +93,10 @@ if __name__ == "__main__":
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     train_dataset = ImageDataSet(
-        "training", device, use_patches=False, resize_to=(384, 384)
+        "data/training", device, use_patches=False, resize_to=(384, 384)
     )
     val_dataset = ImageDataSet(
-        "validation", device, use_patches=False, resize_to=(384, 384)
+        "data/validation", device, use_patches=False, resize_to=(384, 384)
     )
     train_dataloader = torch.utils.data.DataLoader(
         train_dataset, batch_size=8, shuffle=True
@@ -120,7 +120,7 @@ if __name__ == "__main__":
     )
 
     # predict on test set
-    test_path = "test_images/test_images"
+    test_path = "data/test_images/test_images"
     test_filenames = sorted(glob(test_path + "/*.png"))
     test_images = load_all_from_path(test_path)
     batch_size = test_images.shape[0]
@@ -147,5 +147,5 @@ if __name__ == "__main__":
     test_pred = np.round(np.mean(test_pred, (-1, -2)) > CUTOFF)
 
     create_submission(
-        test_pred, test_filenames, submission_filename="submissions/unet_submission.csv"
+        test_pred, test_filenames, submission_filename="data/submissions/unet_submission.csv"
     )

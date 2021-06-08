@@ -1,8 +1,7 @@
-import numpy as np
 import torch
 from torch import nn
 
-from read_data import *
+from common.read_data import *
 
 
 def get_gaussian_kernel(k=3, mu=0, sigma=1, normalize=True):
