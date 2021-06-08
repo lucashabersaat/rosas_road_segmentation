@@ -17,8 +17,6 @@ def preprocess_test(img):
         transforms.GaussianBlur(kernel_size=11, sigma=10)
     )
 
-
-
     img = torch.moveaxis(t(img), 1, -1)
 
     if to_numpy:
@@ -27,4 +25,6 @@ def preprocess_test(img):
     return img
 
 
-show_first_n(train_images, preprocess_test(train_images), title1='Original', title2='Preprocess')
+show_first_n(
+    train_images, preprocess_test(train_images), title1="Original", title2="Preprocess"
+)

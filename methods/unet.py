@@ -1,11 +1,11 @@
-from common.read_data import *
-from conv_neural_networks import ImageDataSet
-from conv_neural_networks import np_to_tensor
-from conv_neural_networks import accuracy_fn
-from conv_neural_networks import train
-
 import torch
 from torch import nn
+
+from common.read_data import *
+from common.util import np_to_tensor, accuracy_fn
+from common.image_data_set import ImageDataSet
+from conv_neural_networks import train
+
 
 
 class Block(nn.Module):
