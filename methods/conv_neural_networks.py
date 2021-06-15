@@ -38,7 +38,6 @@ def train(
     train_dataloader, eval_dataloader, model, loss_fn, metric_fns, optimizer, n_epochs
 ):
     # traininng loop
-    logdir = "./tensorboard/net"
     logdir = os.path.join(ROOT_DIR, "data/tensorboard")
     writer = SummaryWriter(logdir)  # tensorboard writer (can also log images)
 
