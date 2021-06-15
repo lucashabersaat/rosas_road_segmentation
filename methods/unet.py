@@ -4,7 +4,7 @@ from torch import nn
 from common.read_data import *
 from common.util import np_to_tensor, accuracy_fn
 from common.image_data_set import ImageDataSet
-from conv_neural_networks import train
+from methods.conv_neural_networks import train
 
 
 class Block(nn.Module):
@@ -117,6 +117,10 @@ if __name__ == "__main__":
         optimizer,
         n_epochs,
     )
+
+
+
+
 
     # predict on test set
     test_path = "data/test_images/test_images"
