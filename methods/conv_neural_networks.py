@@ -140,8 +140,6 @@ class PatchCNN(nn.Module):
         return self.net(x)
 
 
-
-
 if __name__ == "__main__":
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -190,5 +188,7 @@ if __name__ == "__main__":
     )
 
     create_submission(
-        test_pred, test_filenames, submission_filename="data/submissions/cnn_submission.csv"
+        test_pred,
+        test_filenames,
+        submission_filename="data/submissions/cnn_submission.csv",
     )

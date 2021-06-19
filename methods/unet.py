@@ -7,7 +7,6 @@ from common.image_data_set import ImageDataSet
 from conv_neural_networks import train
 
 
-
 class Block(nn.Module):
     # a repeating structure composed of two convolutional layers with batch normalization and ReLu activations
     def __init__(self, in_ch, out_ch):
@@ -147,5 +146,7 @@ if __name__ == "__main__":
     test_pred = np.round(np.mean(test_pred, (-1, -2)) > CUTOFF)
 
     create_submission(
-        test_pred, test_filenames, submission_filename="data/submissions/unet_submission.csv"
+        test_pred,
+        test_filenames,
+        submission_filename="data/submissions/unet_submission.csv",
     )

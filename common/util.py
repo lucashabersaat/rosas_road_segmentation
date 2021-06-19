@@ -17,4 +17,3 @@ def np_to_tensor(x, device):
 def accuracy_fn(y_hat, y):
     # computes classification accuracy
     return (y_hat.round() == y.round()).float().mean()
-

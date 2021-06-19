@@ -53,5 +53,7 @@ if __name__ == "__main__":
     )
 
     create_submission(
-        test_pred, test_filenames, submission_filename="data/submissions/cnn_submission.csv"
+        test_pred,
+        test_filenames,
+        submission_filename="data/submissions/cnn_submission.csv",
     )
