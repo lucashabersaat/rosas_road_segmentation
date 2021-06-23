@@ -19,6 +19,9 @@ def fit_normally(model):
 
     trainer.fit(model, data)
 
+    name = 'lightning_' + str.lower(arg_model.__class__.__name__)
+    predict_and_write_submission(model, name)
+
 
 def load_model_and_write_submission(path, model_class):
     model = model_class.load_from_checkpoint(path)
