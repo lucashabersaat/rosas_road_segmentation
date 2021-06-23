@@ -36,11 +36,11 @@ class ImageDataSet(torch.utils.data.Dataset):
 
         for i in range(0, x.shape[1], 16):
             for j in range(0, x.shape[1], 16):
-                m = torch.mean(x[:, i : i + 16, j : j + 16], [1, 2])
+                m = torch.mean(x[:, i: i + 16, j: j + 16], [1, 2])
 
-                x[0, i : i + 16, j : j + 16] /= m[0]
-                x[1, i : i + 16, j : j + 16] /= m[1]
-                x[2, i : i + 16, j : j + 16] /= m[2]
+                x[0, i: i + 16, j: j + 16] /= m[0]
+                x[1, i: i + 16, j: j + 16] /= m[1]
+                x[2, i: i + 16, j: j + 16] /= m[2]
 
         x[0] /= s[0]
         x[1] /= s[1]
@@ -53,6 +53,32 @@ class ImageDataSet(torch.utils.data.Dataset):
             np_to_tensor(self.x[item], self.device),
             np_to_tensor(self.y[[item]], self.device),
         )
+
+    def __len__(self):
+        return self.n_samples
+
+
+class TestImageDataSet(ImageDataSet):
+    # dataset class that deals with loading the data and making it available by index
+
+    def __init__(self, path, device, use_patches=True, resize_to=(400, 400)):
+        super(TestImageDataSet, self).__init__(path, device, use_patches, resize_to)
+
+    def _load_data(self):  # not very scalable, but good enough for now
+        self.x = load_all_from_path(self.path)
+
+        if self.use_patches:  # split each image into patches
+            self.x, self.y = image_to_patches(self.x)
+        else:
+            self.x = np.stack([cv2.resize(img, dsize=self.resize_to) for img in self.x])
+        self.x = np.moveaxis(self.x, -1, 1)
+        self.n_samples = len(self.x)
+
+    def _preprocess(self, x, y):
+        raise NameError('Preprocessing for Test Data?')
+
+    def __getitem__(self, item):
+        return np_to_tensor(self.x[item], self.device)
 
     def __len__(self):
         return self.n_samples

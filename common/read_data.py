@@ -21,10 +21,10 @@ def load_all_from_path(path):
     # images are loaded as floats with values in the interval [0., 1.]
     absolute_path = os.path.join(ROOT_DIR, path)
     return (
-        np.stack(
-            [np.array(Image.open(f)) for f in sorted(glob(absolute_path + "/*.png"))]
-        ).astype(np.float32)
-        / 255.0
+            np.stack(
+                [np.array(Image.open(f)) for f in sorted(glob(absolute_path + "/*.png"))]
+            ).astype(np.float32)
+            / 255.0
     )
 
 
@@ -50,7 +50,7 @@ def image_to_patches(images, masks=None):
     n_images = images.shape[0]  # number of images
     h, w = images.shape[1:3]  # shape of images
     assert (h % PATCH_SIZE) + (
-        w % PATCH_SIZE
+            w % PATCH_SIZE
     ) == 0  # make sure images can be patched exactly
 
     h_patches = h // PATCH_SIZE
@@ -112,19 +112,33 @@ print(
 )
 
 
-def create_submission(labels, test_filenames, submission_filename):
-    test_path = "../data/test_images/test_images"
+def create_empty_submission(submission_filename):
     with open(os.path.join(ROOT_DIR, submission_filename), "w") as f:
         f.write("id,prediction\n")
-        for fn, patch_array in zip(sorted(test_filenames), labels):
-            img_number = int(re.search(r"\d+", fn).group(0))
-            for i in range(patch_array.shape[0]):
-                for j in range(patch_array.shape[1]):
-                    f.write(
-                        "{:03d}_{}_{},{}\n".format(
-                            img_number,
-                            j * PATCH_SIZE,
-                            i * PATCH_SIZE,
-                            int(patch_array[i, j]),
-                        )
+
+
+def create_submission(labels, test_filenames, submission_filename):
+    with open(os.path.join(ROOT_DIR, submission_filename), "w") as f:
+        f.write("id,prediction\n")
+        write_into_file(f, test_filenames, labels)
+
+
+def append_submission(labels, test_filenames, submission_filename):
+    with open(os.path.join(ROOT_DIR, submission_filename), "a") as f:
+        write_into_file(f, test_filenames, labels)
+
+
+def write_into_file(file, test_filenames, labels):
+    """Append to the given file the predictions"""
+    for fn, patch_array in zip(sorted(test_filenames), labels):
+        img_number = int(re.search(r"\d+", fn).group(0))
+        for i in range(patch_array.shape[0]):
+            for j in range(patch_array.shape[1]):
+                file.write(
+                    "{:03d}_{}_{},{}\n".format(
+                        img_number,
+                        j * PATCH_SIZE,
+                        i * PATCH_SIZE,
+                        int(patch_array[i, j]),
                     )
+                )
