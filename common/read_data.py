@@ -134,7 +134,7 @@ def write_into_file(file, test_filenames, labels):
         img_number = int(re.search(r"\d+", fn).group(0))
         for i in range(patch_array.shape[0]):
             for j in range(patch_array.shape[1]):
-                file.write_into_file(
+                file.write(
                     "{:03d}_{}_{},{}\n".format(
                         img_number,
                         j * PATCH_SIZE,
