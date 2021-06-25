@@ -29,3 +29,11 @@ All the data is in the `data` folder:
 We use the uncompromising code formatter [Black](https://github.com/psf/black). 
 
 To format: `$ black {source_file_or_directory}`
+
+### Lightning
+Run `methods/lightning/main.py` with a model as argument for a default training and run.
+To see what models are available, checkout the same file.
+For example in the root directory:
+```
+$ python methods/lightning/main.py unet
+```
