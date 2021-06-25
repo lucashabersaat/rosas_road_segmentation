@@ -93,11 +93,11 @@ def train(
                 ]
             )
         )
-        show_val_samples(
-            x.detach().cpu().numpy(),
-            y.detach().cpu().numpy(),
-            y_hat.detach().cpu().numpy(),
-        )
+        # show_val_samples(
+        #     x.detach().cpu().numpy(),
+        #     y.detach().cpu().numpy(),
+        #     y_hat.detach().cpu().numpy(),
+        # )
 
     print("Finished Training")
     # plot loss curves

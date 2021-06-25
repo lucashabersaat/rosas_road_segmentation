@@ -1,18 +1,17 @@
-import torch
 from torch import nn
 import torch.nn.functional as F
-import math
-import numpy as np
 
 from common.read_data import *
-from common.util import np_to_tensor, accuracy_fn
+from common.util import *
 from common.image_data_set import ImageDataSet
 from unet import patch_accuracy_fn
 from conv_neural_networks import train
+from common.unet_transformer_includes import NoiseRobustDiceLoss
 
 
 class DoubleConv(nn.Module):
     """(convolution => [BN] => ReLU) * 2"""
+
     def __init__(self, in_channels, out_channels, mid_channels=None):
         super().__init__()
         if not mid_channels:
@@ -32,6 +31,7 @@ class DoubleConv(nn.Module):
 
 class Down(nn.Module):
     """Downscaling with maxpool then double conv"""
+
     def __init__(self, in_channels, out_channels):
         super().__init__()
         self.maxpool_conv = nn.Sequential(
@@ -45,6 +45,7 @@ class Down(nn.Module):
 
 class Up(nn.Module):
     """Upscaling then double conv"""
+
     def __init__(self, in_channels, out_channels, bilinear=True):
         super().__init__()
 
@@ -82,7 +83,10 @@ class Up(nn.Module):
 class OutConv(nn.Module):
     def __init__(self, in_channels, out_channels):
         super(OutConv, self).__init__()
-        self.conv = nn.Conv2d(in_channels, out_channels, kernel_size=1)
+        self.conv = nn.Sequential(
+            nn.Conv2d(in_channels, out_channels, kernel_size=1),
+            nn.Sigmoid()
+        )
 
     def forward(self, x):
         return self.conv(x)
@@ -164,7 +168,7 @@ class PositionalEncoding2D(nn.Module):
         channels = int(np.ceil(channels / 2))
         self.channels = channels
         inv_freq = 1. / (10000
-                         **(torch.arange(0, channels, 2).float() / channels))
+                         ** (torch.arange(0, channels, 2).float() / channels))
         self.register_buffer('inv_freq', inv_freq)
 
     def forward(self, tensor):
@@ -220,18 +224,18 @@ class MultiHeadSelfAttention(MultiHeadAttention):
         # pe = self.positional_encoding_2d(c, h, w)
         pe = self.pe(x)
         x = x + pe
-        x = x.reshape(b, c, h * w).permute(0, 2, 1)  #[b, h*w, d]
+        x = x.reshape(b, c, h * w).permute(0, 2, 1)  # [b, h*w, d]
         Q = self.query(x)
         K = self.key(x)
         A = self.softmax(torch.bmm(Q, K.permute(0, 2, 1)) /
-                         math.sqrt(c))  #[b, h*w, h*w]
+                         math.sqrt(c))  # [b, h*w, h*w]
         V = self.value(x)
         x = torch.bmm(A, V).permute(0, 2, 1).reshape(b, c, h, w)
         return x
 
 
 class MultiHeadCrossAttention(MultiHeadAttention):
-    def __init__(self, channelY, channelS):
+    def __init__(self, channelY, channelS, skip_connection=True):
         super(MultiHeadCrossAttention, self).__init__()
         self.Sconv = nn.Sequential(
             nn.MaxPool2d(2), nn.Conv2d(channelS, channelS, kernel_size=1),
@@ -251,37 +255,78 @@ class MultiHeadCrossAttention(MultiHeadAttention):
             nn.Conv2d(channelY, channelY, kernel_size=3, padding=1),
             nn.Conv2d(channelY, channelS, kernel_size=1),
             nn.BatchNorm2d(channelS), nn.ReLU(inplace=True))
+        self.Yconv_NoSkip = nn.Sequential(
+            nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True),
+            nn.Conv2d(channelY, channelY, kernel_size=3, padding=1),
+            nn.BatchNorm2d(channelY), nn.ReLU(inplace=True))
         self.softmax = nn.Softmax(dim=1)
         self.Spe = PositionalEncodingPermute2D(channelS)
         self.Ype = PositionalEncodingPermute2D(channelY)
+
+        self.skip_connection = skip_connection
 
     def forward(self, Y, S):
         Sb, Sc, Sh, Sw = S.size()
         Yb, Yc, Yh, Yw = Y.size()
         # Spe = self.positional_encoding_2d(Sc, Sh, Sw)
-        Spe = self.Spe(S)
-        S = S + Spe
-        S1 = self.Sconv(S).reshape(Yb, Sc, Yh * Yw).permute(0, 2, 1)
-        V = self.value(S1)
+        S = S + self.Spe(S)
+        V = self.value(self.Sconv(S).reshape(Yb, Sc, Yh * Yw).permute(0, 2, 1))
         # Ype = self.positional_encoding_2d(Yc, Yh, Yw)
-        Ype = self.Ype(Y)
-        Y = Y + Ype
-        Y1 = self.Yconv(Y).reshape(Yb, Sc, Yh * Yw).permute(0, 2, 1)
-        Y2 = self.Yconv2(Y)
-        Q = self.query(Y1)
-        K = self.key(Y1)
-        A = self.softmax(torch.bmm(Q, K.permute(0, 2, 1)) / math.sqrt(Sc))
-        x = torch.bmm(A, V).permute(0, 2, 1).reshape(Yb, Sc, Yh, Yw)
-        Z = self.conv(x)
-        Z = Z * S
-        Z = torch.cat([Z, Y2], dim=1)
+        Y = Y + self.Ype(Y)
+
+        if self.skip_connection:
+            Y1 = self.Yconv(Y).reshape(Yb, Sc, Yh * Yw).permute(0, 2, 1)
+            Q = self.query(Y1)
+            K = self.key(Y1)
+            A = self.softmax(torch.bmm(Q, K.permute(0, 2, 1)) / math.sqrt(Sc))
+            x = torch.bmm(A, V).permute(0, 2, 1).reshape(Yb, Sc, Yh, Yw)
+
+            Z = torch.cat([self.conv(x) * S, self.Yconv2(Y)], dim=1)
+        else:
+            Z = self.Yconv_NoSkip(Y)
+
         return Z
 
 
+class LessMemoryA(nn.Module):
+
+    def __init__(self):
+        super(LessMemoryA, self).__init__()
+        self.softmax = nn.Softmax(dim=1)
+
+    def forward(self, Q, K, V, Sc, Yb, Yh, Yw):
+        A = torch.bmm(Q, K.permute(0, 2, 1))
+
+        steps = 4
+        assert Q.shape[1] % steps == 0
+        size = Q.shape[1] // steps
+
+        all_x = []
+        for i in range(steps):
+            x = self.step(A, V, Sc, size, i)
+            all_x.append(x)
+
+        tmp = torch.cat(all_x, dim=1)
+
+        return tmp.permute(0, 2, 1).reshape(Yb, Sc, Yh, Yw)
+
+    def step(self, A, V, Sc, size, index):
+        form = size * index
+        to = size * (index + 1)
+
+        A_partial = A[:, form:to]
+
+        softmaxed = self.softmax(A_partial / math.sqrt(Sc))
+
+        result = torch.bmm(softmaxed, V)
+
+        return result
+
+
 class TransformerUp(nn.Module):
-    def __init__(self, Ychannels, Schannels):
+    def __init__(self, Ychannels, Schannels, skip_connection=True):
         super(TransformerUp, self).__init__()
-        self.MHCA = MultiHeadCrossAttention(Ychannels, Schannels)
+        self.MHCA = MultiHeadCrossAttention(Ychannels, Schannels, skip_connection)
         self.conv = nn.Sequential(
             nn.Conv2d(Ychannels,
                       Schannels,
@@ -335,22 +380,28 @@ class U_Transformer(nn.Module):
 
 
 if __name__ == "__main__":
+    torch.cuda.empty_cache()
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
+    batch_size = 1
+    resize_to = 192
+
     train_dataset = ImageDataSet(
-        "data/training", device, use_patches=False, resize_to=(384, 384)
+        "data/training", device, use_patches=False, resize_to=(resize_to, resize_to)
     )
     val_dataset = ImageDataSet(
-        "data/validation", device, use_patches=False, resize_to=(384, 384)
+        "data/validation", device, use_patches=False, resize_to=(resize_to, resize_to)
     )
     train_dataloader = torch.utils.data.DataLoader(
-        train_dataset, batch_size=8, shuffle=True
+        train_dataset, batch_size=batch_size, shuffle=True
     )
     val_dataloader = torch.utils.data.DataLoader(
-        val_dataset, batch_size=8, shuffle=True
+        val_dataset, batch_size=batch_size, shuffle=True
     )
     model = U_Transformer(3, 1, True).to(device)
-    loss_fn = nn.BCELoss()
+    # use same loss as in the repo
+    loss_fn = NoiseRobustDiceLoss(eps=1e-7)
+
     metric_fns = {"acc": accuracy_fn, "patch_acc": patch_accuracy_fn}
     optimizer = torch.optim.Adam(model.parameters())
     n_epochs = 35
@@ -366,20 +417,21 @@ if __name__ == "__main__":
 
     # predict on test set
     test_path = "data/test_images/test_images"
-    test_filenames = sorted(glob(test_path + "/*.png"))
+    test_filenames = sorted(glob(os.path.join(ROOT_DIR, test_path) + "/*.png"))
     test_images = load_all_from_path(test_path)
     batch_size = test_images.shape[0]
     size = test_images.shape[1:3]
 
     # we also need to resize the test images. This might not be the best idea depending on their spatial resolution
     test_images = np.stack(
-        [cv2.resize(img, dsize=(384, 384)) for img in test_images], 0
+        [cv2.resize(img, dsize=(resize_to, resize_to)) for img in test_images], 0
     )
     test_images = np_to_tensor(np.moveaxis(test_images, -1, 1), device)
 
     test_pred = [model(t).detach().cpu().numpy() for t in test_images.unsqueeze(1)]
     test_pred = np.concatenate(test_pred, 0)
-    test_pred = np.moveaxis(test_pred, -1, 1)  # CHW to HWC
+    test_pred = np.moveaxis(test_pred, 1, -1)  # CHW to HWC
+
     test_pred = np.stack(
         [cv2.resize(img, dsize=size) for img in test_pred], 0
     )  # resize to original
