@@ -20,13 +20,7 @@ class ImageDataSet(torch.utils.data.Dataset):
         self.x = load_all_from_path(os.path.join(self.path, "images"))
         self.y = load_all_from_path(os.path.join(self.path, "groundtruth"))
 
-        #a,b,c,d = self.x.shape
-        #print(self.x.shape)
-        #self.x = self.x.reshape(4*a,int(b/2),int(b/2),3)
-        #print(self.x.shape)
 
-        e,f,g = self.y.shape
-        self.y = self.y.reshape(4*e,int(f/2),int(g/2))
 
 
         if self.use_patches:  # split each image into patches
@@ -78,8 +72,6 @@ class TestImageDataSet(ImageDataSet):
 
     def _load_data(self):  # not very scalable, but good enough for now
         self.x = load_all_from_path(self.path)
-        a,b,c,d = self.x.shape
-        self.x = self.x.reshape(4*a,int(b/2),int(b/2),3)
 
         if self.use_patches:  # split each image into patches
             self.x, self.y = image_to_patches(self.x)

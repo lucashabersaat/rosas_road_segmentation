@@ -390,24 +390,24 @@ if __name__ == "__main__":
         "data/training", device, use_patches=False, resize_to=(resize_to, resize_to)
     )
 
-    print(train_dataset.x.shape)
+    #print(train_dataset.x.shape)
     a,b,c,d = train_dataset.x.shape
     train_dataset.x = train_dataset.x.reshape(4*a,3,int(c/2),int(d/2))
-    print(train_dataset.x.shape)
+    #print(train_dataset.x.shape)
 
-    print(train_dataset.y.shape)
+    #print(train_dataset.y.shape)
     e,f,g = train_dataset.y.shape
     train_dataset.y = train_dataset.y.reshape(4*e,int(f/2),int(g/2))
-    print(train_dataset.y.shape)
+    #print(train_dataset.y.shape)
 
     val_dataset = ImageDataSet(
         "data/validation", device, use_patches=False, resize_to=(resize_to, resize_to)
     )
 
-    print(val_dataset.x.shape)
+    #print(val_dataset.x.shape)
     a,b,c,d = val_dataset.x.shape
     val_dataset.x = val_dataset.x.reshape(4*a,3,int(c/2),int(d/2))
-    print(val_dataset.x.shape)
+    #print(val_dataset.x.shape)
 
     train_dataloader = torch.utils.data.DataLoader(
         train_dataset, batch_size=batch_size, shuffle=True
