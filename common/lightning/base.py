@@ -5,7 +5,8 @@ from torch.nn import Module, BCELoss
 
 import pytorch_lightning as pl
 
-from methods.unet import UNet
+from models.unet import UNet
+from common.unet_transformer_includes import NoiseRobustDiceLoss
 
 
 class LitBase(pl.LightningModule):
@@ -13,6 +14,7 @@ class LitBase(pl.LightningModule):
     def __init__(
             self,
             model: Optional[Module] = None,
+            loss_fn='bce',
             learning_rate: float = 0.0001,
     ):
         super().__init__()
@@ -21,7 +23,10 @@ class LitBase(pl.LightningModule):
             model = UNet()
         self.model = model
 
-        self.loss_fn = BCELoss()
+        if loss_fn == 'bce':
+            self.loss_fn = BCELoss()
+        elif loss_fn == 'noise_robust_dice':
+            self.loss_fn = NoiseRobustDiceLoss()
 
     def forward(self, x):
         # use forward for inference/predictions
