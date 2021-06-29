@@ -384,16 +384,16 @@ if __name__ == "__main__":
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     batch_size = 1
-    resize_to = 384
+    resize_to = 192*2
 
     train_dataset = ImageDataSet(
         "data/training", device, use_patches=False, resize_to=(resize_to, resize_to)
     )
 
-    #print(train_dataset.x.shape)
+    #print(train_dataset_shape,train_dataset.x.shape)
     a,b,c,d = train_dataset.x.shape
     train_dataset.x = train_dataset.x.reshape(4*a,3,int(c/2),int(d/2))
-    #print(train_dataset.x.shape)
+    print('train_dataset_shape',train_dataset.x.shape)
 
     #print(train_dataset.y.shape)
     e,f,g = train_dataset.y.shape
@@ -439,15 +439,25 @@ if __name__ == "__main__":
     batch_size = test_images.shape[0]
     size = test_images.shape[1:3]
 
+
+
     # we also need to resize the test images. This might not be the best idea depending on their spatial resolution
     test_images = np.stack(
         [cv2.resize(img, dsize=(resize_to, resize_to)) for img in test_images], 0
     )
     test_images = np_to_tensor(np.moveaxis(test_images, -1, 1), device)
 
+    a,b,c,d = test_images.shape
+    test_images = test_images.reshape(4*a,3,int(c/2),int(d/2))
+
     test_pred = [model(t).detach().cpu().numpy() for t in test_images.unsqueeze(1)]
+    print(test_pred.shape)
+    a,b,c,d = test_pred.shape
+    test_pred = test_pred.reshape(int(a/4),3, c*2,d*2)
     test_pred = np.concatenate(test_pred, 0)
+    print(test_pred.shape)
     test_pred = np.moveaxis(test_pred, 1, -1)  # CHW to HWC
+    print(test_pred.shape)
 
     test_pred = np.stack(
         [cv2.resize(img, dsize=size) for img in test_pred], 0
