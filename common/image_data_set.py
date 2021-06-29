@@ -20,6 +20,15 @@ class ImageDataSet(torch.utils.data.Dataset):
         self.x = load_all_from_path(os.path.join(self.path, "images"))
         self.y = load_all_from_path(os.path.join(self.path, "groundtruth"))
 
+        #a,b,c,d = self.x.shape
+        #print(self.x.shape)
+        #self.x = self.x.reshape(4*a,int(b/2),int(b/2),3)
+        #print(self.x.shape)
+
+        e,f,g = self.y.shape
+        self.y = self.y.reshape(4*e,int(f/2),int(g/2))
+
+
         if self.use_patches:  # split each image into patches
             self.x, self.y = image_to_patches(self.x, self.y)
         else:
@@ -41,6 +50,9 @@ class ImageDataSet(torch.utils.data.Dataset):
                 x[0, i: i + 16, j: j + 16] /= m[0]
                 x[1, i: i + 16, j: j + 16] /= m[1]
                 x[2, i: i + 16, j: j + 16] /= m[2]
+
+
+
 
         x[0] /= s[0]
         x[1] /= s[1]
@@ -66,6 +78,8 @@ class TestImageDataSet(ImageDataSet):
 
     def _load_data(self):  # not very scalable, but good enough for now
         self.x = load_all_from_path(self.path)
+        a,b,c,d = self.x.shape
+        self.x = self.x.reshape(4*a,int(b/2),int(b/2),3)
 
         if self.use_patches:  # split each image into patches
             self.x, self.y = image_to_patches(self.x)
@@ -82,3 +96,26 @@ class TestImageDataSet(ImageDataSet):
 
     def __len__(self):
         return self.n_samples
+
+if __name__ == "__main__":
+    print('image data set preproc')
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    resize_to = 192*4
+    batch_size = 4
+
+    train_dataset = ImageDataSet(
+        "data/training", device, use_patches=False, resize_to=(resize_to, resize_to)
+    )
+    val_dataset = ImageDataSet(
+        "data/validation", device, use_patches=False, resize_to=(resize_to, resize_to)
+    )
+
+
+
+
+    train_dataloader = torch.utils.data.DataLoader(
+        train_dataset, batch_size=batch_size, shuffle=True
+    )
+    val_dataloader = torch.utils.data.DataLoader(
+        val_dataset, batch_size=batch_size, shuffle=True
+    )
