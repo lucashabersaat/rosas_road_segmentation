@@ -9,7 +9,7 @@ from common.read_data import load_all_from_path, create_empty_submission, append
     PATCH_SIZE, CUTOFF, ROOT_DIR
 
 
-def predict_and_write_submission(model, name: str):
+def predict_and_write_submission(model, name: str, resize_to=384):
     """Using the given model, predict the road masks of the test set and save the prediction as valid submission
     with the given name as file name. Write data into file batch-wise to avoid out of memory errors."""
 
@@ -24,6 +24,8 @@ def predict_and_write_submission(model, name: str):
     batch_size = 10
     num_test_images = len(all_test_filenames)
 
+    model = model.to(device)
+
     create_empty_submission(submission_filename=f"data/submissions/{name}_submission.csv")
 
     for i in range(0, num_test_images, batch_size):
@@ -36,7 +38,7 @@ def predict_and_write_submission(model, name: str):
 
         # we also need to resize the test images. This might not be the best idea depending on their spatial resolution
         test_images = np.stack(
-            [cv2.resize(img, dsize=(384, 384)) for img in test_images], 0
+            [cv2.resize(img, dsize=(resize_to, resize_to)) for img in test_images], 0
         )
         test_images = np_to_tensor(np.moveaxis(test_images, -1, 1), device)
 
