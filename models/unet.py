@@ -50,22 +50,9 @@ class UNet(nn.Module):
 
     def forward(self, x):
         # encode
-        # enc_features = []
-        # for block in self.enc_blocks[:-1]:
-        #     x = block(x)  # pass through the block
-        #     enc_features.append(x)  # save features for skip connections
-        #     x = self.pool(x)  # decrease resolution
-        # x = self.enc_blocks[-1](x)
-
         x, enc_features = self.encode(x)
-        # decode
-        # for block, upconv, feature in zip(
-        #     self.dec_blocks, self.upconvs, enc_features[::-1]
-        # ):
-        #     x = upconv(x)  # increase resolution
-        #     x = torch.cat([x, feature], dim=1)  # concatenate skip freatures
-        #     x = block(x)  # decrease resolution
 
+        # decode
         x = self.decode(x, enc_features)
 
         return self.head(x)
@@ -85,7 +72,7 @@ class UNet(nn.Module):
                 self.dec_blocks, self.upconvs, enc_features[::-1]
         ):
             x = upconv(x)  # increase resolution
-            x = torch.cat([x, feature], dim=1)  # concatenate skip freatures
+            x = torch.cat([x, feature], dim=1)  # concatenate skip features
             x = block(x)  # decrease resolution
 
         return x
