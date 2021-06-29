@@ -285,41 +285,6 @@ class MultiHeadCrossAttention(MultiHeadAttention):
         return Z
 
 
-class LessMemoryA(nn.Module):
-
-    def __init__(self):
-        super(LessMemoryA, self).__init__()
-        self.softmax = nn.Softmax(dim=1)
-
-    def forward(self, Q, K, V, Sc, Yb, Yh, Yw):
-        A = torch.bmm(Q, K.permute(0, 2, 1))
-
-        steps = 4
-        assert Q.shape[1] % steps == 0
-        size = Q.shape[1] // steps
-
-        all_x = []
-        for i in range(steps):
-            x = self.step(A, V, Sc, size, i)
-            all_x.append(x)
-
-        tmp = torch.cat(all_x, dim=1)
-
-        return tmp.permute(0, 2, 1).reshape(Yb, Sc, Yh, Yw)
-
-    def step(self, A, V, Sc, size, index):
-        form = size * index
-        to = size * (index + 1)
-
-        A_partial = A[:, form:to]
-
-        softmaxed = self.softmax(A_partial / math.sqrt(Sc))
-
-        result = torch.bmm(softmaxed, V)
-
-        return result
-
-
 class TransformerUp(nn.Module):
     def __init__(self, Ychannels, Schannels, skip_connection=True):
         super(TransformerUp, self).__init__()
