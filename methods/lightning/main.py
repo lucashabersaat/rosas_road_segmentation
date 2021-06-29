@@ -34,6 +34,9 @@ def load_model_and_write_submission(path, model_class):
 
 if __name__ == '__main__':
     """The specific model can be given as argument to the program."""
+
+    pl.utilities.seed.seed_everything(seed=1337)
+
     if sys.argv is not None:
         if len(sys.argv) == 1:
             model_name = 'unet_transformer'
