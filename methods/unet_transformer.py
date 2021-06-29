@@ -4,8 +4,8 @@ import torch.nn.functional as F
 from common.read_data import *
 from common.util import *
 from common.image_data_set import ImageDataSet
-from unet import patch_accuracy_fn
-from conv_neural_networks import train
+from methods.unet import patch_accuracy_fn
+from methods.conv_neural_networks import train
 from common.unet_transformer_includes import NoiseRobustDiceLoss
 
 
@@ -384,7 +384,7 @@ if __name__ == "__main__":
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     batch_size = 1
-    resize_to = 192*2
+    resize_to = 384
 
     train_dataset = ImageDataSet(
         "data/training", device, use_patches=False, resize_to=(resize_to, resize_to)
@@ -393,7 +393,7 @@ if __name__ == "__main__":
     #print(train_dataset_shape,train_dataset.x.shape)
     a,b,c,d = train_dataset.x.shape
     train_dataset.x = train_dataset.x.reshape(4*a,3,int(c/2),int(d/2))
-    print('train_dataset_shape',train_dataset.x.shape)
+    #print('train_dataset_shape',train_dataset.x.shape)
 
     #print(train_dataset.y.shape)
     e,f,g = train_dataset.y.shape
@@ -408,6 +408,12 @@ if __name__ == "__main__":
     a,b,c,d = val_dataset.x.shape
     val_dataset.x = val_dataset.x.reshape(4*a,3,int(c/2),int(d/2))
     #print(val_dataset.x.shape)
+
+    #print(val_dataset.y.shape)
+    a,b,c = val_dataset.y.shape
+    val_dataset.y = val_dataset.y.reshape(4*a,int(b/2),int(c/2))
+    #print(val_dataset.y.shape)
+
 
     train_dataloader = torch.utils.data.DataLoader(
         train_dataset, batch_size=batch_size, shuffle=True
@@ -449,6 +455,8 @@ if __name__ == "__main__":
 
     a,b,c,d = test_images.shape
     test_images = test_images.reshape(4*a,3,int(c/2),int(d/2))
+
+    #output is a list not ndarray, to do reshape to output dim
 
     test_pred = [model(t).detach().cpu().numpy() for t in test_images.unsqueeze(1)]
     print(test_pred.shape)
