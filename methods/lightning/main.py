@@ -35,7 +35,11 @@ def load_model_and_write_submission(path, model_class):
 if __name__ == '__main__':
     """The specific model can be given as argument to the program."""
     if sys.argv is not None:
-        model_name = sys.argv[1]
+        if len(sys.argv) == 1:
+            model_name = 'unet_transformer'
+        else:
+            model_name = sys.argv[1]
+
         if model_name == 'unet':
             model = LitBase(UNet())
             data = RoadDataModule(resize_to=384)
