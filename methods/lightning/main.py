@@ -4,7 +4,6 @@ import torch
 import numpy as np
 import pytorch_lightning as pl
 
-
 from models.unet import UNet
 from models.unet_transformer import U_Transformer
 
@@ -29,6 +28,8 @@ def fit_normally(model, data):
     # put four corresponding images back together again
     if data.divide_into_four:
         predictions = TestImageDataSet.put_back(predictions)
+    else:
+        predictions = np.concatenate(predictions).squeeze()
 
     name = "lightning_" + str.lower(model.model.__class__.__name__)
     write_submission(
@@ -62,7 +63,7 @@ if __name__ == "__main__":
             model = LitBase(UNet(), data_module=data)
         elif model_name == "unet_transformer":
 
-            data = RoadDataModule(batch_size=1, resize_to=384, divide_into_four=True )
+            data = RoadDataModule(batch_size=1, resize_to=192, divide_into_four=False)
             model = LitBase(
                 U_Transformer(3, 1), loss_fn="dice_loss", data_module=data
             )
