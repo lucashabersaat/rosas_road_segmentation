@@ -16,7 +16,7 @@ from common.write_data import write_submission
 
 def fit_normally(model, data):
     gpu = int(torch.cuda.is_available())
-    trainer = pl.Trainer(gpus=gpu, max_epochs=1)
+    trainer = pl.Trainer(gpus=gpu, max_epochs=35)
 
     # fit
     trainer.fit(model, datamodule=data)
