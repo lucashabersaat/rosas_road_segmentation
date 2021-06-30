@@ -23,13 +23,14 @@ def fit_normally(model, data):
 
     # predict
     predictions = trainer.predict(model, datamodule=data)
-    predictions = [p.cpu().detach().numpy() for p in predictions]
+    predictions = [p.detach().cpu().numpy() for p in predictions]
 
     # put four corresponding images back together again
     if data.divide_into_four:
         predictions = TestImageDataSet.put_back(predictions)
     else:
-        predictions = np.concatenate(predictions).squeeze()
+        predictions = np.concatenate(predictions, 0)
+        predictions = np.moveaxis(predictions, -1, 1).squeeze()
 
     name = "lightning_" + str.lower(model.model.__class__.__name__)
     write_submission(
@@ -63,7 +64,7 @@ if __name__ == "__main__":
             model = LitBase(UNet(), data_module=data)
         elif model_name == "unet_transformer":
 
-            data = RoadDataModule(batch_size=1, resize_to=192, divide_into_four=False)
+            data = RoadDataModule(batch_size=1, resize_to=384, divide_into_four=True)
             model = LitBase(
                 U_Transformer(3, 1), loss_fn="dice_loss", data_module=data
             )
