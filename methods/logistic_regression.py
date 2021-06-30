@@ -1,6 +1,7 @@
 from sklearn.linear_model import LogisticRegression
 
 from common.read_data import *
+from common.write_data import create_submission
 
 
 def extract_features(x):
