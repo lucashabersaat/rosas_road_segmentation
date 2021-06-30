@@ -1,3 +1,4 @@
+import cv2
 import torch
 
 from common.util import np_to_tensor
@@ -117,7 +118,6 @@ class TestImageDataSet(ImageDataSet):
     @staticmethod
     def put_back(x):
         """The inverse operation of the dividing into four."""
-        x = [p.cpu().detach().numpy() for p in x]
         x = np.concatenate(x)
         n, c, w, h = x.shape
         n_4 = n // 4

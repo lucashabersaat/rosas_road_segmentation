@@ -16,12 +16,19 @@ class LitBase(pl.LightningModule):
             model: Optional[Module] = None,
             loss_fn='bce',
             learning_rate: float = 0.0001,
+            data_module=None
     ):
         super().__init__()
-        self.save_hyperparameters(ignore=['unet'])
+
         if model is None:
             model = UNet()
         self.model = model
+
+        hyper_parameters = {
+            "model": model, "loss_fn": loss_fn, "learning_rate": learning_rate,
+            "divide_into_four": data_module.divide_into_four, "batch_size": data_module.batch_size
+        }
+        self.save_hyperparameters(hyper_parameters)
 
         if loss_fn == 'bce':
             self.loss_fn = BCELoss()

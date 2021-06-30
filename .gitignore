@@ -4,3 +4,4 @@ venv/
 __pycache__/
 tensorboard/
 lightning_logs
+checkpoints
