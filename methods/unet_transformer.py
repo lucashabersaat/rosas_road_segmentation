@@ -5,7 +5,7 @@ from common.image_data_set import ImageDataSet
 from common.write_data import create_submission
 from methods.unet import patch_accuracy_fn
 from methods.conv_neural_networks import train
-from common.unet_transformer_includes import NoiseRobustDiceLoss
+from common.losses import NoiseRobustDiceLoss
 from models.unet_transformer import U_Transformer
 
 if __name__ == "__main__":

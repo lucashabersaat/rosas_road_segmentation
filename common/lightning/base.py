@@ -6,7 +6,7 @@ from torch.nn import Module, BCELoss
 import pytorch_lightning as pl
 
 from models.unet import UNet
-from common.unet_transformer_includes import NoiseRobustDiceLoss
+from common.losses import NoiseRobustDiceLoss, DiceLoss
 
 
 class LitBase(pl.LightningModule):
@@ -34,6 +34,8 @@ class LitBase(pl.LightningModule):
             self.loss_fn = BCELoss()
         elif loss_fn == 'noise_robust_dice':
             self.loss_fn = NoiseRobustDiceLoss()
+        elif loss_fn == 'dice_loss':
+            self.loss_fn = DiceLoss()
 
     def forward(self, x):
         # use forward for inference/predictions

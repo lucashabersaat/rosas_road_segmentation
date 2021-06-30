@@ -118,7 +118,7 @@ class TestImageDataSet(ImageDataSet):
     @staticmethod
     def put_back(x):
         """The inverse operation of the dividing into four."""
-        x = np.concatenate(x)
+        x = np.concatenate(x, 0)
         n, c, w, h = x.shape
         n_4 = n // 4
 
