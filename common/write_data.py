@@ -13,7 +13,7 @@ def write_submission(all_predictions, name, test_path, size):
     all_test_filenames = sorted(glob(os.path.join(ROOT_DIR, test_path) + "/*.png"))
 
     num_test_images = len(all_test_filenames)
-    batch_size = num_test_images
+    batch_size = 20
 
     create_empty_submission(submission_filename=f"data/submissions/{name}_submission.csv")
 
