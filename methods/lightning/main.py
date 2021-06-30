@@ -56,7 +56,7 @@ if __name__ == '__main__':
             model = LitBase(UNet())
             data = RoadDataModule(resize_to=384)
         elif model_name == 'unet_transformer':
-            model = LitBase(U_Transformer(3, 1), loss_fn='noise_robust_dice')
+            model = LitBase(U_Transformer(3, 1))
             data = RoadDataModule(batch_size=1, resize_to=384, divide_into_four=True)
         elif model_name == 'self_attention_unet':
             model = LitBase(UNetSelfAttention())
