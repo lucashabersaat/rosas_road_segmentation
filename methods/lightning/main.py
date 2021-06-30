@@ -1,6 +1,7 @@
 import sys
 
 import torch
+import numpy as np
 import pytorch_lightning as pl
 
 from models.unet import UNet
@@ -9,27 +10,35 @@ from models.unet_transformer import U_Transformer
 
 from common.lightning.base import LitBase
 from common.lightning.road_data_module import RoadDataModule
-from common.predict import predict_and_write_submission
+from common.image_data_set import TestImageDataSet
+from common.write_data import write_submission
 
 
 def fit_normally(model, data):
-
     gpu = int(torch.cuda.is_available())
-    trainer = pl.Trainer(gpus=gpu, max_epochs=35)
+    trainer = pl.Trainer(gpus=gpu, max_epochs=1)
 
-    trainer.fit(model, data)
+    # fit
+    trainer.fit(model, datamodule=data)
+
+    # predict
+    predictions = trainer.predict(model, datamodule=data)
+
+    # put four corresponding images back together again
+    if data.divide_into_four:
+        predictions = TestImageDataSet.put_back(predictions)
 
     name = 'lightning_' + str.lower(model.model.__class__.__name__)
-    predict_and_write_submission(model, name, resize_to=192)
+    write_submission(predictions, name, "data/test_images/test_images", data.test_dataset.size)
 
-
-def load_model_and_write_submission(path, model_class):
-    model = model_class.load_from_checkpoint(path)
-
-    if torch.cuda.is_available():
-        model.to(torch.device('cuda'))
-
-    predict_and_write_submission(model, 'lightning_unet')
+# for later, if you want to load an already trained model
+# def load_model_and_write_submission(path, model_class):
+#     model = model_class.load_from_checkpoint(path)
+#
+#     if torch.cuda.is_available():
+#         model.to(torch.device('cuda'))
+#
+#     predict_and_write_submission(model, 'lightning_unet')
 
 
 if __name__ == '__main__':
@@ -48,7 +57,7 @@ if __name__ == '__main__':
             data = RoadDataModule(resize_to=384)
         elif model_name == 'unet_transformer':
             model = LitBase(U_Transformer(3, 1), loss_fn='noise_robust_dice')
-            data = RoadDataModule(batch_size=1,  resize_to=192)
+            data = RoadDataModule(batch_size=1, resize_to=384, divide_into_four=True)
         elif model_name == 'self_attention_unet':
             model = LitBase(UNetSelfAttention())
             data = RoadDataModule(resize_to=384)
@@ -59,4 +68,3 @@ if __name__ == '__main__':
         data = RoadDataModule(resize_to=384)
 
     fit_normally(model, data)
-    # load_model_and_write_submission(LitUNet, "lightning_logs_old/version_4/checkpoints/epoch=53-step=1241.ckpt")

@@ -35,5 +35,14 @@ Run `methods/lightning/main.py` with a model as argument for a default training 
 To see what models are available, checkout the same file.
 For example in the root directory:
 ```
-$ python methods/lightning/main.py unet
+$ python methods/lightning/main.py unet_transformer
 ```
+
+### Preprocessing
+#### Divide into Four
+To deal with the model using up too much memory, the images are divided into their four quadrant and the model is trained on those smaller images.
+This must be accomodated when predicting, as the model learns on different zoom level so to say. Images to predict on are divided aswell and the actual predictions are stitched back together.
+
+To enable this, set `divide_into_four` option for the `RoadDataModule`.
+
+See functions `_divide_into_four` and `put_back` in `ImageDataSet`

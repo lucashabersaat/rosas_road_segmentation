@@ -1,11 +1,10 @@
-from torch import nn
-
+import cv2
 from common.read_data import *
 from common.util import *
 from common.image_data_set import ImageDataSet
-from unet import patch_accuracy_fn
-from conv_neural_networks import train
-
+from common.write_data import create_submission
+from methods.unet import patch_accuracy_fn
+from methods.conv_neural_networks import train
 from common.unet_transformer_includes import NoiseRobustDiceLoss
 from models.unet_transformer import U_Transformer
 
@@ -14,14 +13,16 @@ if __name__ == "__main__":
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     batch_size = 1
-    resize_to = 192
+    resize_to = 384
 
     train_dataset = ImageDataSet(
         "data/training", device, use_patches=False, resize_to=(resize_to, resize_to)
     )
+
     val_dataset = ImageDataSet(
         "data/validation", device, use_patches=False, resize_to=(resize_to, resize_to)
     )
+
     train_dataloader = torch.utils.data.DataLoader(
         train_dataset, batch_size=batch_size, shuffle=True
     )
@@ -58,6 +59,7 @@ if __name__ == "__main__":
     )
     test_images = np_to_tensor(np.moveaxis(test_images, -1, 1), device)
 
+    # output is a list not ndarray, to do reshape to output dim
     test_pred = [model(t).detach().cpu().numpy() for t in test_images.unsqueeze(1)]
     test_pred = np.concatenate(test_pred, 0)
     test_pred = np.moveaxis(test_pred, 1, -1)  # CHW to HWC

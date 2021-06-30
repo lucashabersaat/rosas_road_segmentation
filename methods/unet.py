@@ -2,8 +2,9 @@ import torch
 from torch import nn
 
 from common.read_data import *
-from common.util import np_to_tensor, accuracy_fn, print_model_memory
+from common.util import np_to_tensor, accuracy_fn
 from common.image_data_set import ImageDataSet
+from common.write_data import create_submission
 from methods.conv_neural_networks import train
 from models.unet import UNet, patch_accuracy_fn
 
