@@ -64,7 +64,7 @@ if __name__ == "__main__":
 
             data = RoadDataModule(batch_size=1, resize_to=384, divide_into_four=True )
             model = LitBase(
-                U_Transformer(3, 1), loss_fn="noise_robust_dice", data_module=data
+                U_Transformer(3, 1), loss_fn="dice_loss", data_module=data
             )
         else:
             raise Exception("unknown model")
