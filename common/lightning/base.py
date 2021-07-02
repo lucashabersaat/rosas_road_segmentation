@@ -14,8 +14,6 @@ class LitBase(pl.LightningModule):
     def __init__(
             self, config,
             model: Optional[Module] = None,
-            loss_fn='bce',
-            learning_rate: float = 0.0001,
             data_module=None
     ):
         super().__init__()
@@ -24,14 +22,14 @@ class LitBase(pl.LightningModule):
             model = UNet()
         self.model = model
 
+        self.lr = config["lr"]
+        loss_fn = config["loss_fn"]
+
         hyper_parameters = {
-            "model": model, "loss_fn": loss_fn, "learning_rate": learning_rate,
+            "model": model, "loss_fn": loss_fn, "learning_rate": self.lr,
             "divide_into_four": data_module.divide_into_four, "batch_size": data_module.batch_size
         }
         self.save_hyperparameters(hyper_parameters)
-
-        self.lr = config["lr"]
-        loss_fn = config["loss_fn"]
 
         if loss_fn == 'bce':
             self.loss_fn = BCELoss()
@@ -40,7 +38,7 @@ class LitBase(pl.LightningModule):
         elif loss_fn == 'dice_loss':
             self.loss_fn = DiceLoss()
 
-        #self.accuracy = torchmetrics.classification.accuracy.Accuracy()
+        # self.accuracy = torchmetrics.classification.accuracy.Accuracy()
 
     def forward(self, x):
         # use forward for inference/predictions
@@ -52,9 +50,9 @@ class LitBase(pl.LightningModule):
         y_hat = self.model(x)
         loss = self.loss_fn(y_hat, y)
 
-        #acc = self.accuracy(y_hat, y)
+        # acc = self.accuracy(y_hat, y)
         self.log("ptl/train_loss", loss)
-        #self.log("ptl/train_accuracy", acc)
+        # self.log("ptl/train_accuracy", acc)
         self.log('train_loss', loss, on_epoch=True)
         return loss
 
@@ -63,8 +61,9 @@ class LitBase(pl.LightningModule):
         y_hat = self.model(x)
         loss = self.loss_fn(y_hat, y)
         self.log('valid_loss', loss, on_step=True)
-        #acc = self.accuracy(y_hat, y)
+        # acc = self.accuracy(y_hat, y)
         return {"val_loss": loss}
+
     """ 
     def configure_optimizers(self):
         # self.hparams available because we called self.save_hyperparameters()
@@ -77,7 +76,7 @@ class LitBase(pl.LightningModule):
     def validation_epoch_end(self, outputs):
         avg_loss = torch.stack(
             [x["val_loss"] for x in outputs]).mean()
-        #avg_acc = torch.stack(
+        # avg_acc = torch.stack(
         #    [x["val_accuracy"] for x in outputs]).mean()
         self.log("ptl/val_loss", avg_loss)
-        #self.log("ptl/val_accuracy", avg_acc)
+        # self.log("ptl/val_accuracy", avg_acc)

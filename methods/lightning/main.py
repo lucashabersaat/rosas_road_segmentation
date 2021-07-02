@@ -53,6 +53,8 @@ if __name__ == "__main__":
 
     pl.utilities.seed.seed_everything(seed=1337)
 
+    config = {"lr": 0.0001, "loss_fn": "bce"}
+
     if sys.argv is not None:
         if len(sys.argv) == 1:
             model_name = "unet_transformer"
@@ -61,17 +63,17 @@ if __name__ == "__main__":
 
         if model_name == "unet":
             data = RoadDataModule(resize_to=384)
-            model = LitBase(UNet(), data_module=data)
+            model = LitBase(config, UNet(), data_module=data)
         elif model_name == "unet_transformer":
 
+            config['loss_fn'] = "dice_loss"
+
             data = RoadDataModule(batch_size=1, resize_to=384, divide_into_four=True)
-            model = LitBase(
-                U_Transformer(3, 1), loss_fn="dice_loss", data_module=data
-            )
+            model = LitBase(config, U_Transformer(3, 1), data_module=data)
         else:
             raise Exception("unknown model")
     else:
-        model = LitBase(UNet())
         data = RoadDataModule(resize_to=384)
+        model = LitBase(config, UNet(), data_module=data)
 
     fit_normally(model, data)
