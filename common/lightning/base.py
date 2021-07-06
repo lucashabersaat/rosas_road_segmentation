@@ -1,8 +1,6 @@
 from typing import Optional
-import torchmetrics
 import torch
 from torch.nn import Module, BCELoss
-from torch.nn import functional as F
 import pytorch_lightning as pl
 
 from common.plot_data import show_two_imgs_overlay
@@ -15,7 +13,6 @@ class LitBase(pl.LightningModule):
     def __init__(
             self, config,
             model: Optional[Module] = None,
-            data_module=None
     ):
         super().__init__()
 
@@ -26,10 +23,14 @@ class LitBase(pl.LightningModule):
         self.lr = config["lr"]
         loss_fn = config["loss_fn"]
 
+        self.divide_into_four = config.get("divide_into_four")
+        self.batch_size = config.get("batch_size")
+        self.resize_to = config.get("resize_to")
+
         hyper_parameters = {
-            "model": model, "loss_fn": loss_fn, "learning_rate": self.lr,
-            "divide_into_four": data_module.divide_into_four, "batch_size": data_module.batch_size
+            "model": model, "loss_fn": loss_fn, "learning_rate": self.lr, "config": config,
         }
+
         self.save_hyperparameters(hyper_parameters)
 
         if loss_fn == 'bce':
