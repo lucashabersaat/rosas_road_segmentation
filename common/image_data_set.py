@@ -18,6 +18,9 @@ class ImageDataSet(torch.utils.data.Dataset):
         self.x, self.y, self.n_samples = None, None, None
         self._load_data()
 
+        # duplicate data
+        self.breed_images()
+
         if divide_into_four:
             self._divide_into_four()
 
@@ -33,7 +36,24 @@ class ImageDataSet(torch.utils.data.Dataset):
         self.x = np.moveaxis(self.x, -1, 1)
         self.n_samples = len(self.x)
 
+    def breed_images(self):
+        """Rotate all images by 90, 180 and 270 degrees and increase the number of the training set by factor 4."""
+        rotated_x = [self.x]
+        rotated_y = [self.y]
+        for k in range(1, 4):
+            rotated_x.append(np.rot90(self.x, k=k, axes=(2, 3)))
+            rotated_y.append(np.rot90(self.y, k=k, axes=(1, 2)))
+
+        self.x = np.concatenate(rotated_x)
+        self.y = np.concatenate(rotated_y)
+        self.n_samples = len(self.x)
+
     def _divide_into_four(self):
+        """
+        Divide all images into the four quadrants, decreases resolution and increases number of images.
+        The idea was to deal with the limited GPU memory
+        """
+
         n, c, w, h = self.x.shape
         assert (n, w, h) == self.y.shape
 
@@ -116,18 +136,25 @@ class TestImageDataSet(ImageDataSet):
         self.x = np.concatenate([x1, x2, x3, x4])
         self.n_samples = len(self.x)
 
+    def breed_images(self):
+        pass
+
     @staticmethod
     def put_back(x):
-        """The inverse operation of the dividing into four."""
+        """
+        The inverse operation of the dividing into four.
+        Only required for test set, as it after prediction, it must get back into the same format.
+        """
+
         x = np.concatenate(x, 0)
         n, c, w, h = x.shape
         n_4 = n // 4
 
         result = np.zeros([n_4, 1, w * 2, h * 2])
         result[:, :, :w, :h] = x[:n_4, :, :, :]
-        result[:, :, w:, :h] = x[n_4:n_4*2, :, :, :]
-        result[:, :, :w, h:] = x[2*n_4:3*n_4, :, :, :]
-        result[:, :, w:, h:] = x[3*n_4:4*n_4, :, :, :]
+        result[:, :, w:, :h] = x[n_4:n_4 * 2, :, :, :]
+        result[:, :, :w, h:] = x[2 * n_4:3 * n_4, :, :, :]
+        result[:, :, w:, h:] = x[3 * n_4:4 * n_4, :, :, :]
 
         result = np.moveaxis(result, -1, 1)  # CHW to HWC
         result = result.squeeze()
