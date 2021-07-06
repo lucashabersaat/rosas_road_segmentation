@@ -5,6 +5,7 @@ from torch.nn import Module, BCELoss
 from torch.nn import functional as F
 import pytorch_lightning as pl
 
+from common.plot_data import show_two_imgs_overlay
 from models.unet import UNet
 from common.losses import NoiseRobustDiceLoss, DiceLoss
 
@@ -54,6 +55,13 @@ class LitBase(pl.LightningModule):
         self.log("ptl/train_loss", loss)
         # self.log("ptl/train_accuracy", acc)
         self.log('train_loss', loss, on_epoch=True)
+
+        if batch_idx == 0:
+            print_y = torch.moveaxis(y.cpu(), 0, -1)
+            print_yhat = torch.moveaxis(y_hat.cpu().detach(), 0, -1)
+
+            show_two_imgs_overlay(print_yhat[0], print_y[0])
+
         return loss
 
     def validation_step(self, batch, batch_idx):

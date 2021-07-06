@@ -1,6 +1,7 @@
 import torch
 import torchvision.transforms as transforms
 
+from common.plot_data import show_first_n
 from common.read_data import *
 
 

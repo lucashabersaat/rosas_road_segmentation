@@ -24,21 +24,6 @@ def load_all_from_path(path):
     )
 
 
-def show_first_n(imgs1, imgs2, n=5, title1="Image", title2="Mask"):
-    # visualizes the first n elements of a series of images and segmentation masks
-    imgs_to_draw = min(min(n, len(imgs1)), len(imgs2))
-
-    fig, axs = plt.subplots(2, imgs_to_draw, figsize=(18.5, 6))
-    for i in range(imgs_to_draw):
-        axs[0, i].imshow(imgs1[i])
-        axs[1, i].imshow(imgs2[i])
-        axs[0, i].set_title(f"{title1} {i}")
-        axs[1, i].set_title(f"{title2} {i}")
-        axs[0, i].set_axis_off()
-        axs[1, i].set_axis_off()
-    plt.show()
-
-
 def image_to_patches(images, masks=None):
     # takes in a 4D np.array containing images and (optionally) a 4D np.array containing the segmentation masks
     # returns a 4D np.array with an ordered sequence of patches extracted from the image and (optionally) a np.array
@@ -106,5 +91,3 @@ print(
     "{0:0.2f}".format(sum(val_labels) / len(val_labels) * 100)
     + "% of validation patches are labeled as 1."
 )
-
-

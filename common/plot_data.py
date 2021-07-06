@@ -1,0 +1,49 @@
+from matplotlib import pyplot as plt
+
+
+def show_first_n(imgs1, imgs2, n=5, title1="Image", title2="Mask"):
+    # visualizes the first n elements of a series of images and segmentation masks
+    imgs_to_draw = min(min(n, len(imgs1)), len(imgs2))
+
+    fig, axs = plt.subplots(2, imgs_to_draw, figsize=(18.5, 6))
+
+    if imgs_to_draw == 1:
+        axs[0].imshow(imgs1[0])
+        axs[1].imshow(imgs2[0])
+        axs[0].set_title(f"{title1}")
+        axs[1].set_title(f"{title2}")
+        axs[0].set_axis_off()
+        axs[1].set_axis_off()
+    else:
+        for i in range(imgs_to_draw):
+            axs[0, i].imshow(imgs1[i])
+            axs[1, i].imshow(imgs2[i])
+            axs[0, i].set_title(f"{title1} {i}")
+            axs[1, i].set_title(f"{title2} {i}")
+            axs[0, i].set_axis_off()
+            axs[1, i].set_axis_off()
+
+    plt.show()
+
+
+def show_img(img):
+    plt.imshow(img)
+    plt.show()
+
+
+def show_two_imgs(img1, img2):
+    fig = plt.figure(figsize=(8, 8))
+
+    fig.add_subplot(1, 2, 1)
+    plt.imshow(img1)
+
+    fig.add_subplot(1, 2, 2)
+    plt.imshow(img2)
+
+    plt.show()
+
+
+def show_two_imgs_overlay(img1, overlayed_img):
+    plt.imshow(img1)  # I would add interpolation='none'
+    plt.imshow(overlayed_img, alpha=0.5)  # interpolation='none'
+    plt.show()
