@@ -133,11 +133,8 @@ class TestImageDataSet(ImageDataSet):
         result = result.squeeze()
         return result
 
-    def _preprocess(self, x, y):
-        raise NameError('Preprocessing for Test Data?')
-
     def __getitem__(self, item):
-        return np_to_tensor(self.x[item], self.device)
+        return self._preprocess(np_to_tensor(self.x[item], self.device), None)[0]
 
     def __len__(self):
         return self.n_samples
