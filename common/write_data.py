@@ -15,7 +15,9 @@ def write_submission(all_predictions, name, test_path, size):
     num_test_images = len(all_test_filenames)
     batch_size = num_test_images
 
-    create_empty_submission(submission_filename=f"data/submissions/{name}_submission.csv")
+    file_name = f"data/submissions/{name}_submission.csv"
+    print("Writing to", file_name)
+    create_empty_submission(submission_filename=file_name)
 
     for i in range(0, num_test_images, batch_size):
         b = min(batch_size, num_test_images - i)
