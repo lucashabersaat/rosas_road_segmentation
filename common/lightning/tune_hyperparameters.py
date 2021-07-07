@@ -5,7 +5,7 @@ import pytorch_lightning as pl
 from ray.tune.integration.pytorch_lightning import TuneReportCallback
 
 
-def train_segmentation(config, num_epochs=35, num_gpus=0):
+def train_segmentation(config, checkpoint_dir=None, num_epochs=35, num_gpus=0):
     model = LitBase(config)
     dm = RoadDataModule(
         batch_size = config["batch_size"],
