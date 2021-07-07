@@ -13,6 +13,7 @@ from common.lightning.road_data_module import RoadDataModule
 from common.image_data_set import TestImageDataSet
 from common.write_data import write_submission
 from common.plot_data import *
+from common.postprocess import *
 
 
 def gpu():
@@ -22,6 +23,7 @@ def gpu():
 def predict(trainer, model, data):
     # predict
     predictions = trainer.predict(model, datamodule=data)
+
     predictions = [p.detach().cpu().numpy() for p in predictions]
 
     # put four corresponding images back together again
@@ -31,9 +33,17 @@ def predict(trainer, model, data):
         predictions = np.concatenate(predictions)
         predictions = np.moveaxis(predictions, 1, -1).squeeze()
 
-    img = np.moveaxis(data.test_dataset.x, 1, -1)
-    for i in range(0, 90, 5):
-        show_first_n(img[i:], predictions[i:])
+
+    post_process = True
+    if post_process:
+        predictions = blur(predictions)
+
+
+    # img = np.moveaxis(data.test_dataset.x, 1, -1)
+    # show_two_imgs(img[0], predictions)
+    # for i in range(0, 90, 5):
+    #     show_first_n(img[i:], predictions[i:])
+
 
     name = "lightning_" + str.lower(model.model.__class__.__name__)
     write_submission(
