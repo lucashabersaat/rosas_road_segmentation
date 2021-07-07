@@ -1,4 +1,3 @@
-import sys
 import os
 from argparse import ArgumentParser
 
@@ -45,6 +44,13 @@ def predict(trainer, model, data):
 def load_model(version: int):
     no_file_found = Exception("There is no checkpoint file.")
 
+    # get latest version
+    if version == -1:
+        files = os.listdir("data/lightning_logs/")
+        only_versions = filter(lambda s: s[:8] == "version_", files)
+        numbers = [int(s[8:]) for s in only_versions]
+        version = max(numbers)
+
     path = "data/lightning_logs/version_" + str(version) + "/checkpoints/"  # 25/checkpoints/epoch=34-step=12599.ckpt"
 
     if not os.path.exists(path):
@@ -62,7 +68,7 @@ def load_model(version: int):
 def get_args():
     parser = ArgumentParser()
     parser.add_argument('-train', type=str)
-    parser.add_argument('-load', dest="load", type=int)
+    parser.add_argument('-load', dest="load", type=int, nargs='?', const=-1)
 
     args = parser.parse_args()
 
@@ -72,8 +78,8 @@ def get_args():
     return args
 
 
-def handle_load(config):
-    lit_model = load_model(args.load)
+def handle_load(config, version: int):
+    lit_model = load_model(version)
     data = RoadDataModule(batch_size=lit_model.batch_size, resize_to=config["resize_to"],
                           divide_into_four=lit_model.divide_into_four)
 
@@ -89,6 +95,7 @@ def handle_train(trainer, config, model_name):
 
     if model_name == "unet":
         config["resize_to"] = 384
+        config["divide_into_four"] = False
         model = UNet()
     elif model_name == "unet_transformer":
         # config['loss_fn'] = "noise_robust_dice"
@@ -114,12 +121,13 @@ if __name__ == "__main__":
 
     # default
     config = {"lr": 0.0001, "loss_fn": "bce", "divide_into_four": False, "batch_size": 1, "resize_to": 192}
+    num_epochs = 20
 
     if args.load is not None:
-        trainer = pl.Trainer(gpus=gpu(), max_epochs=20, default_root_dir="data", logger=None)
-        model, data = handle_load(config)
+        trainer = pl.Trainer(gpus=gpu(), default_root_dir="data", logger=False)
+        model, data = handle_load(config, args.load)
     else:
-        trainer = pl.Trainer(gpus=gpu(), max_epochs=20, default_root_dir="data")
+        trainer = pl.Trainer(gpus=gpu(), max_epochs=num_epochs, default_root_dir="data")
         model, data = handle_train(trainer, config, args.train)
 
     predict(trainer, model, data)
