@@ -1,6 +1,13 @@
+import math
+
+import numpy as np
 import torch
 from torch import nn
-import math
+from matplotlib import pyplot as plt
+
+
+from common.util import init_tensor
+from common.plot_data import *
 
 
 class Node:
@@ -181,16 +188,18 @@ class EdgeTensorToImg(nn.Module):
 
     def forward(self, x: torch.Tensor):
 
+        x = x.squeeze()
+
         if x.numel() != self.edges_size:
             raise Exception('Tensor has invalid number of elements.')
 
         output = torch.zeros(self.width, self.height)
+        output = init_tensor(output)
 
         for e in range(0, x.numel(), self.edge_size):
             edge = x[e:e + self.edge_size]
             edge_mask = self.maskEdge(edge)
-            print(edge_mask)
-            output = output + edge_mask
+            output = torch.maximum(output, edge_mask)
 
         output = output / torch.max(output)
 
@@ -205,24 +214,71 @@ class MaskOneEdge(nn.Module):
 
         index_y = torch.arange(0, w, 1).repeat(h, 1).resize(w, h, 1)
         index_x = torch.arange(0, h, 1).resize(h, 1).repeat(1, w).resize(w, h, 1)
-        self.coords = torch.cat([index_x, index_y], dim=2).float()
+
+        coords = torch.cat([index_x, index_y], dim=2).float()
+        self.coords = init_tensor(coords)
 
     def forward(self, edge):
-
         start_node = edge[0:2]
         end_node = edge[2:4]
 
         dx = end_node[0] - start_node[0]
         dy = end_node[1] - start_node[1]
 
-        dir = torch.tensor([dx, dy])
+        dir = torch.stack([dx, dy])
         dir_norm = dir[0] ** 2 + dir[1] ** 2
 
         t = (torch.matmul(self.coords, dir) - start_node.dot(dir)) / dir_norm
-        f = (start_node + t.view(-1, 1) * dir).view(self.width, self.height, 2)
+        double_t = torch.stack([t.clone(), t.clone()], 2)
+
+        f = start_node + double_t * dir
+
         dist = torch.linalg.norm(self.coords - f, dim=2)
 
-        return 1 - dist / torch.max(dist)
+        result = dist / edge[4] * 2
+
+        result = self.plateau_distance_to_line(result) * 2
+
+        result = torch.mul(result, self.plateau_distance_from_ends(t))
+
+        return result
+
+    @staticmethod
+    def plateau_distance_to_line(input):
+        a = 1
+        sigma = 0.01
+
+        return MaskOneEdge.plateau(input, a, sigma)
+
+    @staticmethod
+    def plateau_distance_from_ends(input):
+        input -= 0.5
+        a = 0.5
+        sigma = 0.01
+
+        return MaskOneEdge.plateau(input, a, sigma)
+
+    @staticmethod
+    def plateau(input, a, sigma):
+        erf1 = torch.special.erf((input + a) / sigma)
+        erf2 = torch.special.erf((input - a) / sigma)
+
+        return 1 / (4 * a) * (erf1 - erf2)
+
+    @staticmethod
+    def plot_plateau():
+        start = -2
+        end = 2
+        step = (end - start) / 1000
+
+        x = []
+        y = []
+        for i in np.arange(start, end, step):
+            x.append(i)
+            y.append(MaskOneEdge.plateau_distance_to_line(torch.tensor([i])).numpy())
+
+        plt.plot(x, y)
+        plt.show()
 
 
 class MaskOneEdgeNode(nn.Module):
@@ -249,25 +305,29 @@ class MaskOneEdgeNode(nn.Module):
         return dist < edge[2]
 
 
-torch.set_printoptions(precision=2, linewidth=200)
+if __name__ == "__main__":
+    torch.set_printoptions(precision=2, linewidth=200)
 
-nodes = [Node(0, 0), Node(10, 12)]
-edges = [Edge(nodes[0], nodes[1], 3)]
+    nodes = [Node(0, 0), Node(10, 12)]
+    edges = [Edge(nodes[0], nodes[1], 3)]
 
-g = Graph(nodes, edges)
+    g = Graph(nodes, edges)
 
-tensor = torch.tensor([0., 0, 10, 10, 7, 0, 10, 5, 0, 1, 1, 2, 3, 1])
-tensor.requires_grad = True
+    tensor = torch.tensor([0., 0, 10, 10, 7, 0, 10, 5, 0, 1, 1, 2, 3, 1])
+    tensor.requires_grad = True
 
-# g_from_tensor = tensor_to_graph(tensor, 4, 2)
-# g_from_tensor.print()
+    # g_from_tensor = tensor_to_graph(tensor, 4, 2)
+    # g_from_tensor.print()
 
+    graphTensor = init_tensor(torch.tensor([0., 0, 100, 100, 10, 100, 0, 10, 5, 2]))
+    graphTensor.requires_grad = True
+    torch.autograd.set_detect_anomaly(True)
 
+    module = EdgeTensorToImg(2, 192, 192)
+    img_from_tensor = module(graphTensor)
+    img_from_tensor.sum().backward()
 
-graphTensor = torch.tensor([0., 0, 10, 10, 1, 7, 0, 10, 5, 2])
-graphTensor.requires_grad = True
+    # MaskOneEdge.plot_plateau()
 
-module = EdgeTensorToImg(2, 10, 10)
-img_from_tensor = module(graphTensor)
-print(img_from_tensor)
-img_from_tensor.backward()
+    plt.imshow(img_from_tensor.cpu().detach().numpy(), vmin=0, vmax=1)
+    plt.show()

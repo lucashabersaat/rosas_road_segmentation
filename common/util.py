@@ -1,6 +1,17 @@
 import torch
 
 
+def init_tensor(x):
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+
+    if device == "cpu":
+        return x.cpu()
+    else:
+        return (
+            x.contiguous().pin_memory().to(device=device, non_blocking=True)
+        )
+
+
 def np_to_tensor(x, device):
     # allocates tensors from np.arrays
     if device == "cpu":
