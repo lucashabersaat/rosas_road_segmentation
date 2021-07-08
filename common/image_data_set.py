@@ -1,10 +1,12 @@
 import torch
 import cv2
+from torchvision import transforms as T
 
 from common.util import np_to_tensor
 from common.read_data import *
 from common.plot_data import *
 
+torch.manual_seed(17)
 
 class ImageDataSet(torch.utils.data.Dataset):
     # dataset class that deals with loading the data and making it available by index
@@ -74,23 +76,37 @@ class ImageDataSet(torch.utils.data.Dataset):
         y4 = self.y[:, w_2:, h_2:]
         self.y = np.concatenate([y1, y2, y3, y4])
 
-    def _preprocess(self, x, y):
+    def _preprocess(self, x, y, normalize=True, size=400, h_flip=0.5, v_flip=0.5, h_flip_a=0.5, v_flip_a=0.5, contrast=0.3, brightness=0.1, hue=0.3):
         # to keep things simple we will not apply transformations to each sample,
         # but it would be a very good idea to look into preprocessing
 
-        s = torch.std(x, [1, 2])
+        if normalize:
+            s = torch.std(x, [1, 2])
 
-        for i in range(0, x.shape[1], 16):
-            for j in range(0, x.shape[1], 16):
-                m = torch.mean(x[:, i: i + 16, j: j + 16], [1, 2])
+            for i in range(0, x.shape[1], 16):
+                for j in range(0, x.shape[1], 16):
+                    m = torch.mean(x[:, i: i + 16, j: j + 16], [1, 2])
 
-                x[0, i: i + 16, j: j + 16] /= m[0]
-                x[1, i: i + 16, j: j + 16] /= m[1]
-                x[2, i: i + 16, j: j + 16] /= m[2]
+                    x[0, i: i + 16, j: j + 16] /= m[0]
+                    x[1, i: i + 16, j: j + 16] /= m[1]
+                    x[2, i: i + 16, j: j + 16] /= m[2]
 
-        x[0] /= s[0]
-        x[1] /= s[1]
-        x[2] /= s[2]
+            x[0] /= s[0]
+            x[1] /= s[1]
+            x[2] /= s[2]
+
+        resize = T.Resize(size=size)
+        jitter = T.ColorJitter(brightness=brightness, contrast=contrast, hue=hue)
+        hflipper = T.RandomHorizontalFlip(h_flip)
+        vflipper = T.RandomVerticalFlip(v_flip)
+        hflipper_again = T.RandomHorizontalFlip(h_flip_a)
+        vflipper_again = T.RandomVerticalFlip(v_flip_a)
+
+        transx = T.Compose([resize, jitter, hflipper, vflipper, hflipper_again, vflipper_again])
+        transy = T.Compose([resize, hflipper, vflipper, hflipper_again, vflipper_again])
+        x = transx(x)
+        y = transy(y)
+        #possible additions: five_crop, randomCrop, gaussianblur, autocontrast
 
         return x, y
 
@@ -165,3 +181,4 @@ class TestImageDataSet(ImageDataSet):
 
     def __len__(self):
         return self.n_samples
+
