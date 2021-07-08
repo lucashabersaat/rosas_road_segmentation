@@ -105,7 +105,8 @@ class ImageDataSet(torch.utils.data.Dataset):
         transx = T.Compose([jitter, hflipper, vflipper, hflipper_again, vflipper_again])
         transy = T.Compose([hflipper, vflipper, hflipper_again, vflipper_again])
         x = transx(x)
-        y = transy(y)
+        if y is not None:
+            y = transy(y)
         #possible additions: five_crop, randomCrop, gaussianblur, autocontrast
 
         return x, y

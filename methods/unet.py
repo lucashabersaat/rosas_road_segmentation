@@ -1,5 +1,6 @@
 import torch
 from torch import nn
+import cv2
 
 from common.read_data import *
 from common.util import np_to_tensor, accuracy_fn
