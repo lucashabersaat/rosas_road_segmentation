@@ -5,6 +5,19 @@ from torch import nn
 from common.util import init_tensor
 from common.plot_data import *
 
+"""
+The following modules, assumes the input tensor is a list of edges and converts it into a image.
+Each five consecutive values make up an edge. 
+- First two are the coordinates of the starting point, 
+- second two the end point 
+- and the last value is the thickness in pixels.
+
+The idea behind this module, is that some model tries to find this list of edges and the EdgesTensorToImg converts 
+it into a nice mask image of roads, which looks much closer to the groundtruth.
+
+Challenge is building a architecture, that does search for this edge representation. 
+"""
+
 
 class EdgeTensorToImg(nn.Module):
     # a repeating structure composed of two convolutional layers with batch normalization and ReLu activations
