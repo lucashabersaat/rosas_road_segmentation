@@ -33,22 +33,21 @@ def predict(trainer, model, data):
         predictions = np.concatenate(predictions)
         predictions = np.moveaxis(predictions, 1, -1).squeeze()
 
-
     post_process = True
     if post_process:
-        predictions = blur(predictions)
-
+        predictions = postprocess(predictions)
+        # for i in range(predictions.shape[0]):
+        #     show_two_imgs_overlay(data.test_dataset.x[i], predictions[i])
 
     # img = np.moveaxis(data.test_dataset.x, 1, -1)
     # show_two_imgs(img[0], predictions)
     # for i in range(0, 90, 5):
     #     show_first_n(img[i:], predictions[i:])
 
-
     name = "lightning_" + str.lower(model.model.__class__.__name__)
-    write_submission(
-        predictions, name, "data/test_images/test_images", data.test_dataset.size
-    )
+    write_submission(data.test_dataset.x,
+                     predictions, name, "data/test_images/test_images", data.test_dataset.size
+                     )
 
 
 def load_model(version: int):
@@ -130,7 +129,7 @@ if __name__ == "__main__":
     pl.utilities.seed.seed_everything(seed=1337)
 
     # default
-    config = {"lr": 0.0001, "loss_fn": "bce", "divide_into_four": False, "batch_size": 1, "resize_to": 192}
+    config = {"lr": 0.0001, "loss_fn": "dice_loss", "divide_into_four": False, "batch_size": 1, "resize_to": 192}
     num_epochs = 20
 
     if args.load is not None:
