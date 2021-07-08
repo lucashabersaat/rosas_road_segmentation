@@ -46,6 +46,7 @@ instance:
 $ python main.py -load 25
 ```
 
+If no number is given, it will take the latest.
 All the trained models and the respective version number can be found in `data/lightning_logs`. Train a model and it
 will be logged there.
 
