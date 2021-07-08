@@ -7,6 +7,8 @@ import pytorch_lightning as pl
 
 from models.unet import UNet
 from models.unet_transformer import U_Transformer
+from models.grah_net import GraphNet
+from models.grap_unet import GraphUNet
 
 from common.lightning.base import LitBase
 from common.lightning.road_data_module import RoadDataModule
@@ -100,6 +102,10 @@ def handle_train(trainer, config, model_name):
     elif model_name == "unet_transformer":
         # config['loss_fn'] = "noise_robust_dice"
         model = U_Transformer(3, 1)
+    elif model_name == "graph_net":
+        model = GraphNet(10, config['resize_to'], config['resize_to'])
+    elif model_name == "graph_unet":
+        model = GraphUNet(10, config['resize_to'], config['resize_to'])
     else:
         raise Exception("unknown model")
 
