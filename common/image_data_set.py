@@ -76,7 +76,7 @@ class ImageDataSet(torch.utils.data.Dataset):
         y4 = self.y[:, w_2:, h_2:]
         self.y = np.concatenate([y1, y2, y3, y4])
 
-    def _preprocess(self, x, y, normalize=True, size=400, h_flip=0.5, v_flip=0.5, h_flip_a=0.5, v_flip_a=0.5, contrast=0.3, brightness=0.1, hue=0.3):
+    def _preprocess(self, x, y, normalize=True, h_flip=0.5, v_flip=0.5, h_flip_a=0.5, v_flip_a=0.5, contrast=0.3, brightness=0.1, hue=0.3):
         # to keep things simple we will not apply transformations to each sample,
         # but it would be a very good idea to look into preprocessing
 
@@ -95,15 +95,15 @@ class ImageDataSet(torch.utils.data.Dataset):
             x[1] /= s[1]
             x[2] /= s[2]
 
-        resize = T.Resize(size=size)
+        #resize = T.Resize(size=size)
         jitter = T.ColorJitter(brightness=brightness, contrast=contrast, hue=hue)
         hflipper = T.RandomHorizontalFlip(h_flip)
         vflipper = T.RandomVerticalFlip(v_flip)
         hflipper_again = T.RandomHorizontalFlip(h_flip_a)
         vflipper_again = T.RandomVerticalFlip(v_flip_a)
 
-        transx = T.Compose([resize, jitter, hflipper, vflipper, hflipper_again, vflipper_again])
-        transy = T.Compose([resize, hflipper, vflipper, hflipper_again, vflipper_again])
+        transx = T.Compose([jitter, hflipper, vflipper, hflipper_again, vflipper_again])
+        transy = T.Compose([hflipper, vflipper, hflipper_again, vflipper_again])
         x = transx(x)
         y = transy(y)
         #possible additions: five_crop, randomCrop, gaussianblur, autocontrast
