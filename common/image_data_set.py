@@ -8,6 +8,7 @@ from common.plot_data import *
 
 torch.manual_seed(17)
 
+
 class ImageDataSet(torch.utils.data.Dataset):
     # dataset class that deals with loading the data and making it available by index
 
@@ -76,47 +77,58 @@ class ImageDataSet(torch.utils.data.Dataset):
         y4 = self.y[:, w_2:, h_2:]
         self.y = np.concatenate([y1, y2, y3, y4])
 
-    def _preprocess(self, x, y, normalize=True, h_flip=0.5, v_flip=0.5, h_flip_a=0.5, v_flip_a=0.5, contrast=0.3, brightness=0.1, hue=0.3):
-        # to keep things simple we will not apply transformations to each sample,
-        # but it would be a very good idea to look into preprocessing
+    def _preprocess(self, x, y, normalize=False, h_flip=0.5, v_flip=0.5, h_flip_a=0.5, v_flip_a=0.5, contrast=0.3,
+                    brightness=0.1, hue=0.3):
 
         if normalize:
-            s = torch.std(x, [1, 2])
+            x = self.normalize(x)
 
-            for i in range(0, x.shape[1], 16):
-                for j in range(0, x.shape[1], 16):
-                    m = torch.mean(x[:, i: i + 16, j: j + 16], [1, 2])
-
-                    x[0, i: i + 16, j: j + 16] /= m[0]
-                    x[1, i: i + 16, j: j + 16] /= m[1]
-                    x[2, i: i + 16, j: j + 16] /= m[2]
-
-            x[0] /= s[0]
-            x[1] /= s[1]
-            x[2] /= s[2]
-
-        #resize = T.Resize(size=size)
         jitter = T.ColorJitter(brightness=brightness, contrast=contrast, hue=hue)
+
         hflipper = T.RandomHorizontalFlip(h_flip)
         vflipper = T.RandomVerticalFlip(v_flip)
         hflipper_again = T.RandomHorizontalFlip(h_flip_a)
         vflipper_again = T.RandomVerticalFlip(v_flip_a)
-
-        trans = T.Compose([hflipper, vflipper, hflipper_again, vflipper_again])
+        randomFlipping = T.Compose([hflipper, vflipper, hflipper_again, vflipper_again])
 
         x = jitter(x)
 
         if y is not None:
             tmp_y = torch.cat([y, y, y])
-            processed = trans(torch.stack([x, tmp_y]))
+            flipped = randomFlipping(torch.stack([x, tmp_y]))
 
-            x = processed[0]
-            y = processed[1][0].unsqueeze(0)
-
+            x = flipped[0]
+            y = flipped[1][0].unsqueeze(0)
 
         # possible additions: five_crop, randomCrop, gaussianblur, autocontrast
 
         return x, y
+
+    def normalize_patchwise(self, x):
+        s = torch.std(x, [1, 2])
+
+        patch_size = 16
+        for i in range(0, x.shape[1], patch_size):
+            for j in range(0, x.shape[1], patch_size):
+                m = torch.mean(x[:, i: i + patch_size, j: j + patch_size], [1, 2])
+
+                x[0, i: i + patch_size, j: j + patch_size] -= m[0]
+                x[1, i: i + patch_size, j: j + patch_size] -= m[1]
+                x[2, i: i + patch_size, j: j + patch_size] -= m[2]
+
+        x[0] /= s[0]
+        x[1] /= s[1]
+        x[2] /= s[2]
+
+        return x
+
+    def normalize(self, x):
+        s = torch.std(x, [1, 2])
+        m = torch.mean(x, [1, 2])
+
+        normalize = T.Normalize(m, s)
+
+        return normalize(x)
 
     def __getitem__(self, item):
         return self._preprocess(
@@ -189,4 +201,3 @@ class TestImageDataSet(ImageDataSet):
 
     def __len__(self):
         return self.n_samples
-

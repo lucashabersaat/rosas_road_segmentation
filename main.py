@@ -130,8 +130,8 @@ if __name__ == "__main__":
     pl.utilities.seed.seed_everything(seed=1337)
 
     # default
-    config = {"lr": 0.0001, "loss_fn": "dice_loss", "divide_into_four": False, "batch_size": 1, "resize_to": 192}
-    num_epochs = 20
+    config = {"lr": 0.0001, "loss_fn": "dice_loss", "divide_into_four": False, "batch_size": 1, "resize_to": 192, "comment": "UNetTrans with fixed pre/pro, no norm"}
+    num_epochs = 35
 
     if args.load is not None:
         # load
@@ -139,7 +139,8 @@ if __name__ == "__main__":
         model, data = handle_load(config, args.load)
     else:
         # train
-        trainer = pl.Trainer(gpus=gpu(), max_epochs=num_epochs, default_root_dir="data")
+        logger = True
+        trainer = pl.Trainer(gpus=gpu(), max_epochs=num_epochs, default_root_dir="data", logger=logger)
         model, data = handle_train(trainer, config, args.train)
 
     predict(trainer, model, data)
