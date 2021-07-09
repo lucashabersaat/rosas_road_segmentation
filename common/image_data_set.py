@@ -102,11 +102,20 @@ class ImageDataSet(torch.utils.data.Dataset):
         hflipper_again = T.RandomHorizontalFlip(h_flip_a)
         vflipper_again = T.RandomVerticalFlip(v_flip_a)
 
-        transx = T.Compose([jitter, hflipper, vflipper, hflipper_again, vflipper_again])
-        transy = T.Compose([hflipper, vflipper, hflipper_again, vflipper_again])
-        x = transx(x)
+        trans = T.Compose([hflipper, vflipper, hflipper_again, vflipper_again])
+
+        x = jitter(x)
+
         if y is not None:
-            y = transy(y)
+            tmp_y = torch.cat([y, y, y])
+            processed = trans(torch.stack([x, tmp_y]))
+
+            x = processed[0]
+            y = processed[1][0].unsqueeze(0)
+
+        else:
+            x = trans(x)
+
         #possible additions: five_crop, randomCrop, gaussianblur, autocontrast
 
         return x, y
