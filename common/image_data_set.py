@@ -113,10 +113,8 @@ class ImageDataSet(torch.utils.data.Dataset):
             x = processed[0]
             y = processed[1][0].unsqueeze(0)
 
-        else:
-            x = trans(x)
 
-        #possible additions: five_crop, randomCrop, gaussianblur, autocontrast
+        # possible additions: five_crop, randomCrop, gaussianblur, autocontrast
 
         return x, y
 
