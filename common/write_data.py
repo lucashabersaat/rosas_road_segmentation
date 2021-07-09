@@ -5,10 +5,12 @@ from glob import glob
 import cv2
 import os
 
-from common.read_data import PATCH_SIZE, CUTOFF, ROOT_DIR
+from common.read_data import PATCH_SIZE, ROOT_DIR, CUTOFF
+from common.plot_data import *
+from common.postprocess import *
 
 
-def write_submission(all_predictions, name, test_path, size):
+def write_submission(original, all_predictions, name, test_path, size):
     """Save the predictions batch wise in submissions."""
     all_test_filenames = sorted(glob(os.path.join(ROOT_DIR, test_path) + "/*.png"))
 
@@ -33,13 +35,21 @@ def write_submission(all_predictions, name, test_path, size):
             (-1, size[0] // PATCH_SIZE, PATCH_SIZE, size[0] // PATCH_SIZE, PATCH_SIZE)
         )
         predictions = np.moveaxis(predictions, 2, 3)
-        predictions = np.round(np.mean(predictions, (-1, -2)) > CUTOFF)
+        predictions = classify(predictions)
+
+        for i in range(predictions.shape[0]):
+            resized = cv2.resize(predictions[i].astype(float), dsize=original[i].shape[1:])
+            show_two_imgs_overlay(original[i], resized)
 
         append_submission(
             predictions,
             test_filenames,
             submission_filename=f"data/submissions/{name}_submission.csv",
         )
+
+
+def classify(predictions):
+    return np.round(np.mean(predictions, (-1, -2)) > CUTOFF)
 
 
 def create_empty_submission(submission_filename):

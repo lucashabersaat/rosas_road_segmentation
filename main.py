@@ -13,6 +13,7 @@ from common.lightning.road_data_module import RoadDataModule
 from common.image_data_set import TestImageDataSet
 from common.write_data import write_submission
 from common.plot_data import *
+from common.postprocess import *
 
 
 def gpu():
@@ -22,6 +23,7 @@ def gpu():
 def predict(trainer, model, data):
     # predict
     predictions = trainer.predict(model, datamodule=data)
+
     predictions = [p.detach().cpu().numpy() for p in predictions]
 
     # put four corresponding images back together again
@@ -31,14 +33,21 @@ def predict(trainer, model, data):
         predictions = np.concatenate(predictions)
         predictions = np.moveaxis(predictions, 1, -1).squeeze()
 
-    img = np.moveaxis(data.test_dataset.x, 1, -1)
-    for i in range(0, 90, 5):
-        show_first_n(img[i:], predictions[i:])
+    post_process = True
+    if post_process:
+        predictions = postprocess(predictions)
+        # for i in range(predictions.shape[0]):
+        #     show_two_imgs_overlay(data.test_dataset.x[i], predictions[i])
+
+    # img = np.moveaxis(data.test_dataset.x, 1, -1)
+    # show_two_imgs(img[0], predictions)
+    # for i in range(0, 90, 5):
+    #     show_first_n(img[i:], predictions[i:])
 
     name = "lightning_" + str.lower(model.model.__class__.__name__)
-    write_submission(
-        predictions, name, "data/test_images/test_images", data.test_dataset.size
-    )
+    write_submission(data.test_dataset.x,
+                     predictions, name, "data/test_images/test_images", data.test_dataset.size
+                     )
 
 
 def load_model(version: int):
@@ -98,7 +107,8 @@ def handle_train(trainer, config, model_name):
         config["divide_into_four"] = False
         model = UNet()
     elif model_name == "unet_transformer":
-        # config['loss_fn'] = "noise_robust_dice"
+        config['loss_fn'] = "noise_robust_dice"
+        config["resize_to"] = 256
         model = U_Transformer(3, 1)
     else:
         raise Exception("unknown model")
@@ -120,14 +130,17 @@ if __name__ == "__main__":
     pl.utilities.seed.seed_everything(seed=1337)
 
     # default
-    config = {"lr": 0.0001, "loss_fn": "bce", "divide_into_four": False, "batch_size": 1, "resize_to": 192}
-    num_epochs = 20
+    config = {"lr": 0.0001, "loss_fn": "dice_loss", "divide_into_four": False, "batch_size": 1, "resize_to": 192}
+    num_epochs = 35
 
     if args.load is not None:
+        # load
         trainer = pl.Trainer(gpus=gpu(), default_root_dir="data", logger=False)
         model, data = handle_load(config, args.load)
     else:
-        trainer = pl.Trainer(gpus=gpu(), max_epochs=num_epochs, default_root_dir="data")
+        # train
+        logger = True
+        trainer = pl.Trainer(gpus=gpu(), max_epochs=num_epochs, default_root_dir="data", logger=logger)
         model, data = handle_train(trainer, config, args.train)
 
     predict(trainer, model, data)

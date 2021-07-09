@@ -3,7 +3,7 @@ import torch
 from torch.nn import Module, BCELoss
 import pytorch_lightning as pl
 
-from common.plot_data import show_two_imgs_overlay
+from common.plot_data import *
 from models.unet import UNet
 from common.losses import NoiseRobustDiceLoss, DiceLoss
 
@@ -61,7 +61,8 @@ class LitBase(pl.LightningModule):
             print_y = torch.moveaxis(y.cpu(), 0, -1)
             print_yhat = torch.moveaxis(y_hat.cpu().detach(), 0, -1)
 
-            show_two_imgs_overlay(print_yhat[0], print_y[0])
+            # show_two_imgs_overlay(print_yhat[0], print_y[0])
+            # show_two_imgs(print_yhat[0], print_y[0])
 
         return loss
 

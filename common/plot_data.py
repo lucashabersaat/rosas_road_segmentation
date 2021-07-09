@@ -1,3 +1,5 @@
+import numpy as np
+import torch
 from matplotlib import pyplot as plt
 
 
@@ -27,11 +29,17 @@ def show_first_n(imgs1, imgs2, n=5, title1="Image", title2="Mask"):
 
 
 def show_img(img):
+    img = prepare(img)
+
     plt.imshow(img)
     plt.show()
 
 
 def show_two_imgs(img1, img2):
+
+    img1 = prepare(img1)
+    img2 = prepare(img2)
+
     fig = plt.figure(figsize=(8, 8))
 
     fig.add_subplot(1, 2, 1)
@@ -44,6 +52,38 @@ def show_two_imgs(img1, img2):
 
 
 def show_two_imgs_overlay(img1, overlayed_img):
+    img1 = prepare(img1)
+    overlayed_img = prepare(overlayed_img)
+
     plt.imshow(img1)  # I would add interpolation='none'
     plt.imshow(overlayed_img, alpha=0.5)  # interpolation='none'
     plt.show()
+
+
+def prepare(image):
+    """Prepare the image for the plotting. Set type to compatible one and change to HWC from CHW if necessary."""
+
+    if torch.is_tensor(image):
+        image = image.cpu().detach().numpy()
+
+    s = image.shape
+
+    if image.dtype == np.float16:
+        image = image.astype(float)
+
+    if len(s) == 2:
+        return image
+
+    c = 0
+    if len(image.shape) == 4:
+        c = 1
+
+    if s[c] == s[c + 1] == s[c + 2]:
+        print(
+            "Same width and height and channel_number are the same. Can't decide how to rearange. Letting it like that.")
+        return image
+
+    if s[c + 1] == s[c + 2]:
+        return np.moveaxis(image, c, -1)
+    else:
+        return image
