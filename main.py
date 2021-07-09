@@ -107,7 +107,8 @@ def handle_train(trainer, config, model_name):
         config["divide_into_four"] = False
         model = UNet()
     elif model_name == "unet_transformer":
-        # config['loss_fn'] = "noise_robust_dice"
+        config['loss_fn'] = "noise_robust_dice"
+        config["resize_to"] = 256
         model = U_Transformer(3, 1)
     else:
         raise Exception("unknown model")
@@ -133,9 +134,11 @@ if __name__ == "__main__":
     num_epochs = 20
 
     if args.load is not None:
+        # load
         trainer = pl.Trainer(gpus=gpu(), default_root_dir="data", logger=False)
         model, data = handle_load(config, args.load)
     else:
+        # train
         trainer = pl.Trainer(gpus=gpu(), max_epochs=num_epochs, default_root_dir="data")
         model, data = handle_train(trainer, config, args.train)
 
