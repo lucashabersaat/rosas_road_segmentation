@@ -61,7 +61,7 @@ class LitBase(pl.LightningModule):
             print_y = torch.moveaxis(y.cpu(), 0, -1)
             print_yhat = torch.moveaxis(y_hat.cpu().detach(), 0, -1)
 
-            show_two_imgs_overlay(print_yhat[0], print_y[0])
+            #show_two_imgs_overlay(print_yhat[0], print_y[0])
 
         return loss
 
