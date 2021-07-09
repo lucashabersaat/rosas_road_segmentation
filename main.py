@@ -130,7 +130,7 @@ if __name__ == "__main__":
     pl.utilities.seed.seed_everything(seed=1337)
 
     # default
-    config = {"lr": 0.0001, "loss_fn": "dice_loss", "divide_into_four": False, "batch_size": 1, "resize_to": 192, "comment": "UNetTrans with fixed pre/pro, no norm"}
+    config = {"lr": 0.0001, "loss_fn": "dice_loss", "divide_into_four": False, "batch_size": 1, "resize_to": 192}
     num_epochs = 35
 
     if args.load is not None:
