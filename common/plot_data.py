@@ -1,4 +1,5 @@
 import numpy as np
+import torch
 from matplotlib import pyplot as plt
 
 
@@ -28,14 +29,17 @@ def show_first_n(imgs1, imgs2, n=5, title1="Image", title2="Mask"):
 
 
 def show_img(img):
-    if img.dtype == np.float16:
-        img = img.astype(float)
+    img = prepare(img)
 
     plt.imshow(img)
     plt.show()
 
 
 def show_two_imgs(img1, img2):
+
+    img1 = prepare(img1)
+    img2 = prepare(img2)
+
     fig = plt.figure(figsize=(8, 8))
 
     fig.add_subplot(1, 2, 1)
@@ -58,6 +62,10 @@ def show_two_imgs_overlay(img1, overlayed_img):
 
 def prepare(image):
     """Prepare the image for the plotting. Set type to compatible one and change to HWC from CHW if necessary."""
+
+    if torch.is_tensor(image):
+        image = image.cpu().detach().numpy()
+
     s = image.shape
 
     if image.dtype == np.float16:
