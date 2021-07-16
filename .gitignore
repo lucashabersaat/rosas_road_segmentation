@@ -5,3 +5,4 @@ __pycache__/
 tensorboard/
 lightning_logs
 checkpoints
+data/models/imagenet*

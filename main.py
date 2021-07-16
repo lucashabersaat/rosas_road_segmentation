@@ -1,5 +1,6 @@
 import os
 from argparse import ArgumentParser
+import time
 
 import torch
 import numpy as np
@@ -7,6 +8,7 @@ import pytorch_lightning as pl
 
 from models.unet import UNet
 from models.unet_transformer import U_Transformer
+from models.transunet.vit_seg_modeling import CONFIGS, VisionTransformer
 
 from common.lightning.base import LitBase
 from common.lightning.road_data_module import RoadDataModule
@@ -106,6 +108,13 @@ def handle_train(trainer, config, model_name):
         config["resize_to"] = 384
         config["divide_into_four"] = False
         model = UNet()
+    elif model_name == "transunet":
+        config["resize_to"] = 384
+        config["batch_size"] = 4
+        config["divide_into_four"] = False
+        config['loss_fn'] = "noise_robust_dice"
+        transunet_config = CONFIGS['R50-ViT-B_16']
+        model = VisionTransformer(transunet_config, img_size=config["resize_to"], num_classes=transunet_config.n_classes)
     elif model_name == "unet_transformer":
         config['loss_fn'] = "noise_robust_dice"
         config["resize_to"] = 256
@@ -114,7 +123,7 @@ def handle_train(trainer, config, model_name):
         raise Exception("unknown model")
 
     data = RoadDataModule(batch_size=config["batch_size"], resize_to=config["resize_to"],
-                          divide_into_four=config["divide_into_four"])
+                          divide_into_four=config["divide_into_four"], enable_preprocessing=True)
     lit_model = LitBase(config, model)
 
     trainer.fit(lit_model, datamodule=data)
