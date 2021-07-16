@@ -12,17 +12,19 @@ torch.manual_seed(17)
 class ImageDataSet(torch.utils.data.Dataset):
     # dataset class that deals with loading the data and making it available by index
 
-    def __init__(self, path, device, use_patches=True, resize_to=(400, 400), divide_into_four=True):
+    def __init__(self, path, device, use_patches=True, resize_to=(400, 400), divide_into_four=True, enable_preprocessing=True):
         self.path = path
 
         self.device = device
         self.use_patches = use_patches
+        self.enable_preprocessing = enable_preprocessing
         self.resize_to = resize_to
         self.x, self.y, self.n_samples = None, None, None
         self._load_data()
 
         # duplicate data
-        self.breed_images()
+        if self.enable_preprocessing:
+            self.breed_images()
 
         if divide_into_four:
             self._divide_into_four()
@@ -79,6 +81,8 @@ class ImageDataSet(torch.utils.data.Dataset):
 
     def _preprocess(self, x, y, normalize=False, h_flip=0.5, v_flip=0.5, h_flip_a=0.5, v_flip_a=0.5, contrast=0.3,
                     brightness=0.1, hue=0.3):
+        if not self.enable_preprocessing:
+            return x, y
 
         if normalize:
             x = self.normalize(x)
@@ -143,8 +147,8 @@ class ImageDataSet(torch.utils.data.Dataset):
 class TestImageDataSet(ImageDataSet):
     # dataset class that deals with loading the data and making it available by index
 
-    def __init__(self, path, device, use_patches=True, resize_to=(400, 400), divide_into_four=True):
-        super(TestImageDataSet, self).__init__(path, device, use_patches, resize_to, divide_into_four)
+    def __init__(self, path, device, use_patches=True, resize_to=(400, 400), divide_into_four=True, enable_preprocessing=True):
+        super(TestImageDataSet, self).__init__(path, device, use_patches, resize_to, divide_into_four, enable_preprocessing)
 
     def _load_data(self):  # not very scalable, but good enough for now
         self.x = load_all_from_path(self.path)
