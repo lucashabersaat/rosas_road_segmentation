@@ -27,7 +27,7 @@ if __name__ == "__main__":
         train_dataset, batch_size=batch_size, shuffle=True
     )
     val_dataloader = torch.utils.data.DataLoader(
-        val_dataset, batch_size=batch_size, shuffle=True
+        val_dataset, batch_size=batch_size, shuffle=False
     )
     model = UNet().to(device)
     loss_fn = nn.BCELoss()
@@ -43,10 +43,6 @@ if __name__ == "__main__":
         optimizer,
         n_epochs,
     )
-
-
-
-
 
     # predict on test set
     test_path = "data/test_images/test_images"
