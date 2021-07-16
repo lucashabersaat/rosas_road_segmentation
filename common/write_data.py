@@ -4,6 +4,7 @@ import numpy as np
 from glob import glob
 import cv2
 import os
+import time
 
 from common.read_data import PATCH_SIZE, ROOT_DIR, CUTOFF
 from common.plot_data import *
@@ -17,7 +18,7 @@ def write_submission(original, all_predictions, name, test_path, size):
     num_test_images = len(all_test_filenames)
     batch_size = num_test_images
 
-    file_name = f"data/submissions/{name}_submission.csv"
+    file_name = f"data/submissions/{name}_submission.{str(int(time.time()))}.csv"
     print("Writing to", file_name)
     create_empty_submission(submission_filename=file_name)
 
@@ -44,7 +45,7 @@ def write_submission(original, all_predictions, name, test_path, size):
         append_submission(
             predictions,
             test_filenames,
-            submission_filename=f"data/submissions/{name}_submission.csv",
+            submission_filename=file_name,
         )
 
 

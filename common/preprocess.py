@@ -26,6 +26,6 @@ def preprocess_test(img):
     return img
 
 
-show_first_n(
-    train_images, preprocess_test(train_images), title1="Original", title2="Preprocess"
-)
+# show_first_n(
+#     train_images, preprocess_test(train_images), title1="Original", title2="Preprocess"
+# )

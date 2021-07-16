@@ -63,31 +63,31 @@ def show_patched_image(patches, labels, h_patches=25, w_patches=25):
     plt.show()
 
 
-# paths to training and validation datasets
-train_path = "data/training"
-val_path = "data/validation"
-
-train_images = load_all_from_path(os.path.join(train_path, "images"))
-train_masks = load_all_from_path(os.path.join(train_path, "groundtruth"))
-val_images = load_all_from_path(os.path.join(val_path, "images"))
-val_masks = load_all_from_path(os.path.join(val_path, "groundtruth"))
-
-# visualize a few images from the training set
-# show_first_n(train_images, train_masks)
-
-
-# extract all patches and visualize those from the first image
-train_patches, train_labels = image_to_patches(train_images, train_masks)
-val_patches, val_labels = image_to_patches(val_images, val_masks)
-
-# the first image is broken up in the first 25*25 patches
-# show_patched_image(train_patches[:25 * 25], train_labels[:25 * 25])
-
-print(
-    "{0:0.2f}".format(sum(train_labels) / len(train_labels) * 100)
-    + "% of training patches are labeled as 1."
-)
-print(
-    "{0:0.2f}".format(sum(val_labels) / len(val_labels) * 100)
-    + "% of validation patches are labeled as 1."
-)
+# # paths to training and validation datasets
+# train_path = "data/training"
+# val_path = "data/validation"
+#
+# train_images = load_all_from_path(os.path.join(train_path, "images"))
+# train_masks = load_all_from_path(os.path.join(train_path, "groundtruth"))
+# val_images = load_all_from_path(os.path.join(val_path, "images"))
+# val_masks = load_all_from_path(os.path.join(val_path, "groundtruth"))
+#
+# # visualize a few images from the training set
+# # show_first_n(train_images, train_masks)
+#
+#
+# # extract all patches and visualize those from the first image
+# train_patches, train_labels = image_to_patches(train_images, train_masks)
+# val_patches, val_labels = image_to_patches(val_images, val_masks)
+#
+# # the first image is broken up in the first 25*25 patches
+# # show_patched_image(train_patches[:25 * 25], train_labels[:25 * 25])
+#
+# print(
+#     "{0:0.2f}".format(sum(train_labels) / len(train_labels) * 100)
+#     + "% of training patches are labeled as 1."
+# )
+# print(
+#     "{0:0.2f}".format(sum(val_labels) / len(val_labels) * 100)
+#     + "% of validation patches are labeled as 1."
+# )
