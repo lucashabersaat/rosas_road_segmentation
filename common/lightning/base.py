@@ -18,6 +18,7 @@ class LitBase(pl.LightningModule):
 
         if model is None:
             model = UNet()
+
         self.model = model
 
         self.lr = config["lr"]
