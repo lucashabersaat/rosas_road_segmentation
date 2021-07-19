@@ -9,6 +9,7 @@ import pytorch_lightning as pl
 from models.unet import UNet
 from models.unet_transformer import U_Transformer
 from models.transunet.vit_seg_modeling import CONFIGS, VisionTransformer
+from models.unets_to_test import U_Net2, R2U_Net, AttU_Net, R2AttU_Net, NestedUNet
 
 from common.lightning.base import LitBase
 from common.lightning.road_data_module import RoadDataModule
@@ -108,6 +109,31 @@ def handle_train(trainer, config, model_name):
         config["resize_to"] = 384
         config["divide_into_four"] = False
         model = UNet()
+    elif model_name == "unet2":
+        config["resize_to"] = 384
+        config["divide_into_four"] = False
+        model = U_Net2()
+#R2U_Net, AttU_Net, R2AttU_Net, NestedUNet
+    elif model_name == "attUnet":
+        config["resize_to"] = 384
+        config["divide_into_four"] = False
+        model = AttU_Net()
+    elif model_name == "r2Unet":
+        config["resize_to"] = 384
+        config["divide_into_four"] = False
+        model = R2U_Net()
+    elif model_name == "attUnet":
+        config["resize_to"] = 384
+        config["divide_into_four"] = False
+        model = AttU_Net()
+    elif model_name == "r2attUnet":
+        config["resize_to"] = 384
+        config["divide_into_four"] = False
+        model = R2AttU_Net()
+    elif model_name == "nestedUnet":
+        config["resize_to"] = 384
+        config["divide_into_four"] = False
+        model = NestedUNet()
     elif model_name == "transunet":
         config["resize_to"] = 384
         config["batch_size"] = 4
