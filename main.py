@@ -6,10 +6,6 @@ import torch
 import numpy as np
 import pytorch_lightning as pl
 
-from models.unet import UNet
-from models.unet_transformer import U_Transformer
-from models.transunet.vit_seg_modeling import CONFIGS, VisionTransformer
-from models.unets_to_test import U_Net2, R2U_Net, AttU_Net, R2AttU_Net, NestedUNet
 
 from common.lightning.base import LitBase
 from common.lightning.road_data_module import RoadDataModule
@@ -17,7 +13,7 @@ from common.image_data_set import TestImageDataSet
 from common.write_data import write_submission
 from common.plot_data import *
 from common.postprocess import *
-
+from common.get_model import get_model
 
 def gpu():
     return int(torch.cuda.is_available())
@@ -102,51 +98,7 @@ def handle_load(config, version: int):
 
 
 def handle_train(trainer, config, model_name):
-    if model_name is None:
-        model_name = "unet_transformer"
-
-    if model_name == "unet":
-        config["resize_to"] = 384
-        config["divide_into_four"] = False
-        model = UNet()
-    elif model_name == "unet2":
-        config["resize_to"] = 384
-        config["divide_into_four"] = False
-        model = U_Net2()
-#R2U_Net, AttU_Net, R2AttU_Net, NestedUNet
-    elif model_name == "attUnet":
-        config["resize_to"] = 384
-        config["divide_into_four"] = False
-        model = AttU_Net()
-    elif model_name == "r2Unet":
-        config["resize_to"] = 384
-        config["divide_into_four"] = False
-        model = R2U_Net()
-    elif model_name == "attUnet":
-        config["resize_to"] = 384
-        config["divide_into_four"] = False
-        model = AttU_Net()
-    elif model_name == "r2attUnet":
-        config["resize_to"] = 384
-        config["divide_into_four"] = False
-        model = R2AttU_Net()
-    elif model_name == "nestedUnet":
-        config["resize_to"] = 384
-        config["divide_into_four"] = False
-        model = NestedUNet()
-    elif model_name == "transunet":
-        config["resize_to"] = 384
-        config["batch_size"] = 4
-        config["divide_into_four"] = False
-        config['loss_fn'] = "noise_robust_dice"
-        transunet_config = CONFIGS['R50-ViT-B_16']
-        model = VisionTransformer(transunet_config, img_size=config["resize_to"], num_classes=transunet_config.n_classes)
-    elif model_name == "unet_transformer":
-        config['loss_fn'] = "noise_robust_dice"
-        config["resize_to"] = 256
-        model = U_Transformer(3, 1)
-    else:
-        raise Exception("unknown model")
+    model = get_model(model_name, config)
 
     data = RoadDataModule(batch_size=config["batch_size"], resize_to=config["resize_to"],
                           divide_into_four=config["divide_into_four"], enable_preprocessing=True)
@@ -155,6 +107,8 @@ def handle_train(trainer, config, model_name):
     trainer.fit(lit_model, datamodule=data)
 
     return lit_model, data
+
+
 
 
 if __name__ == "__main__":

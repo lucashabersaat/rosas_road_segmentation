@@ -4,8 +4,8 @@ from torch.nn import Module, BCELoss
 import pytorch_lightning as pl
 
 from common.plot_data import *
-from models.unet import UNet
 from common.losses import NoiseRobustDiceLoss, DiceLoss
+from common.get_model import get_model
 
 
 class LitBase(pl.LightningModule):
@@ -16,9 +16,12 @@ class LitBase(pl.LightningModule):
     ):
         super().__init__()
 
-        if model is None:
-            model = UNet()
-        self.model = model
+        if isinstance(model, str):
+            model_name = model
+            self.model = get_model(model_name, config)
+        else:
+            model_name = str.lower(model.__class__.__name__)
+            self.model = model
 
         self.lr = config["lr"]
         loss_fn = config["loss_fn"]
@@ -28,7 +31,7 @@ class LitBase(pl.LightningModule):
         self.resize_to = config.get("resize_to")
 
         hyper_parameters = {
-            "model": model, "loss_fn": loss_fn, "learning_rate": self.lr, "config": config,
+            "model": model_name, "loss_fn": loss_fn, "learning_rate": self.lr, "config": config,
         }
 
         self.save_hyperparameters(hyper_parameters)
@@ -57,13 +60,6 @@ class LitBase(pl.LightningModule):
         # self.log("ptl/train_accuracy", acc)
         self.log('train_loss', loss, on_epoch=True)
 
-        if batch_idx == 0:
-            print_y = torch.moveaxis(y.cpu(), 0, -1)
-            print_yhat = torch.moveaxis(y_hat.cpu().detach(), 0, -1)
-
-            # show_two_imgs_overlay(print_yhat[0], print_y[0])
-            # show_two_imgs(print_yhat[0], print_y[0])
-
         return loss
 
     def validation_step(self, batch, batch_idx):
@@ -73,12 +69,6 @@ class LitBase(pl.LightningModule):
         self.log('valid_loss', loss, on_step=True)
         # acc = self.accuracy(y_hat, y)
         return {"val_loss": loss}
-
-    """ 
-    def configure_optimizers(self):
-        # self.hparams available because we called self.save_hyperparameters()
-        return torch.optim.Adam(self.parameters(), lr=self.hparams.learning_rate)
-    """
 
     def configure_optimizers(self):
         return torch.optim.Adam(self.parameters(), lr=self.lr)
