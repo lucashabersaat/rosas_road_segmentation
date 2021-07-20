@@ -6,7 +6,6 @@ import torch
 import numpy as np
 import pytorch_lightning as pl
 
-
 from common.lightning.base import LitBase
 from common.lightning.road_data_module import RoadDataModule
 from common.image_data_set import TestImageDataSet
@@ -14,6 +13,7 @@ from common.write_data import write_submission
 from common.plot_data import *
 from common.postprocess import *
 from common.get_model import get_model
+
 
 def gpu():
     return int(torch.cuda.is_available())
@@ -109,8 +109,6 @@ def handle_train(trainer, config, model_name):
     return lit_model, data
 
 
-
-
 if __name__ == "__main__":
     """The specific model can be given as argument to the program."""
 
@@ -120,7 +118,7 @@ if __name__ == "__main__":
 
     # default
     config = {"lr": 0.0001, "loss_fn": "dice_loss", "divide_into_four": False, "batch_size": 1, "resize_to": 192,
-              "num_epochs": 10}
+              "num_epochs": 35}
 
     if args.load is not None:
         # load
