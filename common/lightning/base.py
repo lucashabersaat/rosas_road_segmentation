@@ -29,6 +29,7 @@ class LitBase(pl.LightningModule):
         self.divide_into_four = config.get("divide_into_four")
         self.batch_size = config.get("batch_size")
         self.resize_to = config.get("resize_to")
+        self.num_epochs = config.get("num_epochs")
 
         hyper_parameters = {
             "model": model_name, "loss_fn": loss_fn, "learning_rate": self.lr, "config": config,
