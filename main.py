@@ -45,7 +45,8 @@ def predict(trainer, model, data):
 
     name = "lightning_" + str.lower(model.model.__class__.__name__)
     write_submission(data.test_dataset.x,
-                     predictions, name, "data/test_images/test_images", data.test_dataset.size
+                     predictions, name, "data/test_images/test_images", data.test_dataset.size,
+                     graph_cut=False
                      )
 
 
@@ -117,7 +118,7 @@ if __name__ == "__main__":
     pl.utilities.seed.seed_everything(seed=1337)
 
     # default
-    config = {"lr": 0.0001, "loss_fn": "dice_loss", "divide_into_four": False, "batch_size": 1, "resize_to": 192,
+    config = {"lr": 0.001, "loss_fn": "dice_loss", "divide_into_four": False, "batch_size": 1, "resize_to": 192,
               "num_epochs": 35}
 
     if args.load is not None:

@@ -9,9 +9,10 @@ import time
 from common.read_data import PATCH_SIZE, ROOT_DIR, CUTOFF
 from common.plot_data import *
 from common.postprocess import *
+from common.postprocess import graph_cut
 
 
-def write_submission(original, all_predictions, name, test_path, size):
+def write_submission(original, all_predictions, name, test_path, size, graph_cut=False):
     """Save the predictions batch wise in submissions."""
     all_test_filenames = sorted(glob(os.path.join(ROOT_DIR, test_path) + "/*.png"))
 
@@ -27,20 +28,26 @@ def write_submission(original, all_predictions, name, test_path, size):
         predictions = all_predictions[i:i + b]
         test_filenames = all_test_filenames[i:i + b]
 
+        # resize to original
         predictions = np.stack(
             [cv2.resize(img, dsize=size) for img in predictions], 0
-        )  # resize to original
+        )
+
+        original = np.moveaxis(original, 1, -1)
+        original = np.stack(
+            [cv2.resize(img, dsize=size) for img in original], 0
+        )
 
         # now compute labels
-        predictions = predictions.reshape(
-            (-1, size[0] // PATCH_SIZE, PATCH_SIZE, size[0] // PATCH_SIZE, PATCH_SIZE)
-        )
-        predictions = np.moveaxis(predictions, 2, 3)
-        predictions = classify(predictions)
+        if graph_cut:
+            predictions = classify_graph_cut(predictions, original)
+
+        predictions = classify_cutoff(predictions, size)
 
         for i in range(predictions.shape[0]):
             resized = cv2.resize(predictions[i].astype(float), dsize=original[i].shape[1:])
             show_two_imgs_overlay(original[i], resized)
+            break
 
         append_submission(
             predictions,
@@ -49,8 +56,16 @@ def write_submission(original, all_predictions, name, test_path, size):
         )
 
 
-def classify(predictions):
+def classify_cutoff(predictions, size):
+    predictions = predictions.reshape(
+        (-1, size[0] // PATCH_SIZE, PATCH_SIZE, size[0] // PATCH_SIZE, PATCH_SIZE)
+    )
+    predictions = np.moveaxis(predictions, 2, 3)
     return np.round(np.mean(predictions, (-1, -2)) > CUTOFF)
+
+
+def classify_graph_cut(predictions, original):
+    return graph_cut(predictions, original)
 
 
 def create_empty_submission(submission_filename):

@@ -1,6 +1,6 @@
-import numpy as np
-import torch
+from skimage import color
 import cv2
+import maxflow
 
 import torchvision.transforms as T
 from torchvision.transforms.functional import adjust_sharpness
@@ -12,7 +12,7 @@ def postprocess(images):
     """Run all post-processing steps. This is only done for the predictions. Not while training."""
     # images = blur(images)
     # images = sharpen(images)
-    images = morphological_postprocessing(images, 4)
+    images = morphological_postprocessing(images, 10)
     return images
 
 
@@ -52,12 +52,50 @@ def morphological_postprocessing(imgs, iterations):
         img = cv2.dilate(img, kernel, iterations=iterations)
         img = cv2.erode(img, kernel, iterations=iterations)
 
-        img = cv2.erode(img, kernel, iterations=iterations)
-        img = cv2.dilate(img, kernel, iterations=iterations)
-
         out.append(img)
 
         # show_img(img)
 
     out = np.expand_dims(np.stack(out), -1)
     return out
+
+
+def graph_cut(images, originals):
+    binary_masks = np.zeros_like(images)
+
+    for index, image in enumerate(images):
+
+        s = image.size
+        l = image.shape[0]
+        num_edges = 2 * (l - 1) ** 2 + 2 * (l - 1)
+
+        if image.shape[1] != l:
+            raise Exception("Rectangular image? No please not.")
+
+        g = maxflow.Graph[float](s, num_edges)
+        nodes = g.add_nodes(s)
+
+        img_flat = image.reshape(-1)
+        lab_img = color.rgb2lab(originals[index]).reshape(-1, 3)
+
+        for i in range(img_flat.size):
+            p = img_flat[i]
+
+            g.add_tedge(i, 1 - p, p)
+
+            if i % l < l - 1:
+                d = color.deltaE_cie76(lab_img[index], lab_img[index + 1])
+                g.add_edge(i, i + 1, d, d)
+            if i < s - l:
+                d = color.deltaE_cie76(lab_img[index], lab_img[index + l])
+                g.add_edge(i, i + l, d, d)
+
+        g.maxflow()
+        binary_mask = g.get_grid_segments(nodes).reshape(l, l)
+        binary_masks[index] = binary_mask
+
+        # print(index, images.shape[0])
+        # show_two_imgs_overlay(image, originals[index])
+        # show_two_imgs_overlay(binary_masks[index], originals[index])
+
+    return binary_masks
