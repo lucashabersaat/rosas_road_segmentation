@@ -76,7 +76,7 @@ def get_l16_config():
     config.transformer.mlp_dim = 4096
     config.transformer.num_heads = 16
     config.transformer.num_layers = 24
-    config.transformer.attention_dropout_rate = 0.0
+    config.transformer.attention_dropout_rate = 0.1
     config.transformer.dropout_rate = 0.1
     config.representation_size = None
 
