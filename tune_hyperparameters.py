@@ -8,7 +8,7 @@ import torch
 
 
 def train_segmentation(config, checkpoint_dir=None, num_epochs=35, num_gpus=1):
-    model = get_model(config["model_name"], config)
+    model = get_model(None, config)
     data = RoadDataModule(batch_size=config["batch_size"], resize_to=config["resize_to"],
                       divide_into_four=config["divide_into_four"], enable_preprocessing=True)
     metrics = {"loss": "ptl/val_loss"}

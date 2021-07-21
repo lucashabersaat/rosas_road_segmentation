@@ -6,7 +6,7 @@ from models.unets_to_test import U_Net2, R2U_Net, AttU_Net, R2AttU_Net, NestedUN
 
 def get_model(model_name, config):
     if model_name is None:
-        model_name = "unet_transformer"
+        model_name = config["model_name"]
 
     if model_name == "unet":
         config["resize_to"] = 384
@@ -17,10 +17,6 @@ def get_model(model_name, config):
         config["divide_into_four"] = False
         model = U_Net2()
         # R2U_Net, AttU_Net, R2AttU_Net, NestedUNet
-    elif model_name == "attUnet":
-        config["resize_to"] = 384
-        config["divide_into_four"] = False
-        model = AttU_Net()
     elif model_name == "r2Unet":
         config["resize_to"] = 384
         config["divide_into_four"] = False
@@ -50,6 +46,7 @@ def get_model(model_name, config):
         config["resize_to"] = 256
         model = U_Transformer(3, 1)
     else:
+        print()
         raise Exception("unknown model")
 
     return model
