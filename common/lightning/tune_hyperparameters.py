@@ -5,7 +5,7 @@ import pytorch_lightning as pl
 from ray.tune.integration.pytorch_lightning import TuneReportCallback
 
 
-def train_segmentation(config, checkpoint_dir=None, num_epochs=35, num_gpus=0):
+def train_segmentation(config, checkpoint_dir=None, num_epochs=35, num_gpus=1):
     model = LitBase(config)
     dm = RoadDataModule(
         batch_size = config["batch_size"],
@@ -27,9 +27,9 @@ if __name__ == "__main__":
     callbacks = [TuneReportCallback(metrics, on="validation_end")]
     trainer = pl.Trainer(callbacks=callbacks)
 
-    num_samples = 10
-    num_epochs = 10
-    gpus_per_trial = 0 # set this to higher if using GPU
+    num_samples = 4
+    num_epochs = 4
+    gpus_per_trial = 1 # set this to higher if using GPU
 
 
 
@@ -38,7 +38,7 @@ if __name__ == "__main__":
      "loss_fn": tune.choice(['bce','noise_robust_dice']),
      "batch_size": tune.choice([1,2,3,4]),
      "resize_to": tune.choice([192, 384]),
-     "divide_into_four": tune.choice([True])
+     "divide_into_four": tune.choice([True, False])
     }
 
     trainable = tune.with_parameters(
