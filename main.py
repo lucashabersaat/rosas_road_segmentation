@@ -88,7 +88,7 @@ def get_args():
 
 def handle_load(config, version: int):
     lit_model = load_model(version)
-    data = RoadDataModule(batch_size=lit_model.batch_size, resize_to=config["resize_to"],
+    data = RoadDataModule(batch_size=lit_model.batch_size, resize_to=lit_model.resize_to,
                           divide_into_four=lit_model.divide_into_four)
 
     if torch.cuda.is_available():

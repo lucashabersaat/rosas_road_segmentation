@@ -57,6 +57,7 @@ def show_two_imgs_overlay(img1, overlayed_img):
 
     plt.imshow(img1)  # I would add interpolation='none'
     plt.imshow(overlayed_img, alpha=0.5)  # interpolation='none'
+    plt.colorbar()
     plt.show()
 
 
