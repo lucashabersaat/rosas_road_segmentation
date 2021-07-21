@@ -1,5 +1,5 @@
-from base import LitBase
-from road_data_module import RoadDataModule
+from common.lightning.base import LitBase
+from common.lightning.road_data_module import RoadDataModule
 from ray import tune
 import pytorch_lightning as pl
 from ray.tune.integration.pytorch_lightning import TuneReportCallback
