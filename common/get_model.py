@@ -22,13 +22,10 @@ def get_model(model_name, config):
     elif model_name == "nestedUnet":
         model = NestedUNet()
     elif model_name == "transunet" or model_name == "visiontransformer":
-        config["batch_size"] = 1
         config['loss_fn'] = "noise_robust_dice"
         transunet_config = CONFIGS['R50-ViT-B_16']
-        model = VisionTransformer(transunet_config, img_size=256, num_classes=transunet_config.n_classes)
+        model = VisionTransformer(transunet_config, img_size=config['patch_size'], num_classes=transunet_config.n_classes)
     elif model_name == "unet_transformer":
-        config['loss_fn'] = "noise_robust_dice"
-        config["resize_to"] = 256
         model = U_Transformer(3, 1)
     else:
         print()
