@@ -17,8 +17,6 @@ def get_model(model_name, config):
         model = AttU_Net()
     elif model_name == "r2Unet":
         model = R2U_Net()
-    elif model_name == "attUnet":
-        model = AttU_Net()
     elif model_name == "r2attUnet":
         model = R2AttU_Net()
     elif model_name == "nestedUnet":
