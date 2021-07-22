@@ -13,6 +13,7 @@ class RoadDataModule(pl.LightningDataModule):
             self,
             batch_size: int = 4,
             resize_to=None,
+            patch_size=256
     ):
         super().__init__()
 
@@ -20,19 +21,22 @@ class RoadDataModule(pl.LightningDataModule):
         self.num_worker = 0
         self.resize_to = resize_to
 
+        if patch_size is None:
+            patch_size = 256
+
         if resize_to is not None:
             resize_to = (resize_to, resize_to)
 
         device = "cuda" if torch.cuda.is_available() else "cpu"
         self.train_dataset = ImageDataSet(
-            "data/training", device, resize_to=resize_to
+            "data/training", device, resize_to=resize_to, patch_size=patch_size
         )
         self.val_dataset = ImageDataSet(
-            "data/validation", device, resize_to=resize_to
+            "data/validation", device, resize_to=resize_to, patch_size=patch_size
         )
 
         self.test_dataset = TestImageDataSet(
-            "data/test_images", device
+            "data/test_images", device, patch_size=patch_size
         )
 
     def train_dataloader(self):

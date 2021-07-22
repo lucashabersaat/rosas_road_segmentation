@@ -90,7 +90,8 @@ def get_args():
 def handle_load(config, version: int):
     """Handle case when a model should be loaded from logs"""
     lit_model = load_model(version)
-    data = RoadDataModule(batch_size=lit_model.batch_size, resize_to=lit_model.resize_to)
+    data = RoadDataModule(batch_size=lit_model.batch_size, resize_to=lit_model.resize_to,
+                          patch_size=config.get('patch_size'))
 
     if torch.cuda.is_available():
         lit_model.to(torch.device("cuda"))
@@ -102,7 +103,8 @@ def handle_train(trainer, config, model_name):
     """Train model with given configs"""
     model = get_model(model_name, config)
 
-    data = RoadDataModule(batch_size=config["batch_size"], resize_to=config["resize_to"])
+    data = RoadDataModule(batch_size=config["batch_size"], resize_to=config["resize_to"],
+                          patch_size=config.get('patch_size'))
     lit_model = LitBase(config, model)
 
     trainer.fit(lit_model, datamodule=data)
@@ -124,6 +126,7 @@ if __name__ == "__main__":
         "batch_size": 1,
         "resize_to": None,
         "num_epochs": 35,
+        "patch_size": 256
     }
 
     if args.load is not None:
