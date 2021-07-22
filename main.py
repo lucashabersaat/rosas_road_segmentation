@@ -20,7 +20,8 @@ def gpu():
 
 
 def predict(trainer, model, data):
-    # predict
+    """Predict on the test set with given model, apply post processing and write into submission file"""
+
     predictions = trainer.predict(model, datamodule=data)
 
     predictions = [p.detach().cpu().numpy() for p in predictions]
@@ -35,22 +36,20 @@ def predict(trainer, model, data):
     post_process = True
     if post_process:
         predictions = postprocess(predictions)
-        # for i in range(predictions.shape[0]):
-        #     show_two_imgs_overlay(data.test_dataset.x[i], predictions[i])
-
-    # img = np.moveaxis(data.test_dataset.x, 1, -1)
-    # show_two_imgs(img[0], predictions)
-    # for i in range(0, 90, 5):
-    #     show_first_n(img[i:], predictions[i:])
 
     name = "lightning_" + str.lower(model.model.__class__.__name__)
-    write_submission(data.test_dataset.x,
-                     predictions, name, "data/test_images/test_images", data.test_dataset.size,
-                     graph_cut=False
-                     )
+    write_submission(
+        data.test_dataset.x,
+        predictions,
+        name,
+        "data/test_images/test_images",
+        data.test_dataset.size,
+        graph_cut=False,
+    )
 
 
 def load_model(version: int):
+    """Load model with given version from 'data/lightning_logs'"""
     no_file_found = Exception("There is no checkpoint file.")
 
     # get latest version
@@ -60,7 +59,7 @@ def load_model(version: int):
         numbers = [int(s[8:]) for s in only_versions]
         version = max(numbers)
 
-    path = "data/lightning_logs/version_" + str(version) + "/checkpoints/"  # 25/checkpoints/epoch=34-step=12599.ckpt"
+    path = "data/lightning_logs/version_" + str(version) + "/checkpoints/"
 
     if not os.path.exists(path):
         raise no_file_found
@@ -75,34 +74,46 @@ def load_model(version: int):
 
 
 def get_args():
+    """Initialize and return program arguments"""
     parser = ArgumentParser()
-    parser.add_argument('-train', type=str)
-    parser.add_argument('-load', dest="load", type=int, nargs='?', const=-1)
+    parser.add_argument("-train", type=str)
+    parser.add_argument("-load", dest="load", type=int, nargs="?", const=-1)
 
     args = parser.parse_args()
 
     if args.train is not None and args.load is not None:
-        raise Exception("Cannot fit a new model and load a model at the same time. Drop one of the arguments.")
+        raise Exception(
+            "Cannot fit a new model and load a model at the same time. Drop one of the arguments."
+        )
 
     return args
 
 
 def handle_load(config, version: int):
+    """Handle case when a model should be loaded from logs"""
     lit_model = load_model(version)
-    data = RoadDataModule(batch_size=lit_model.batch_size, resize_to=lit_model.resize_to,
-                          divide_into_four=lit_model.divide_into_four)
+    data = RoadDataModule(
+        batch_size=lit_model.batch_size,
+        resize_to=lit_model.resize_to,
+        divide_into_four=lit_model.divide_into_four,
+    )
 
     if torch.cuda.is_available():
-        lit_model.to(torch.device('cuda'))
+        lit_model.to(torch.device("cuda"))
 
     return lit_model, data
 
 
 def handle_train(trainer, config, model_name):
+    """Train model with given configs"""
     model = get_model(model_name, config)
 
-    data = RoadDataModule(batch_size=config["batch_size"], resize_to=config["resize_to"],
-                          divide_into_four=config["divide_into_four"], enable_preprocessing=True)
+    data = RoadDataModule(
+        batch_size=config["batch_size"],
+        resize_to=config["resize_to"],
+        divide_into_four=config["divide_into_four"],
+        enable_preprocessing=True,
+    )
     lit_model = LitBase(config, model)
 
     trainer.fit(lit_model, datamodule=data)
@@ -118,8 +129,14 @@ if __name__ == "__main__":
     pl.utilities.seed.seed_everything(seed=1337)
 
     # default
-    config = {"lr": 0.001, "loss_fn": "dice_loss", "divide_into_four": False, "batch_size": 1, "resize_to": 192,
-              "num_epochs": 35}
+    config = {
+        "lr": 0.001,
+        "loss_fn": "dice_loss",
+        "divide_into_four": False,
+        "batch_size": 1,
+        "resize_to": 192,
+        "num_epochs": 35,
+    }
 
     if args.load is not None:
         # load
@@ -128,7 +145,12 @@ if __name__ == "__main__":
     else:
         # train
         logger = True
-        trainer = pl.Trainer(gpus=gpu(), max_epochs=config["num_epochs"], default_root_dir="data", logger=logger)
+        trainer = pl.Trainer(
+            gpus=gpu(),
+            max_epochs=config["num_epochs"],
+            default_root_dir="data",
+            logger=logger,
+        )
         model, data = handle_train(trainer, config, args.train)
 
     predict(trainer, model, data)

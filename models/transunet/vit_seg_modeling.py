@@ -381,7 +381,6 @@ class VisionTransformer(nn.Module):
             out_channels=config['n_classes'],
             kernel_size=3,
         )
-        self.sigmoid = nn.Sigmoid()
         self.config = config
 
     def forward(self, x):
@@ -390,7 +389,7 @@ class VisionTransformer(nn.Module):
         x, attn_weights, features = self.transformer(x)  # (B, n_patch, hidden)
         x = self.decoder(x, features)
         logits = self.segmentation_head(x)
-        return self.sigmoid(logits)
+        return logits
 
     def load_from(self, weights):
         with torch.no_grad():

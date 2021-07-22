@@ -1,3 +1,4 @@
+from torch import nn
 from skimage import color
 import cv2
 import maxflow
@@ -61,6 +62,13 @@ def morphological_postprocessing(imgs, iterations):
 
 
 def graph_cut(images, originals):
+
+    # sig = nn.Sigmoid()
+    # images = sig(images)
+
+    images = 1/(1 + np.exp(-images))
+
+
     binary_masks = np.zeros_like(images)
 
     for index, image in enumerate(images):
