@@ -2,10 +2,10 @@ from typing import Optional
 import torch
 from torch.nn import Module, BCELoss
 import pytorch_lightning as pl
-
 from common.plot_data import *
 from common.losses import NoiseRobustDiceLoss, DiceLoss
 from common.get_model import get_model
+from torchmetrics.classification.accuracy import Accuracy
 
 
 class LitBase(pl.LightningModule):
@@ -44,7 +44,7 @@ class LitBase(pl.LightningModule):
         elif loss_fn == 'dice_loss':
             self.loss_fn = DiceLoss()
 
-        # self.accuracy = torchmetrics.classification.accuracy.Accuracy()
+        self.accuracy = Accuracy()
 
     def forward(self, x):
         # use forward for inference/predictions
@@ -55,11 +55,11 @@ class LitBase(pl.LightningModule):
         x, y = batch
         y_hat = self.model(x)
         loss = self.loss_fn(y_hat, y)
-
-        # acc = self.accuracy(y_hat, y)
+        print("accccc",type(y_hat), type(y) )
+        acc = self.accuracy((y_hat*2).type(torch.IntTensor), y.type(torch.IntTensor))
         self.log("ptl/train_loss", loss)
-        # self.log("ptl/train_accuracy", acc)
-        self.log('train_loss', loss, on_epoch=True)
+
+        self.log("ptl/train_accuracy", acc)
 
         return loss
 
@@ -67,9 +67,9 @@ class LitBase(pl.LightningModule):
         x, y = batch
         y_hat = self.model(x)
         loss = self.loss_fn(y_hat, y)
-        self.log('valid_loss', loss, on_step=True)
-        # acc = self.accuracy(y_hat, y)
-        return {"val_loss": loss}
+        print("acccc",type(y_hat), type(y))
+        acc = self.accuracy((y_hat*2).type(torch.IntTensor), y.type(torch.IntTensor))
+        return {"val_loss": loss, "val_accuracy": acc}
 
     def configure_optimizers(self):
         return torch.optim.Adam(self.parameters(), lr=self.lr)
@@ -77,7 +77,7 @@ class LitBase(pl.LightningModule):
     def validation_epoch_end(self, outputs):
         avg_loss = torch.stack(
             [x["val_loss"] for x in outputs]).mean()
-        # avg_acc = torch.stack(
-        #    [x["val_accuracy"] for x in outputs]).mean()
+        avg_acc = torch.stack(
+            [x["val_accuracy"] for x in outputs]).mean()
         self.log("ptl/val_loss", avg_loss)
-        # self.log("ptl/val_accuracy", avg_acc)
+        self.log("ptl/val_accuracy", avg_acc)

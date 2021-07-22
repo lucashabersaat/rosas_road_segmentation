@@ -9,41 +9,23 @@ def get_model(model_name, config):
         model_name = config["model_name"]
 
     if model_name == "unet":
-        config["resize_to"] = 384
-        config["divide_into_four"] = False
         model = UNet()
     elif model_name == "unet2":
-        config["resize_to"] = 384
-        config["divide_into_four"] = False
         model = U_Net2()
-        # R2U_Net, AttU_Net, R2AttU_Net, NestedUNet
     elif model_name == "attUnet":
-        config["resize_to"] = 384
-        config["divide_into_four"] = False
         model = AttU_Net()
     elif model_name == "r2Unet":
-        config["resize_to"] = 384
-        config["divide_into_four"] = False
         model = R2U_Net()
     elif model_name == "r2attUnet":
-        config["resize_to"] = 384
-        config["divide_into_four"] = False
         model = R2AttU_Net()
     elif model_name == "nestedUnet":
-        config["resize_to"] = 384
-        config["divide_into_four"] = False
         model = NestedUNet()
     elif model_name == "transunet" or model_name == "visiontransformer":
-        config["resize_to"] = 384
-        config["batch_size"] = 4
-        config["divide_into_four"] = False
-        config['loss_fn'] = "noise_robust_dice"
         transunet_config = CONFIGS['R50-ViT-B_16']
         config['transunet_config'] = transunet_config
         model = VisionTransformer(transunet_config, img_size=config["resize_to"],
                                   num_classes=transunet_config.n_classes)
     elif model_name == "unet_transformer":
-        config['loss_fn'] = "noise_robust_dice"
         config["resize_to"] = 256
         model = U_Transformer(3, 1)
     else:
