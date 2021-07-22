@@ -25,10 +25,9 @@ def predict(trainer, model, data):
     predictions = trainer.predict(model, datamodule=data)
 
     predictions = [p.detach().cpu().numpy() for p in predictions]
-    predictions = np.asarray(predictions).squeeze(1)
+    predictions = np.concatenate(predictions)
 
     predictions = data.test_dataset.reassemble(predictions)
-
     predictions = np.asarray(predictions).squeeze(1)
 
     post_process = True
