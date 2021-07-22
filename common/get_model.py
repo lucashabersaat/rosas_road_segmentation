@@ -17,6 +17,10 @@ def get_model(model_name, config):
         config["divide_into_four"] = False
         model = U_Net2()
         # R2U_Net, AttU_Net, R2AttU_Net, NestedUNet
+    elif model_name == "attUnet":
+        config["resize_to"] = 384
+        config["divide_into_four"] = False
+        model = AttU_Net()
     elif model_name == "r2Unet":
         config["resize_to"] = 384
         config["divide_into_four"] = False
