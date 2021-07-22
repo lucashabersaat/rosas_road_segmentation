@@ -6,7 +6,7 @@ from models.unets_to_test import U_Net2, R2U_Net, AttU_Net, R2AttU_Net, NestedUN
 
 def get_model(model_name, config):
     if model_name is None:
-        model_name = "unet_transformer"
+        model_name = config["model_name"]
 
     if model_name == "unet":
         model = UNet()
@@ -27,13 +27,13 @@ def get_model(model_name, config):
         config["batch_size"] = 1
         config['loss_fn'] = "noise_robust_dice"
         transunet_config = CONFIGS['R50-ViT-B_16']
-        model = VisionTransformer(transunet_config, img_size=256,
-                                  num_classes=transunet_config.n_classes)
+        model = VisionTransformer(transunet_config, img_size=256, num_classes=transunet_config.n_classes)
     elif model_name == "unet_transformer":
         config['loss_fn'] = "noise_robust_dice"
         config["resize_to"] = 256
         model = U_Transformer(3, 1)
     else:
+        print()
         raise Exception("unknown model")
 
     return model

@@ -19,9 +19,7 @@ from scipy import ndimage
 from . import vit_seg_configs as configs
 from .vit_seg_modeling_resnet_skip import ResNetV2
 
-
 logger = logging.getLogger(__name__)
-
 
 ATTENTION_Q = "MultiHeadDotProductAttention_1/query"
 ATTENTION_K = "MultiHeadDotProductAttention_1/key"
@@ -122,13 +120,14 @@ class Mlp(nn.Module):
 class Embeddings(nn.Module):
     """Construct the embeddings from patch, position embeddings.
     """
+
     def __init__(self, config, img_size, in_channels=3):
         super(Embeddings, self).__init__()
         self.hybrid = None
         self.config = config
         img_size = _pair(img_size)
 
-        if config.patches.get("grid") is not None:   # ResNet
+        if config.patches.get("grid") is not None:  # ResNet
             grid_size = config.patches["grid"]
             patch_size = (img_size[0] // 16 // grid_size[0], img_size[1] // 16 // grid_size[1])
             patch_size_real = (patch_size[0] * 16, patch_size[1] * 16)
@@ -149,7 +148,6 @@ class Embeddings(nn.Module):
         self.position_embeddings = nn.Parameter(torch.zeros(1, n_patches, config.hidden_size))
 
         self.dropout = Dropout(config.transformer["dropout_rate"])
-
 
     def forward(self, x):
         if self.hybrid:
@@ -189,10 +187,13 @@ class Block(nn.Module):
     def load_from(self, weights, n_block):
         ROOT = f"Transformer/encoderblock_{n_block}"
         with torch.no_grad():
-            query_weight = np2th(weights[pjoin(ROOT, ATTENTION_Q, "kernel")]).view(self.hidden_size, self.hidden_size).t()
+            query_weight = np2th(weights[pjoin(ROOT, ATTENTION_Q, "kernel")]).view(self.hidden_size,
+                                                                                   self.hidden_size).t()
             key_weight = np2th(weights[pjoin(ROOT, ATTENTION_K, "kernel")]).view(self.hidden_size, self.hidden_size).t()
-            value_weight = np2th(weights[pjoin(ROOT, ATTENTION_V, "kernel")]).view(self.hidden_size, self.hidden_size).t()
-            out_weight = np2th(weights[pjoin(ROOT, ATTENTION_OUT, "kernel")]).view(self.hidden_size, self.hidden_size).t()
+            value_weight = np2th(weights[pjoin(ROOT, ATTENTION_V, "kernel")]).view(self.hidden_size,
+                                                                                   self.hidden_size).t()
+            out_weight = np2th(weights[pjoin(ROOT, ATTENTION_OUT, "kernel")]).view(self.hidden_size,
+                                                                                   self.hidden_size).t()
 
             query_bias = np2th(weights[pjoin(ROOT, ATTENTION_Q, "bias")]).view(-1)
             key_bias = np2th(weights[pjoin(ROOT, ATTENTION_K, "bias")]).view(-1)
@@ -341,11 +342,11 @@ class DecoderCup(nn.Module):
 
         if self.config.n_skip != 0:
             skip_channels = self.config.skip_channels
-            for i in range(4-self.config.n_skip):  # re-select the skip channels according to n_skip
-                skip_channels[3-i]=0
+            for i in range(4 - self.config.n_skip):  # re-select the skip channels according to n_skip
+                skip_channels[3 - i] = 0
 
         else:
-            skip_channels=[0,0,0,0]
+            skip_channels = [0, 0, 0, 0]
 
         blocks = [
             DecoderBlock(in_ch, out_ch, sk_ch) for in_ch, out_ch, sk_ch in zip(in_channels, out_channels, skip_channels)
@@ -384,7 +385,7 @@ class VisionTransformer(nn.Module):
 
     def forward(self, x):
         if x.size()[1] == 1:
-            x = x.repeat(1,3,1,1)
+            x = x.repeat(1, 3, 1, 1)
         x, attn_weights, features = self.transformer(x)  # (B, n_patch, hidden)
         x = self.decoder(x, features)
         logits = self.segmentation_head(x)
@@ -405,7 +406,7 @@ class VisionTransformer(nn.Module):
             posemb_new = self.transformer.embeddings.position_embeddings
             if posemb.size() == posemb_new.size():
                 self.transformer.embeddings.position_embeddings.copy_(posemb)
-            elif posemb.size()[1]-1 == posemb_new.size()[1]:
+            elif posemb.size()[1] - 1 == posemb_new.size()[1]:
                 posemb = posemb[:, 1:]
                 self.transformer.embeddings.position_embeddings.copy_(posemb)
             else:
@@ -429,7 +430,8 @@ class VisionTransformer(nn.Module):
                     unit.load_from(weights, n_block=uname)
 
             if self.transformer.embeddings.hybrid:
-                self.transformer.embeddings.hybrid_model.root.conv.weight.copy_(np2th(res_weight["conv_root/kernel"], conv=True))
+                self.transformer.embeddings.hybrid_model.root.conv.weight.copy_(
+                    np2th(res_weight["conv_root/kernel"], conv=True))
                 gn_weight = np2th(res_weight["gn_root/scale"]).view(-1)
                 gn_bias = np2th(res_weight["gn_root/bias"]).view(-1)
                 self.transformer.embeddings.hybrid_model.root.gn.weight.copy_(gn_weight)
@@ -438,6 +440,7 @@ class VisionTransformer(nn.Module):
                 for bname, block in self.transformer.embeddings.hybrid_model.body.named_children():
                     for uname, unit in block.named_children():
                         unit.load_from(res_weight, n_block=bname, n_unit=uname)
+
 
 CONFIGS = {
     'ViT-B_16': configs.get_b16_config(),
@@ -449,5 +452,3 @@ CONFIGS = {
     'R50-ViT-L_16': configs.get_r50_l16_config(),
     'testing': configs.get_testing(),
 }
-
-

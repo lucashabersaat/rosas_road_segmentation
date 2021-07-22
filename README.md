@@ -104,3 +104,8 @@ See functions `_divide_into_four` and `put_back` in `ImageDataSet`
 
 #### Training Data Duplication
 The training data is rotated by 90, 180 and 270 degrees to increase the number of training images by a factor of four.
+
+### Postprocessing
+#### Graph Cut
+Instead of the threshold classifier, a graph cut is used to further improve results.
+However, it takes quite some time, so it is disabled by default. To enable it, set `graph_cut` to `true` in the `write_submissions` method call in the prediction.

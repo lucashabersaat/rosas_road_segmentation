@@ -1,0 +1,3 @@
+loss,time_this_iter_s,done,timesteps_total,episodes_total,training_iteration,experiment_id,date,timestamp,time_total_s,pid,hostname,node_ip,time_since_restore,timesteps_since_restore,iterations_since_restore,trial_id
+0.9746360182762146,4308.541897058487,False,,,1,5bb1db2fe1ec45069f46bfee6dc617ec,2021-07-21_19-16-38,1626887798,4308.541897058487,21931,lo-a2-053,10.204.3.163,4308.541897058487,0,1,5eaee_00002
+0.8385683298110962,4115.104227304459,False,,,2,5bb1db2fe1ec45069f46bfee6dc617ec,2021-07-21_20-25-13,1626891913,8423.646124362946,21931,lo-a2-053,10.204.3.163,8423.646124362946,0,2,5eaee_00002
