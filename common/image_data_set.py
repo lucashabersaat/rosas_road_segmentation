@@ -18,17 +18,16 @@ class ImageDataSet(torch.utils.data.Dataset):
     index.
     """
 
-    def __init__(self, path, device, resize_to=(400, 400), patch_size=256):
+    def __init__(self, path, device, resize_to=None, patch_size=256):
         self.path = path
 
         self.x, self.y, self.n_samples = None, None, None
         self.n_variants = 8
 
         self.device = device
-        self.resize_to = resize_to
         self.patch_size = patch_size
 
-        self._load()
+        self._load(resize_to)
         self._preprocess()
 
     def __getitem__(self, item):
@@ -40,7 +39,7 @@ class ImageDataSet(torch.utils.data.Dataset):
     def __len__(self):
         return self.n_samples
 
-    def _load(self):
+    def _load(self, resize_to):
         """
         Load loads the images from the data directory, resizes them if
         necessary and stores them in the object.
@@ -48,8 +47,9 @@ class ImageDataSet(torch.utils.data.Dataset):
         self.x = load_all_from_path(os.path.join(self.path, "images"))
         self.y = load_all_from_path(os.path.join(self.path, "groundtruth"))
 
-        self.x = np.stack([cv2.resize(img, dsize=self.resize_to) for img in self.x])
-        self.y = np.stack([cv2.resize(img, dsize=self.resize_to) for img in self.y])
+        if resize_to is not None:
+            self.x = np.stack([cv2.resize(img, dsize=resize_to) for img in self.x])
+            self.y = np.stack([cv2.resize(img, dsize=resize_to) for img in self.y])
 
         self.x = np.moveaxis(self.x, -1, 1)
 
@@ -185,24 +185,30 @@ class TestImageDataSet(torch.utils.data.Dataset):
     index.
     """
 
-    def __init__(self, path, device, resize_to=(608, 608), patch_size=256):
+    def __init__(self, path, device, resize_to=None, patch_size=256):
         self.path = path
 
         self.x, self.n_samples = None, None
 
         self.device = device
-        self.resize_to = resize_to
         self.patch_size = patch_size
 
+        self._load(resize_to)
+        self.unprocessed_x = np.copy(self.x)
+
+        if resize_to is not None:
+            self.size = resize_to
+        else:
+            self.size = self.x.shape[2:]
+
         self.x_variants = (
-            math.ceil((self.resize_to[0] - self.patch_size) / self.patch_size) + 1
+                math.ceil((self.size[0] - self.patch_size) / self.patch_size) + 1
         )
         self.y_variants = (
-            math.ceil((self.resize_to[1] - self.patch_size) / self.patch_size) + 1
+                math.ceil((self.size[1] - self.patch_size) / self.patch_size) + 1
         )
         self.n_variants = self.x_variants * self.y_variants
 
-        self._load()
         self._preprocess()
 
     def __getitem__(self, item):
@@ -211,13 +217,16 @@ class TestImageDataSet(torch.utils.data.Dataset):
     def __len__(self):
         return self.n_samples
 
-    def _load(self):
+    def _load(self, resize_to):
         """
         Load loads the images from the data directory, resizes them if
         necessary and stores them in the object.
         """
         self.x = load_all_from_path(self.path)
-        self.x = np.stack([cv2.resize(img, dsize=self.resize_to) for img in self.x])
+
+        if resize_to is not None:
+            self.x = np.stack([cv2.resize(img, dsize=resize_to) for img in self.x])
+
         self.x = np.moveaxis(self.x, -1, 1)
 
         self.n_samples = len(self.x)
@@ -236,17 +245,17 @@ class TestImageDataSet(torch.utils.data.Dataset):
         for img_index in range(self.n_samples):
             x = self.__getitem__(img_index)
 
-            for pos_x in range(0, self.resize_to[0] - self.patch_size + 1):
+            for pos_x in range(0, self.size[0] - self.patch_size + 1):
                 if (
-                    pos_x % self.patch_size != 0
-                    and pos_x + self.patch_size != self.resize_to[0]
+                        pos_x % self.patch_size != 0
+                        and pos_x + self.patch_size != self.size[0]
                 ):
                     continue
 
-                for pos_y in range(0, self.resize_to[1] - self.patch_size + 1):
+                for pos_y in range(0, self.size[1] - self.patch_size + 1):
                     if (
-                        pos_y % self.patch_size != 0
-                        and pos_y + self.patch_size != self.resize_to[1]
+                            pos_y % self.patch_size != 0
+                            and pos_y + self.patch_size != self.size[1]
                     ):
                         continue
 
@@ -267,7 +276,7 @@ class TestImageDataSet(torch.utils.data.Dataset):
         n_images = self.n_samples // self.n_variants
 
         reassembled_images = np.empty(
-            [n_images, 1, self.resize_to[0], self.resize_to[1]]
+            [n_images, 1, self.size[0], self.size[1]]
         )
 
         for img_index in range(n_images):
@@ -275,23 +284,23 @@ class TestImageDataSet(torch.utils.data.Dataset):
                 for patch_y_index in range(self.y_variants):
                     x_pos = patch_x_index * self.patch_size
                     if patch_x_index == self.x_variants - 1:
-                        x_pos = self.resize_to[0] - self.patch_size
+                        x_pos = self.size[0] - self.patch_size
 
                     y_pos = patch_y_index * self.patch_size
                     if patch_y_index == self.x_variants - 1:
-                        y_pos = self.resize_to[1] - self.patch_size
+                        y_pos = self.size[1] - self.patch_size
 
                     patch_index = (
-                        img_index * self.n_variants
-                        + (patch_x_index * self.x_variants)
-                        + patch_y_index
+                            img_index * self.n_variants
+                            + (patch_x_index * self.x_variants)
+                            + patch_y_index
                     )
 
                     reassembled_images[
-                        img_index,
-                        :,
-                        x_pos : x_pos + self.patch_size,
-                        y_pos : y_pos + self.patch_size,
+                    img_index,
+                    :,
+                    x_pos: x_pos + self.patch_size,
+                    y_pos: y_pos + self.patch_size,
                     ] = y[patch_index, :, :, :]
 
         return reassembled_images

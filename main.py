@@ -37,7 +37,7 @@ def predict(trainer, model, data):
 
     name = "lightning_" + str.lower(model.model.__class__.__name__)
     write_submission(
-        data.test_dataset.x,
+        data.test_dataset.unprocessed_x,
         predictions,
         name,
         "data/test_images",
@@ -122,7 +122,7 @@ if __name__ == "__main__":
         "lr": 0.001,
         "loss_fn": "dice_loss",
         "batch_size": 1,
-        "resize_to": 400,
+        "resize_to": None,
         "num_epochs": 35,
     }
 
