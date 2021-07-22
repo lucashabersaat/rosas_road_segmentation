@@ -22,7 +22,7 @@ class ImageDataSet(torch.utils.data.Dataset):
         self.path = path
 
         self.x, self.y, self.n_samples = None, None, None
-        self.n_variants = 20
+        self.n_variants = 8
 
         self.device = device
         self.resize_to = resize_to
@@ -128,7 +128,8 @@ class ImageDataSet(torch.utils.data.Dataset):
         resulting image is of size (size, size).
         """
         orig_size = math.ceil(len(x[0]) / 3)
-        rand_pos_x, rand_pos_y = torch.randint(0, orig_size, (2,))
+        pad_size = math.floor(len(x[0]) / 3)
+        rand_pos_x, rand_pos_y = torch.randint(low=pad_size, high=pad_size+orig_size, size=(2,))
 
         x_cropped = TF.crop(x, rand_pos_x, rand_pos_y, size, size)
         y_cropped = TF.crop(y, rand_pos_x, rand_pos_y, size, size)
@@ -233,8 +234,6 @@ class TestImageDataSet(torch.utils.data.Dataset):
         for img_index in range(self.n_samples):
             x = self.__getitem__(img_index)
 
-            show_img(x)
-
             for pos_x in range(0, self.resize_to[0] - self.patch_size + 1):
                 if (
                     pos_x % self.patch_size != 0
@@ -299,8 +298,3 @@ class TestImageDataSet(torch.utils.data.Dataset):
 if __name__ == "__main__":
     dataset = ImageDataSet("data/training", "cpu")
 
-    print(len(dataset))
-
-    x, y = dataset[115]
-    show_img(x)
-    show_img(y)
