@@ -9,9 +9,11 @@ import torch
 
 def train_segmentation(config, checkpoint_dir=None, num_epochs=35, num_gpus=1):
     model = get_model("unet", config)
-    #print(config["model_name"])
-    data = RoadDataModule(batch_size=config["batch_size"], resize_to=config["resize_to"],
-                      divide_into_four=config["divide_into_four"], enable_preprocessing=True)
+    data = RoadDataModule(
+        batch_size=config["batch_size"],
+        resize_to=config["resize_to"],
+        patch_size=config["patch_size"])
+
     metrics = {"loss": "ptl/val_loss"}
     lit_model = LitBase(config, model)
     """ 
@@ -28,27 +30,24 @@ def train_segmentation(config, checkpoint_dir=None, num_epochs=35, num_gpus=1):
 
 
 if __name__ == "__main__":
-
     pl.utilities.seed.seed_everything(seed=1337)
-    #, "acc": "ptl/val_accuracy" should also be logged, for now just loss
+    # , "acc": "ptl/val_accuracy" should also be logged, for now just loss
     metrics = {"loss": "ptl/val_loss"}
     callbacks = [TuneReportCallback(metrics, on="validation_end")]
     trainer = pl.Trainer(callbacks=callbacks)
 
     num_samples = 4
     num_epochs = 4
-    gpus_per_trial = int(torch.cuda.is_available()) # set this to higher if using GPU
-
-
+    gpus_per_trial = int(torch.cuda.is_available())  # set this to higher if using GPU
 
     config = {
-     #"model_name": tune.choice(["unet", "unet2", "transunet", "r2Uet", "attUnet", "r2attUnet", "nestedUnet"]),
-     "lr": tune.loguniform(1e-4, 1e-1),
-     "loss_fn": tune.choice(["dice_loss", 'noise_robust_dice']),
-     "batch_size": tune.choice([1, 2, 3, 4]),
-     "resize_to": tune.choice([384, 192]),
-     "divide_into_four": tune.choice([False]),
-    "num_epochs": tune.choice([35])
+        # "model_name": tune.choice(["unet", "unet2", "transunet", "r2Uet", "attUnet", "r2attUnet", "nestedUnet"]),
+        "lr": tune.loguniform(1e-4, 1e-1),
+        "loss_fn": tune.choice(["dice_loss", 'noise_robust_dice']),
+        "batch_size": tune.choice([1, 2, 3, 4]),
+        "resize_to": tune.choice([384, 192]),
+        "num_epochs": tune.choice([35]),
+        "patch_size": tune.choice([256])
     }
 
     trainable = tune.with_parameters(
@@ -57,9 +56,9 @@ if __name__ == "__main__":
         num_gpus=gpus_per_trial)
 
     analysis = tune.run(
-     trainable,
-     config=config,
-     num_samples=num_samples)
+        trainable,
+        config=config,
+        num_samples=num_samples)
 
     analysis = tune.run(
         trainable,

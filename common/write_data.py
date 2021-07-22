@@ -28,15 +28,16 @@ def write_submission(original, all_predictions, name, test_path, size, graph_cut
         predictions = all_predictions[i:i + b]
         test_filenames = all_test_filenames[i:i + b]
 
-        # resize to original
-        predictions = np.stack(
-            [cv2.resize(img, dsize=size) for img in predictions], 0
-        )
+        if size != original.shape[1:3]:
+            # resize to original
+            predictions = np.stack(
+                [cv2.resize(img, dsize=size) for img in predictions], 0
+            )
 
-        original = np.moveaxis(original, 1, -1)
-        original = np.stack(
-            [cv2.resize(img, dsize=size) for img in original], 0
-        )
+            original = np.moveaxis(original, 1, -1)
+            original = np.stack(
+                [cv2.resize(img, dsize=size) for img in original], 0
+            )
 
         # now compute labels
         if graph_cut:

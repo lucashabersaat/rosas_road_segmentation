@@ -25,13 +25,11 @@ def predict(trainer, model, data):
     predictions = trainer.predict(model, datamodule=data)
 
     predictions = [p.detach().cpu().numpy() for p in predictions]
+    predictions = np.asarray(predictions).squeeze(1)
 
-    # put four corresponding images back together again
-    if data.divide_into_four:
-        predictions = TestImageDataSet.put_back(predictions)
-    else:
-        predictions = np.concatenate(predictions)
-        predictions = np.moveaxis(predictions, 1, -1).squeeze()
+    predictions = data.test_dataset.reassemble(predictions)
+
+    predictions = np.asarray(predictions).squeeze(1)
 
     post_process = True
     if post_process:
@@ -39,11 +37,11 @@ def predict(trainer, model, data):
 
     name = "lightning_" + str.lower(model.model.__class__.__name__)
     write_submission(
-        data.test_dataset.x,
+        data.test_dataset.unprocessed_x,
         predictions,
         name,
-        "data/test_images/test_images",
-        data.test_dataset.size,
+        "data/test_images",
+        (608, 608),
         graph_cut=False,
     )
 
@@ -92,11 +90,8 @@ def get_args():
 def handle_load(config, version: int):
     """Handle case when a model should be loaded from logs"""
     lit_model = load_model(version)
-    data = RoadDataModule(
-        batch_size=lit_model.batch_size,
-        resize_to=lit_model.resize_to,
-        divide_into_four=lit_model.divide_into_four,
-    )
+    data = RoadDataModule(batch_size=lit_model.batch_size, resize_to=lit_model.resize_to,
+                          patch_size=config.get('patch_size'))
 
     if torch.cuda.is_available():
         lit_model.to(torch.device("cuda"))
@@ -108,12 +103,8 @@ def handle_train(trainer, config, model_name):
     """Train model with given configs"""
     model = get_model(model_name, config)
 
-    data = RoadDataModule(
-        batch_size=config["batch_size"],
-        resize_to=config["resize_to"],
-        divide_into_four=config["divide_into_four"],
-        enable_preprocessing=True,
-    )
+    data = RoadDataModule(batch_size=config["batch_size"], resize_to=config["resize_to"],
+                          patch_size=config.get('patch_size'))
     lit_model = LitBase(config, model)
 
     trainer.fit(lit_model, datamodule=data)
@@ -132,10 +123,10 @@ if __name__ == "__main__":
     config = {
         "lr": 0.001,
         "loss_fn": "dice_loss",
-        "divide_into_four": False,
         "batch_size": 1,
-        "resize_to": 192,
+        "resize_to": None,
         "num_epochs": 35,
+        "patch_size": 256
     }
 
     if args.load is not None:
