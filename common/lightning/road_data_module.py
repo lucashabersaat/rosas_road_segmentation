@@ -29,7 +29,7 @@ class RoadDataModule(pl.LightningDataModule):
         )
 
         self.test_dataset = TestImageDataSet(
-            "data/test_images", device, resize_to=(self.resize_to, self.resize_to)
+            "data/test_images", device, resize_to=(608, 608)
         )
 
     def train_dataloader(self):

@@ -129,7 +129,9 @@ class ImageDataSet(torch.utils.data.Dataset):
         """
         orig_size = math.ceil(len(x[0]) / 3)
         pad_size = math.floor(len(x[0]) / 3)
-        rand_pos_x, rand_pos_y = torch.randint(low=pad_size, high=pad_size+orig_size, size=(2,))
+        rand_pos_x, rand_pos_y = torch.randint(
+            low=pad_size, high=pad_size + orig_size, size=(2,)
+        )
 
         x_cropped = TF.crop(x, rand_pos_x, rand_pos_y, size, size)
         y_cropped = TF.crop(y, rand_pos_x, rand_pos_y, size, size)
@@ -225,7 +227,7 @@ class TestImageDataSet(torch.utils.data.Dataset):
         Preprocess preprocesses an image by creating multiple variants of the
         same image. The original image is cropped multiple times.
         """
-        x_preprocessed = np.zeros(
+        x_preprocessed = np.empty(
             (self.n_samples * self.n_variants, 3, self.patch_size, self.patch_size),
             dtype=np.float32,
         )
@@ -264,7 +266,7 @@ class TestImageDataSet(torch.utils.data.Dataset):
         """
         n_images = self.n_samples // self.n_variants
 
-        reassembled_images = np.zeros(
+        reassembled_images = np.empty(
             [n_images, 1, self.resize_to[0], self.resize_to[1]]
         )
 
@@ -297,4 +299,3 @@ class TestImageDataSet(torch.utils.data.Dataset):
 
 if __name__ == "__main__":
     dataset = ImageDataSet("data/training", "cpu")
-
