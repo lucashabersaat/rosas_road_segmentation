@@ -1,132 +1,173 @@
+import math
+
 import torch
 import cv2
 from torchvision import transforms as T
+from torchvision.transforms import functional as TF
+from PIL import Image
+import numpy as np
 
 from common.util import np_to_tensor
 from common.read_data import *
 from common.plot_data import *
 
-torch.manual_seed(17)
-
 
 class ImageDataSet(torch.utils.data.Dataset):
-    # dataset class that deals with loading the data and making it available by index
+    """
+    Dataset class that deals with loading the data and making it available by
+    index.
+    """
 
-    def __init__(self, path, device, use_patches=True, resize_to=(400, 400), divide_into_four=True, enable_preprocessing=True):
+    def __init__(self, path, device, resize_to=(400, 400), patch_size=256):
         self.path = path
 
-        self.device = device
-        self.use_patches = use_patches
-        self.enable_preprocessing = enable_preprocessing
-        self.resize_to = resize_to
         self.x, self.y, self.n_samples = None, None, None
-        self._load_data()
+        self.n_variants = 20
 
-        # duplicate data
-        if self.enable_preprocessing:
-            self.breed_images()
+        self.device = device
+        self.resize_to = resize_to
+        self.patch_size = patch_size
 
-        if divide_into_four:
-            self._divide_into_four()
+        self._load()
+        self._preprocess()
 
-    def _load_data(self):  # not very scalable, but good enough for now
-        self.x = load_all_from_path(os.path.join(self.path, "images"))
-        self.y = load_all_from_path(os.path.join(self.path, "groundtruth"))
-
-        if self.use_patches:  # split each image into patches
-            self.x, self.y = image_to_patches(self.x, self.y)
-        else:
-            self.x = np.stack([cv2.resize(img, dsize=self.resize_to) for img in self.x])
-            self.y = np.stack([cv2.resize(img, dsize=self.resize_to) for img in self.y])
-        self.x = np.moveaxis(self.x, -1, 1)
-        self.n_samples = len(self.x)
-
-    def breed_images(self):
-        """Rotate all images by 90, 180 and 270 degrees and increase the number of the training set by factor 4."""
-        rotated_x = [self.x]
-        rotated_y = [self.y]
-        for k in range(1, 4):
-            rotated_x.append(np.rot90(self.x, k=k, axes=(2, 3)))
-            rotated_y.append(np.rot90(self.y, k=k, axes=(1, 2)))
-
-        self.x = np.concatenate(rotated_x)
-        self.y = np.concatenate(rotated_y)
-        self.n_samples = len(self.x)
-
-    def _divide_into_four(self):
-        """
-        Divide all images into the four quadrants, decreases resolution and increases number of images.
-        The idea was to deal with the limited GPU memory
-        """
-
-        n, c, w, h = self.x.shape
-        assert (n, w, h) == self.y.shape
-
-        # half width and height
-        w_2 = w // 2
-        h_2 = h // 2
-
-        # divide into the four quadrant and concatenate
-        x1 = self.x[:, :, :w_2, :h_2]
-        x2 = self.x[:, :, w_2:, :h_2]
-        x3 = self.x[:, :, :w_2, h_2:]
-        x4 = self.x[:, :, w_2:, h_2:]
-        self.x = np.concatenate([x1, x2, x3, x4])
-
-        y1 = self.y[:, :w_2, :h_2]
-        y2 = self.y[:, w_2:, :h_2]
-        y3 = self.y[:, :w_2, h_2:]
-        y4 = self.y[:, w_2:, h_2:]
-        self.y = np.concatenate([y1, y2, y3, y4])
-
-    def _preprocess(self, x, y, normalize=False, h_flip=0.5, v_flip=0.5, h_flip_a=0.5, v_flip_a=0.5, contrast=0.3,
-                    brightness=0.1, hue=0.3):
-        if not self.enable_preprocessing:
-            return x, y
-
-        if normalize:
-            x = self.normalize(x)
-
-        jitter = T.ColorJitter(brightness=brightness, contrast=contrast, hue=hue)
-
-        hflipper = T.RandomHorizontalFlip(h_flip)
-        vflipper = T.RandomVerticalFlip(v_flip)
-        hflipper_again = T.RandomHorizontalFlip(h_flip_a)
-        vflipper_again = T.RandomVerticalFlip(v_flip_a)
-        randomFlipping = T.Compose([hflipper, vflipper, hflipper_again, vflipper_again])
-
-        x = jitter(x)
-
-        if y is not None:
-            tmp_y = torch.cat([y, y, y])
-            flipped = randomFlipping(torch.stack([x, tmp_y]))
-
-            x = flipped[0]
-            y = flipped[1][0].unsqueeze(0)
-
-        # possible additions: five_crop, randomCrop, gaussianblur, autocontrast
+    def __getitem__(self, item):
+        x = np_to_tensor(self.x[item], self.device)
+        y = np_to_tensor(self.y[[item]], self.device)
 
         return x, y
 
-    def normalize_patchwise(self, x):
-        s = torch.std(x, [1, 2])
+    def __len__(self):
+        return self.n_samples
 
-        patch_size = 16
-        for i in range(0, x.shape[1], patch_size):
-            for j in range(0, x.shape[1], patch_size):
-                m = torch.mean(x[:, i: i + patch_size, j: j + patch_size], [1, 2])
+    def _load(self):
+        """
+        Load loads the images from the data directory, resizes them if
+        necessary and stores them in the object.
+        """
+        self.x = load_all_from_path(os.path.join(self.path, "images"))
+        self.y = load_all_from_path(os.path.join(self.path, "groundtruth"))
 
-                x[0, i: i + patch_size, j: j + patch_size] -= m[0]
-                x[1, i: i + patch_size, j: j + patch_size] -= m[1]
-                x[2, i: i + patch_size, j: j + patch_size] -= m[2]
+        self.x = np.stack([cv2.resize(img, dsize=self.resize_to) for img in self.x])
+        self.y = np.stack([cv2.resize(img, dsize=self.resize_to) for img in self.y])
 
-        x[0] /= s[0]
-        x[1] /= s[1]
-        x[2] /= s[2]
+        self.x = np.moveaxis(self.x, -1, 1)
 
-        return x
+        self.n_samples = len(self.x)
 
-    def normalize(self, x):
+    def _preprocess(self):
+        """
+        Preprocess preprocesses an image by randomly creating multiple variants
+        of the same image. The original image gets randomly rotated, cropped and
+        its colour modified. The modified image is then inserted into the data
+        set.
+        """
+        x_preprocessed = np.empty(
+            (self.n_samples * self.n_variants, 3, self.patch_size, self.patch_size),
+            dtype=np.float32,
+        )
+        y_preprocessed = np.empty(
+            (self.n_samples * self.n_variants, self.patch_size, self.patch_size),
+            dtype=np.float32,
+        )
+
+        for img_index in range(self.n_samples):
+            x, y = self.__getitem__(img_index)
+
+            x_padded, y_padded = ImageDataSet._pad(x, y)
+
+            for variant_index in range(self.n_variants):
+                x_rotated, y_rotated = ImageDataSet._rotate(x_padded, y_padded)
+                x_cropped, y_cropped = ImageDataSet._crop(
+                    x_rotated, y_rotated, self.patch_size
+                )
+                x_flipped, y_flipped = ImageDataSet._flip(x_cropped, y_cropped)
+
+                x_colored = ImageDataSet._color(x_flipped)
+
+                index = (img_index * self.n_variants) + variant_index
+
+                x_preprocessed[index] = x_colored.cpu().numpy()
+                y_preprocessed[index] = y_flipped.cpu().numpy()[0]
+
+        self.x = x_preprocessed
+        self.y = y_preprocessed
+
+        self.n_samples = len(self.x)
+
+    @staticmethod
+    def _pad(x, y):
+        """
+        Pad mirrors the image and the corresponding groundtruth mask on each
+        side. The resulting image is of size (3 * height - 2, 3 * width - 2).
+        """
+        size = len(x[0]) - 1
+
+        pad = T.Pad(padding=size, padding_mode="reflect")
+
+        return pad(x), pad(y)
+
+    @staticmethod
+    def _rotate(x, y):
+        """
+        Rotate rotates the image randomly with a value picked randomly from the
+        range of degrees (-180, +180).
+        """
+        rotate = T.RandomRotation(degrees=180)
+
+        x_rotated, y_rotated = rotate(torch.stack([x, torch.cat([y, y, y])]))
+        y_rotated = y_rotated[0].unsqueeze(0)
+
+        return x_rotated, y_rotated
+
+    @staticmethod
+    def _crop(x, y, size):
+        """
+        Crop expects a padded (and optionally rotated) image. It randomly
+        selects a section from the center of the image and crops it. The
+        resulting image is of size (size, size).
+        """
+        orig_size = math.ceil(len(x[0]) / 3)
+        rand_pos_x, rand_pos_y = torch.randint(0, orig_size, (2,))
+
+        x_cropped = TF.crop(x, rand_pos_x, rand_pos_y, size, size)
+        y_cropped = TF.crop(y, rand_pos_x, rand_pos_y, size, size)
+
+        return x_cropped, y_cropped
+
+    @staticmethod
+    def _flip(x, y):
+        """
+        Flip randomly flips the image.
+        """
+        flip_horizontal_1 = T.RandomHorizontalFlip(0.5)
+        flip_horizontal_2 = T.RandomHorizontalFlip(0.5)
+        flip_vertical_1 = T.RandomVerticalFlip(0.5)
+        flip_vertical_2 = T.RandomVerticalFlip(0.5)
+
+        flip = T.Compose(
+            [flip_horizontal_1, flip_vertical_1, flip_horizontal_2, flip_vertical_2]
+        )
+
+        x_flipped, y_flipped = flip(torch.stack([x, torch.cat([y, y, y])]))
+        y_flipped = y_flipped[0].unsqueeze(0)
+
+        return x_flipped, y_flipped
+
+    @staticmethod
+    def _color(x):
+        """
+        Colour randomly changes the contrast, brightness and hue of the image.
+        """
+        color = T.ColorJitter(brightness=0.1, contrast=0.3, hue=0.1)
+
+        return color(x)
+
+    @staticmethod
+    def _normalize(x):
+        """
+        Normalize normalizes the image.
+        """
         s = torch.std(x, [1, 2])
         m = torch.mean(x, [1, 2])
 
@@ -134,74 +175,132 @@ class ImageDataSet(torch.utils.data.Dataset):
 
         return normalize(x)
 
+
+class TestImageDataSet(torch.utils.data.Dataset):
+    """
+    Dataset class that deals with loading the data and making it available by
+    index.
+    """
+
+    def __init__(self, path, device, resize_to=(608, 608), patch_size=256):
+        self.path = path
+
+        self.x, self.n_samples = None, None
+
+        self.device = device
+        self.resize_to = resize_to
+        self.patch_size = patch_size
+
+        self.x_variants = (
+            math.ceil((self.resize_to[0] - self.patch_size) / self.patch_size) + 1
+        )
+        self.y_variants = (
+            math.ceil((self.resize_to[1] - self.patch_size) / self.patch_size) + 1
+        )
+        self.n_variants = self.x_variants * self.y_variants
+
+        self._load()
+        self._preprocess()
+
     def __getitem__(self, item):
-        return self._preprocess(
-            np_to_tensor(self.x[item], self.device),
-            np_to_tensor(self.y[[item]], self.device),
+        return np_to_tensor(self.x[item], self.device)
+
+    def __len__(self):
+        return self.n_samples
+
+    def _load(self):
+        """
+        Load loads the images from the data directory, resizes them if
+        necessary and stores them in the object.
+        """
+        self.x = load_all_from_path(self.path)
+        self.x = np.stack([cv2.resize(img, dsize=self.resize_to) for img in self.x])
+        self.x = np.moveaxis(self.x, -1, 1)
+
+        self.n_samples = len(self.x)
+
+    def _preprocess(self):
+        """
+        Preprocess preprocesses an image by creating multiple variants of the
+        same image. The original image is cropped multiple times.
+        """
+        x_preprocessed = np.zeros(
+            (self.n_samples * self.n_variants, 3, self.patch_size, self.patch_size),
+            dtype=np.float32,
         )
 
-    def __len__(self):
-        return self.n_samples
+        index = 0
+        for img_index in range(self.n_samples):
+            x = self.__getitem__(img_index)
 
+            show_img(x)
 
-class TestImageDataSet(ImageDataSet):
-    # dataset class that deals with loading the data and making it available by index
+            for pos_x in range(0, self.resize_to[0] - self.patch_size + 1):
+                if (
+                    pos_x % self.patch_size != 0
+                    and pos_x + self.patch_size != self.resize_to[0]
+                ):
+                    continue
 
-    def __init__(self, path, device, use_patches=True, resize_to=(400, 400), divide_into_four=True, enable_preprocessing=True):
-        super(TestImageDataSet, self).__init__(path, device, use_patches, resize_to, divide_into_four, enable_preprocessing)
+                for pos_y in range(0, self.resize_to[1] - self.patch_size + 1):
+                    if (
+                        pos_y % self.patch_size != 0
+                        and pos_y + self.patch_size != self.resize_to[1]
+                    ):
+                        continue
 
-    def _load_data(self):  # not very scalable, but good enough for now
-        self.x = load_all_from_path(self.path)
-        self.size = self.x.shape[1:3]
+                    x_cropped = TF.crop(
+                        x, pos_x, pos_y, self.patch_size, self.patch_size
+                    )
 
-        if self.use_patches:  # split each image into patches
-            self.x, self.y = image_to_patches(self.x)
-        else:
-            self.x = np.stack([cv2.resize(img, dsize=self.resize_to) for img in self.x])
-        self.x = np.moveaxis(self.x, -1, 1)
+                    x_preprocessed[index] = x_cropped.cpu().numpy()
+                    index += 1
+
+        self.x = x_preprocessed
         self.n_samples = len(self.x)
 
-    def _divide_into_four(self):
-        n, c, w, h = self.x.shape
-
-        # half width and height
-        w_2 = w // 2
-        h_2 = h // 2
-
-        # divide into the four quadrant and concatenate
-        x1 = self.x[:, :, :w_2, :h_2]
-        x2 = self.x[:, :, w_2:, :h_2]
-        x3 = self.x[:, :, :w_2, h_2:]
-        x4 = self.x[:, :, w_2:, h_2:]
-        self.x = np.concatenate([x1, x2, x3, x4])
-        self.n_samples = len(self.x)
-
-    def breed_images(self):
-        pass
-
-    @staticmethod
-    def put_back(x):
+    def reassemble(self, y):
         """
-        The inverse operation of the dividing into four.
-        Only required for test set, as it after prediction, it must get back into the same format.
+        Reassemble reassembles patches to a full image.
         """
+        n_images = self.n_samples // self.n_variants
 
-        x = np.concatenate(x, 0)
-        n, c, w, h = x.shape
-        n_4 = n // 4
+        reassembled_images = np.zeros(
+            [n_images, 1, self.resize_to[0], self.resize_to[1]]
+        )
 
-        result = np.zeros([n_4, 1, w * 2, h * 2])
-        result[:, :, :w, :h] = x[:n_4, :, :, :]
-        result[:, :, w:, :h] = x[n_4:n_4 * 2, :, :, :]
-        result[:, :, :w, h:] = x[2 * n_4:3 * n_4, :, :, :]
-        result[:, :, w:, h:] = x[3 * n_4:4 * n_4, :, :, :]
+        for img_index in range(n_images):
+            for patch_x_index in range(self.x_variants):
+                for patch_y_index in range(self.y_variants):
+                    x_pos = patch_x_index * self.patch_size
+                    if patch_x_index == self.x_variants - 1:
+                        x_pos = self.resize_to[0] - self.patch_size
 
-        result = np.moveaxis(result, -1, 1)  # CHW to HWC
-        result = result.squeeze()
-        return result
+                    y_pos = patch_y_index * self.patch_size
+                    if patch_y_index == self.x_variants - 1:
+                        y_pos = self.resize_to[1] - self.patch_size
 
-    def __getitem__(self, item):
-        return self._preprocess(np_to_tensor(self.x[item], self.device), None)[0]
+                    patch_index = (
+                        img_index * self.n_variants
+                        + (patch_x_index * self.x_variants)
+                        + patch_y_index
+                    )
 
-    def __len__(self):
-        return self.n_samples
+                    reassembled_images[
+                        img_index,
+                        :,
+                        x_pos : x_pos + self.patch_size,
+                        y_pos : y_pos + self.patch_size,
+                    ] = y[patch_index, :, :, :]
+
+        return reassembled_images
+
+
+if __name__ == "__main__":
+    dataset = ImageDataSet("data/training", "cpu")
+
+    print(len(dataset))
+
+    x, y = dataset[115]
+    show_img(x)
+    show_img(y)

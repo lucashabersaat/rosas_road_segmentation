@@ -38,9 +38,9 @@ def write_submission(original, all_predictions, name, test_path, size):
         predictions = np.moveaxis(predictions, 2, 3)
         predictions = classify(predictions)
 
-        for i in range(predictions.shape[0]):
-            resized = cv2.resize(predictions[i].astype(float), dsize=original[i].shape[1:])
-            show_two_imgs_overlay(original[i], resized)
+        # for i in range(predictions.shape[0]):
+        #     resized = cv2.resize(predictions[i].astype(float), dsize=original[i].shape[1:])
+        #     show_two_imgs_overlay(original[i], resized)
 
         append_submission(
             predictions,

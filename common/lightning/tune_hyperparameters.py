@@ -9,8 +9,7 @@ def train_segmentation(config, checkpoint_dir=None, num_epochs=35, num_gpus=1):
     model = LitBase(config)
     dm = RoadDataModule(
         batch_size = config["batch_size"],
-        resize_to = config["resize_to"],
-        divide_into_four = config["divide_into_four"])
+        resize_to = config["resize_to"])
     metrics = {"loss": "ptl/val_loss"}
     trainer = pl.Trainer(
         max_epochs=num_epochs,
@@ -37,8 +36,7 @@ if __name__ == "__main__":
      "lr": tune.loguniform(1e-4, 1e-1),
      "loss_fn": tune.choice(['bce','noise_robust_dice']),
      "batch_size": tune.choice([1,2,3,4]),
-     "resize_to": tune.choice([192, 384]),
-     "divide_into_four": tune.choice([True, False])
+     "resize_to": tune.choice([192, 384])
     }
 
     trainable = tune.with_parameters(

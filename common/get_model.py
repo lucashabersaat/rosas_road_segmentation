@@ -9,41 +9,25 @@ def get_model(model_name, config):
         model_name = "unet_transformer"
 
     if model_name == "unet":
-        config["resize_to"] = 384
-        config["divide_into_four"] = False
         model = UNet()
     elif model_name == "unet2":
-        config["resize_to"] = 384
-        config["divide_into_four"] = False
         model = U_Net2()
         # R2U_Net, AttU_Net, R2AttU_Net, NestedUNet
     elif model_name == "attUnet":
-        config["resize_to"] = 384
-        config["divide_into_four"] = False
         model = AttU_Net()
     elif model_name == "r2Unet":
-        config["resize_to"] = 384
-        config["divide_into_four"] = False
         model = R2U_Net()
     elif model_name == "attUnet":
-        config["resize_to"] = 384
-        config["divide_into_four"] = False
         model = AttU_Net()
     elif model_name == "r2attUnet":
-        config["resize_to"] = 384
-        config["divide_into_four"] = False
         model = R2AttU_Net()
     elif model_name == "nestedUnet":
-        config["resize_to"] = 384
-        config["divide_into_four"] = False
         model = NestedUNet()
-    elif model_name == "transunet":
-        config["resize_to"] = 384
-        config["batch_size"] = 4
-        config["divide_into_four"] = False
+    elif model_name == "transunet" or model_name == "visiontransformer":
+        config["batch_size"] = 1
         config['loss_fn'] = "noise_robust_dice"
         transunet_config = CONFIGS['R50-ViT-B_16']
-        model = VisionTransformer(transunet_config, img_size=config["resize_to"],
+        model = VisionTransformer(transunet_config, img_size=256,
                                   num_classes=transunet_config.n_classes)
     elif model_name == "unet_transformer":
         config['loss_fn'] = "noise_robust_dice"

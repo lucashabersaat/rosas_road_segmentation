@@ -24,13 +24,11 @@ def predict(trainer, model, data):
     predictions = trainer.predict(model, datamodule=data)
 
     predictions = [p.detach().cpu().numpy() for p in predictions]
+    predictions = np.asarray(predictions).squeeze(1)
 
-    # put four corresponding images back together again
-    if data.divide_into_four:
-        predictions = TestImageDataSet.put_back(predictions)
-    else:
-        predictions = np.concatenate(predictions)
-        predictions = np.moveaxis(predictions, 1, -1).squeeze()
+    predictions = data.test_dataset.reassemble(predictions)
+
+    predictions = np.asarray(predictions).squeeze(1)
 
     post_process = True
     if post_process:
@@ -44,8 +42,8 @@ def predict(trainer, model, data):
     #     show_first_n(img[i:], predictions[i:])
 
     name = "lightning_" + str.lower(model.model.__class__.__name__)
-    write_submission(data.test_dataset.x,
-                     predictions, name, "data/test_images/test_images", data.test_dataset.size
+    write_submission(None,
+                     predictions, name, "data/test_images", (608, 608)
                      )
 
 
@@ -88,8 +86,7 @@ def get_args():
 
 def handle_load(config, version: int):
     lit_model = load_model(version)
-    data = RoadDataModule(batch_size=lit_model.batch_size, resize_to=config["resize_to"],
-                          divide_into_four=lit_model.divide_into_four)
+    data = RoadDataModule(batch_size=lit_model.batch_size, resize_to=config["resize_to"])
 
     if torch.cuda.is_available():
         lit_model.to(torch.device('cuda'))
@@ -100,8 +97,7 @@ def handle_load(config, version: int):
 def handle_train(trainer, config, model_name):
     model = get_model(model_name, config)
 
-    data = RoadDataModule(batch_size=config["batch_size"], resize_to=config["resize_to"],
-                          divide_into_four=config["divide_into_four"], enable_preprocessing=True)
+    data = RoadDataModule(batch_size=config["batch_size"], resize_to=config["resize_to"])
     lit_model = LitBase(config, model)
 
     trainer.fit(lit_model, datamodule=data)
@@ -117,8 +113,7 @@ if __name__ == "__main__":
     pl.utilities.seed.seed_everything(seed=1337)
 
     # default
-    config = {"lr": 0.0001, "loss_fn": "dice_loss", "divide_into_four": False, "batch_size": 1, "resize_to": 192,
-              "num_epochs": 35}
+    config = {"lr": 0.0001, "loss_fn": "dice_loss", "batch_size": 1, "resize_to": 400, "num_epochs": 35}
 
     if args.load is not None:
         # load
