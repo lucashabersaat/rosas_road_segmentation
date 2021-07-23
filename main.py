@@ -30,13 +30,15 @@ def predict(trainer, model, data):
     predictions = data.test_dataset.reassemble(predictions)
     predictions = np.asarray(predictions).squeeze(1)
 
+    # np.save("predictions.npy", predictions)
+
     post_process = True
     if post_process:
         predictions = postprocess(predictions)
 
     name = "lightning_" + str.lower(model.model.__class__.__name__)
     write_submission(
-        data.test_dataset.unprocessed_x,
+        data.test_dataset.x,
         predictions,
         name,
         "data/test_images",
@@ -89,8 +91,16 @@ def get_args():
 def handle_load(config, version: int):
     """Handle case when a model should be loaded from logs"""
     lit_model = load_model(version)
-    data = RoadDataModule(batch_size=lit_model.batch_size, resize_to=lit_model.resize_to,
-                          patch_size=config.get('patch_size'))
+    data = RoadDataModule(
+        batch_size=lit_model.batch_size,
+        resize_to=lit_model.resize_to,
+        patch_size=config["patch_size"],
+        mode=config["mode"],
+        variants=config["variants"],
+        enhance=config["enhance"],
+        offset=config["offset"],
+        blend_mode=config["blend_mode"]
+    )
 
     if torch.cuda.is_available():
         lit_model.to(torch.device("cuda"))
@@ -102,8 +112,16 @@ def handle_train(trainer, config, model_name):
     """Train model with given configs"""
     model = get_model(model_name, config)
 
-    data = RoadDataModule(batch_size=config["batch_size"], resize_to=config["resize_to"],
-                          patch_size=config.get('patch_size'))
+    data = RoadDataModule(
+        batch_size=config["batch_size"],
+        resize_to=config["resize_to"],
+        patch_size=config["patch_size"],
+        mode=config["mode"],
+        variants=config["variants"],
+        enhance=config["enhance"],
+        offset=config["offset"],
+        blend_mode=config["blend_mode"]
+    )
     lit_model = LitBase(config, model)
 
     trainer.fit(lit_model, datamodule=data)
@@ -121,11 +139,16 @@ if __name__ == "__main__":
     # default
     config = {
         "lr": 0.001,
-        "loss_fn": "dice_loss",
-        "batch_size": 1,
-        "resize_to": None,
+        "loss_fn": "noise_robust_dice",
+        "batch_size": 4,
         "num_epochs": 35,
-        "patch_size": 256
+        "resize_to": None,
+        "patch_size": 256,
+        "mode": "patch",
+        "variants": 5,
+        "enhance": True,
+        "offset": 100,
+        "blend_mode": "weighted_average",
     }
 
     if args.load is not None:
