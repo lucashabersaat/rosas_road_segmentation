@@ -82,7 +82,10 @@ class ImageDataSet(torch.utils.data.Dataset):
         y = torch.round(np_to_tensor(self.y_preprocessed[[item]], self.device))
 
         if self.noise:
-            x = ImageDataSet._noise(x)
+            gaussian_noise = 0.02 * np.random.normal(size=x.shape)
+            gaussian_noise = np_to_tensor(gaussian_noise, self.device)
+
+            x = torch.add(x, gaussian_noise)
 
         x = ImageDataSet._normalize(x)
 
@@ -377,15 +380,6 @@ class ImageDataSet(torch.utils.data.Dataset):
         return torch.from_numpy(x)
 
     @staticmethod
-    def _noise(x):
-        """
-        Noise adds random gaussian noise to the image.
-        """
-        gaussian_noise = 0.05 * torch.randn(x.shape)
-
-        return torch.add(x, gaussian_noise)
-
-    @staticmethod
     def _normalize(x):
         """
         Normalize normalizes the image.
@@ -649,7 +643,7 @@ if __name__ == "__main__":
         variants=3,
         patch_size=256,
         enhance=True,
-        noise=False
+        noise=True
     )
     show_two_imgs(dataset[0][0], dataset[0][1])
 
