@@ -2,10 +2,8 @@ from typing import Optional
 import torch
 from torch.nn import Module, BCELoss
 import pytorch_lightning as pl
-from common.plot_data import *
 from common.losses import NoiseRobustDiceLoss, DiceLoss
 from common.get_model import get_model
-from torchmetrics.classification.accuracy import Accuracy
 
 
 class LitBase(pl.LightningModule):
@@ -43,8 +41,6 @@ class LitBase(pl.LightningModule):
         elif loss_fn == 'dice_loss':
             self.loss_fn = DiceLoss()
 
-        self.accuracy = Accuracy()
-
     def forward(self, x):
         # use forward for inference/predictions
         embedding = self.model(x)
@@ -53,11 +49,11 @@ class LitBase(pl.LightningModule):
     def training_step(self, batch, batch_idx):
         x, y = batch
         y_hat = self.model(x)
-        loss = self.loss_fn(y_hat, y)
-        print("accccc",type(y_hat), type(y) )
-        acc = self.accuracy((y_hat*2).type(torch.IntTensor), y.type(torch.IntTensor))
-        self.log("ptl/train_loss", loss)
 
+        loss = self.loss_fn(y_hat, y)
+        acc = LitBase.accuracy(y_hat, y)
+
+        self.log("ptl/train_loss", loss)
         self.log("ptl/train_accuracy", acc)
 
         return loss
@@ -65,9 +61,10 @@ class LitBase(pl.LightningModule):
     def validation_step(self, batch, batch_idx):
         x, y = batch
         y_hat = self.model(x)
+
         loss = self.loss_fn(y_hat, y)
-        print("acccc",type(y_hat), type(y))
-        acc = self.accuracy((y_hat*2).type(torch.IntTensor), y.type(torch.IntTensor))
+        acc = LitBase.accuracy(y_hat, y)
+
         return {"val_loss": loss, "val_accuracy": acc}
 
     def configure_optimizers(self):
@@ -78,5 +75,18 @@ class LitBase(pl.LightningModule):
             [x["val_loss"] for x in outputs]).mean()
         avg_acc = torch.stack(
             [x["val_accuracy"] for x in outputs]).mean()
+
         self.log("ptl/val_loss", avg_loss)
-        self.log("ptl/val_accuracy", avg_acc)
+        self.log("ptl/val_accuracy", avg_acc, prog_bar=True)
+
+    @staticmethod
+    def accuracy(y_hat, y):
+        y = torch.flatten(y).type(torch.IntTensor)
+        y_hat = torch.flatten(y_hat)
+
+        y_hat = torch.where(y_hat >= 0.5, 1, 0).type(torch.IntTensor)
+
+        tp_tn = torch.count_nonzero(torch.logical_and(y, y_hat))
+        tp_tn_fp_fn = len(y_hat)
+
+        return tp_tn / tp_tn_fp_fn
