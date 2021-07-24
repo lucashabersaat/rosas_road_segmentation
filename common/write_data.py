@@ -12,49 +12,42 @@ from common.postprocess import *
 from common.postprocess import graph_cut
 
 
-def write_submission(original, all_predictions, name, test_path, size, graph_cut=False):
+def write_submission(original, predictions, name, test_path, size, graph_cut=False):
     """Save the predictions batch wise in submissions."""
-    all_test_filenames = sorted(glob(os.path.join(ROOT_DIR, test_path) + "/*.png"))
-
-    num_test_images = len(all_test_filenames)
-    batch_size = num_test_images
+    test_filenames = sorted(glob(os.path.join(ROOT_DIR, test_path) + "/*.png"))
 
     file_name = f"data/submissions/{name}_submission.{str(int(time.time()))}.csv"
     print("Writing to", file_name)
     create_empty_submission(submission_filename=file_name)
 
-    for i in range(0, num_test_images, batch_size):
-        b = min(batch_size, num_test_images - i)
-        predictions = all_predictions[i:i + b]
-        test_filenames = all_test_filenames[i:i + b]
-
-        if size != original.shape[1:3]:
-            # resize to original
-            predictions = np.stack(
-                [cv2.resize(img, dsize=size) for img in predictions], 0
-            )
-
-            original = np.moveaxis(original, 1, -1)
-            original = np.stack(
-                [cv2.resize(img, dsize=size) for img in original], 0
-            )
-
-        # now compute labels
-        if graph_cut:
-            predictions = classify_graph_cut(predictions, original)
-
-        predictions = classify_cutoff(predictions, size)
-
-        for i in range(predictions.shape[0]):
-            resized = cv2.resize(predictions[i].astype(float), dsize=original[i].shape[1:])
-            show_two_imgs_overlay(original[i], resized)
-            break
-
-        append_submission(
-            predictions,
-            test_filenames,
-            submission_filename=file_name,
+    if size != original.shape[1:3]:
+        # resize to original
+        predictions = np.stack(
+            [cv2.resize(img, dsize=size) for img in predictions], 0
         )
+
+        original = np.moveaxis(original, 1, -1)
+        original = np.stack(
+            [cv2.resize(img, dsize=size) for img in original], 0
+        )
+
+    # now compute labels
+    if graph_cut:
+        predictions = classify_graph_cut(predictions, original)
+
+    predictions = classify_cutoff(predictions, size)
+
+    # for i in range(predictions.shape[0]):
+    #     resized = cv2.resize(predictions[i].astype(float), dsize=original[i].shape[:2])
+    #     show_two_imgs_overlay(original[i], resized)
+    #     if i == 4:
+    #         exit()
+
+    append_submission(
+        predictions,
+        test_filenames,
+        submission_filename=file_name,
+    )
 
 
 def classify_cutoff(predictions, size):
