@@ -33,6 +33,7 @@ class ImageDataSet(torch.utils.data.Dataset):
         variants: int = 5,
         patch_size: int = 256,
         enhance: bool = True,
+        noise: bool = True
     ):
         """
         Init initializes the dataset by loading the images from the file system
@@ -67,6 +68,7 @@ class ImageDataSet(torch.utils.data.Dataset):
             pass
 
         self.enhance = enhance
+        self.noise = noise
 
         self._load()
         self._preprocess()
@@ -77,7 +79,12 @@ class ImageDataSet(torch.utils.data.Dataset):
         image as tensors.
         """
         x = np_to_tensor(self.x_preprocessed[item], self.device)
-        y = np_to_tensor(self.y_preprocessed[[item]], self.device)
+        y = torch.round(np_to_tensor(self.y_preprocessed[[item]], self.device))
+
+        if self.noise:
+            x = ImageDataSet._noise(x)
+
+        x = ImageDataSet._normalize(x)
 
         return x, y
 
@@ -253,14 +260,13 @@ class ImageDataSet(torch.utils.data.Dataset):
     @staticmethod
     def enhance(x):
         """
-        Enhance applies several filters to an image. The image is blurred,
-        sharpened and normalized.
+        Enhance applies several filters to an image. The image is blurred and
+        sharpened.
         """
         x_blurred = ImageDataSet._blur(x)
         x_sharpened = ImageDataSet._sharpen(x_blurred)
-        x_normalized = ImageDataSet._normalize(x_sharpened)
 
-        return x_normalized
+        return x_sharpened
 
     @staticmethod
     def _pad(x, y):
@@ -369,6 +375,15 @@ class ImageDataSet(torch.utils.data.Dataset):
             x[c] = convolve2d(x[c], filter, mode='same', boundary='symm')
 
         return torch.from_numpy(x)
+
+    @staticmethod
+    def _noise(x):
+        """
+        Noise adds random gaussian noise to the image.
+        """
+        gaussian_noise = 0.05 * torch.randn(x.shape)
+
+        return torch.add(x, gaussian_noise)
 
     @staticmethod
     def _normalize(x):
@@ -626,32 +641,33 @@ class TestImageDataSet(torch.utils.data.Dataset):
 
 
 if __name__ == "__main__":
-    # dataset = ImageDataSet(
-    #     "data/training",
-    #     "cpu",
-    #     size=400,
-    #     mode="none",
-    #     variants=3,
-    #     patch_size=256,
-    #     enhance=True,
-    # )
-    # show_two_imgs(dataset[0][0], dataset[0][1])
-
-    dataset = TestImageDataSet(
-        "data/test_images",
+    dataset = ImageDataSet(
+        "data/training",
         "cpu",
-        size=608,
-        enhance=True,
+        size=400,
+        mode="none",
+        variants=3,
         patch_size=256,
-        offset=200,
-        blend_mode="weighted_average",
+        enhance=True,
+        noise=False
     )
+    show_two_imgs(dataset[0][0], dataset[0][1])
 
-    y = np.zeros([2*dataset.variants, 1, 256, 256])
-    gray = T.Grayscale()
-    for i in range(len(dataset)):
-        y[i] = gray(dataset[i]).cpu().numpy()
-
-    reassembled = dataset.reassemble(y)
-    show_img(reassembled[0])
-    show_img(reassembled[1])
+    # dataset = TestImageDataSet(
+    #     "data/test_images",
+    #     "cpu",
+    #     size=608,
+    #     enhance=True,
+    #     patch_size=256,
+    #     offset=200,
+    #     blend_mode="weighted_average",
+    # )
+    #
+    # y = np.zeros([2*dataset.variants, 1, 256, 256])
+    # gray = T.Grayscale()
+    # for i in range(len(dataset)):
+    #     y[i] = gray(dataset[i]).cpu().numpy()
+    #
+    # reassembled = dataset.reassemble(y)
+    # show_img(reassembled[0])
+    # show_img(reassembled[1])

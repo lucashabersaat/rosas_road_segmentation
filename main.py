@@ -30,6 +30,10 @@ def predict(trainer, model, data):
     predictions = data.test_dataset.reassemble(predictions)
     predictions = np.asarray(predictions).squeeze(1)
 
+    # Project values into interval [0, 1]
+    predictions = np.add(predictions, abs(predictions.min()))
+    predictions = np.divide(predictions, predictions.max())
+
     # np.save("predictions.npy", predictions)
 
     post_process = True
@@ -99,7 +103,8 @@ def handle_load(config, version: int):
         variants=config["variants"],
         enhance=config["enhance"],
         offset=config["offset"],
-        blend_mode=config["blend_mode"]
+        blend_mode=config["blend_mode"],
+        noise=config["noise"]
     )
 
     if torch.cuda.is_available():
@@ -120,7 +125,8 @@ def handle_train(trainer, config, model_name):
         variants=config["variants"],
         enhance=config["enhance"],
         offset=config["offset"],
-        blend_mode=config["blend_mode"]
+        blend_mode=config["blend_mode"],
+        noise=config["noise"]
     )
     lit_model = LitBase(config, model)
 
@@ -149,6 +155,7 @@ if __name__ == "__main__":
         "enhance": True,
         "offset": 100,
         "blend_mode": "weighted_average",
+        "noise": True
     }
 
     if args.load is not None:
