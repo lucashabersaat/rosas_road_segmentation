@@ -82,7 +82,7 @@ class ImageDataSet(torch.utils.data.Dataset):
         y = torch.round(np_to_tensor(self.y_preprocessed[[item]], self.device))
 
         if self.noise:
-            gaussian_noise = 0.02 * np.random.normal(size=x.shape)
+            gaussian_noise = 0.02 * np.random.normal(size=x.shape).astype(np.float32)
             gaussian_noise = np_to_tensor(gaussian_noise, self.device)
 
             x = torch.add(x, gaussian_noise)
