@@ -104,8 +104,8 @@ class LitBase(pl.LightningModule):
         meanIoU is the average IoU over all output classes, as we only have one, this is the same.
         """
 
-        y = torch.flatten(y).type(torch.IntTensor)
-        y_hat = torch.flatten(y_hat)
+        y = torch.flatten(y.cpu()).type(torch.IntTensor)
+        y_hat = torch.flatten(y_hat.cpu())
 
         if torch.min(y_hat) < 0 or torch.max(y_hat) > 1:
             print("Not in 0..1 range: ", torch.min(y_hat), torch.max(y_hat))
