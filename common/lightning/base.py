@@ -4,6 +4,7 @@ from torch.nn import Module, BCELoss
 import pytorch_lightning as pl
 from common.losses import NoiseRobustDiceLoss, DiceLoss
 from common.get_model import get_model
+from torchmetrics import Accuracy
 
 
 class LitBase(pl.LightningModule):
@@ -54,7 +55,7 @@ class LitBase(pl.LightningModule):
         y_hat = self.model(x)
 
         loss = self.loss_fn(y_hat, y)
-        acc = LitBase.accuracy(y_hat, y)
+        acc = Accuracy(y_hat, y)
         iou = LitBase.IoU(y_hat, y)
 
         self.log("ptl/train_loss", loss)
@@ -68,7 +69,7 @@ class LitBase(pl.LightningModule):
         y_hat = self.model(x)
 
         loss = self.loss_fn(y_hat, y)
-        acc = LitBase.accuracy(y_hat, y)
+        acc = Accuracy(y_hat, y)
         iou = LitBase.IoU(y_hat, y)
 
         return {"val_loss": loss, "val_accuracy": acc, "val_iou": iou}

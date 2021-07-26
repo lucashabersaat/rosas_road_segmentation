@@ -115,6 +115,11 @@ class ImageDataSet(torch.utils.data.Dataset):
         self.x = load_all_from_path(os.path.join(self.path, "images"))
         self.y = load_all_from_path(os.path.join(self.path, "groundtruth"))
 
+
+
+
+
+
         self.x = np.stack(
             [cv2.resize(img, dsize=(self.size, self.size)) for img in self.x]
         )

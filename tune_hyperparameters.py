@@ -22,7 +22,7 @@ def train_segmentation(config, model_name=None, num_epochs=10, num_gpus=0):
                       blend_mode=config["blend_mode"],
                       noise=config["noise"])
 
-    metrics = {"loss": "ptl/val_loss", "acc": "ptl/val_accuracy"}
+    metrics = {"loss": "ptl/val_loss", "acc": "ptl/val_accuracy", "val_iou": "ptl/val_iou"}
 
     logger = True
     trainer = pl.Trainer(
@@ -58,7 +58,7 @@ if __name__ == "__main__":
 
     pl.utilities.seed.seed_everything(seed=1337)
     # , "acc": "ptl/val_accuracy" should also be logged, for now just loss
-    metrics = {"loss": "ptl/val_loss", "acc": "ptl/val_accuracy"}
+    metrics = {"loss": "ptl/val_loss", "acc": "ptl/val_accuracy", "val_iou": "ptl/val_iou"}
     callbacks = [TuneReportCallback(metrics, on="validation_end")]
     trainer = pl.Trainer(callbacks=callbacks)
 
@@ -97,8 +97,8 @@ if __name__ == "__main__":
             "cpu": args.cpu,
             "gpu": gpus_per_trial
         },
-        metric="loss",
-        mode="min",
+        metric="val_iou",
+        mode="max",
         config=config,
         num_samples=num_samples,
         name="tune_segmentation")
