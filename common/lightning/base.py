@@ -87,8 +87,8 @@ class LitBase(pl.LightningModule):
 
     @staticmethod
     def accuracy(y_hat, y):
-        y = torch.flatten(y).type(torch.IntTensor)
-        y_hat = torch.flatten(y_hat)
+        y = torch.flatten(y.cpu()).type(torch.IntTensor)
+        y_hat = torch.flatten(y_hat.cpu())
 
         y_hat = torch.where(y_hat >= 0.5, 1, 0).type(torch.IntTensor)
 
