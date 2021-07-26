@@ -1,0 +1,10 @@
+{
+  "batch_size": 4,
+  "divide_into_four": false,
+  "loss_fn": "noise_robust_dice",
+  "lr": 0.001,
+  "model_name": "unet",
+  "num_epochs": 1,
+  "patch_size": 256,
+  "resize_to": 400
+}
