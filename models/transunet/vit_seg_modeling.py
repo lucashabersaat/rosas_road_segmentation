@@ -142,8 +142,7 @@ class Embeddings(nn.Module):
             self.hybrid_model = ResNetV2(block_units=config.resnet.num_layers, width_factor=config.resnet.width_factor)
             in_channels = self.hybrid_model.width * 16
         self.patch_embeddings = Conv2d(in_channels=in_channels,
-                                       out_channels=config.hidden_size,
-                                       kernel_size=patch_size,
+                                       out_channels=config.hidden_size,                                       kernel_size=patch_size,
                                        stride=patch_size)
         self.position_embeddings = nn.Parameter(torch.zeros(1, n_patches, config.hidden_size))
 
@@ -381,6 +380,7 @@ class VisionTransformer(nn.Module):
             out_channels=config['n_classes'],
             kernel_size=3,
         )
+        self.sigmoid = nn.Sigmoid()
         self.config = config
 
     def forward(self, x):
@@ -389,6 +389,7 @@ class VisionTransformer(nn.Module):
         x, attn_weights, features = self.transformer(x)  # (B, n_patch, hidden)
         x = self.decoder(x, features)
         logits = self.segmentation_head(x)
+        logits = self.sigmoid(logits)
         return logits
 
     def load_from(self, weights):
