@@ -9,7 +9,7 @@ from argparse import ArgumentParser
 import tempfile
 
 
-def train_segmentation(config, model_name=None, num_epochs=1, num_gpus=0):
+def train_segmentation(config, model_name=None, num_epochs=10, num_gpus=0):
     print(config["model_name"])
     model_name = (str)(config["model_name"])
     model = get_model(model_name, config)
@@ -48,7 +48,7 @@ def get_args():
     #    args.train = "unet"
 
     if args.cpu is None:
-        args.cpu = 8
+        args.cpu = 16
 
     return args
 
@@ -84,12 +84,9 @@ if __name__ == "__main__":
         #"divide_into_four": tune.choice([False])
     }
 
-
-
-
     trainable = tune.with_parameters(
         train_segmentation,
-        #model_name=args.train,
+      	#model_name=args.train,
         num_epochs=num_epochs,
         num_gpus=gpus_per_trial)
 
