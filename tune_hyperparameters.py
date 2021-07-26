@@ -9,14 +9,13 @@ from argparse import ArgumentParser
 import tempfile
 
 
-def train_segmentation(config, model_name=None, num_epochs=10, num_gpus=0):
+def train_segmentation(config, model_name=None, num_epochs=1, num_gpus=0):
     print(config["model_name"])
     model_name = (str)(config["model_name"])
     model = get_model(model_name, config)
     lit_model = LitBase(config, model)
     # print(config["model_name"])
-    data = RoadDataModule(batch_size=config["batch_size"], resize_to=config["resize_to"],
-                          divide_into_four=config["divide_into_four"], enable_preprocessing=True)
+    data = RoadDataModule(batch_size=config["batch_size"], resize_to=config["resize_to"])
     metrics = {"loss": "ptl/val_loss", "acc": "ptl/val_accuracy"}
 
     logger = True
@@ -43,7 +42,7 @@ def get_args():
     #    args.train = "unet"
 
     if args.cpu is None:
-        args.cpu = 8
+        args.cpu = 16
 
     return args
 
@@ -57,7 +56,7 @@ if __name__ == "__main__":
     callbacks = [TuneReportCallback(metrics, on="validation_end")]
     trainer = pl.Trainer(callbacks=callbacks)
 
-    num_samples = 4
+    num_samples = 2
     num_epochs = 1
     gpus_per_trial = int(torch.cuda.is_available())  # set this to higher if using GPU
 
@@ -78,7 +77,7 @@ if __name__ == "__main__":
 
     trainable = tune.with_parameters(
         train_segmentation,
-        model_name=args.train,
+      	#model_name=args.train,
         num_epochs=num_epochs,
         num_gpus=gpus_per_trial)
 
