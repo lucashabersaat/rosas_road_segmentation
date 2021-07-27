@@ -9,20 +9,19 @@ from argparse import ArgumentParser
 import tempfile
 import os
 
-
 os.environ["CUDA_LAUNCH_BLOCKING"] = 1
-def train_segmentation(config, model_name=None, num_epochs=10, num_gpus=0):
+
+
+def train_segmentation(config, num_epochs=35, num_gpus=0):
     print(config["model_name"])
     model_name = (str)(config["model_name"])
     model = get_model(model_name, config)
     lit_model = LitBase(config, model)
-    # print(config["model_name"])
     data = RoadDataModule(batch_size=config["batch_size"],
-                     # resize_to=config["resize_to"],
-                      patch_size= config["patch_size"],
-                      mode=config["mode"],
-                      blend_mode=config["blend_mode"],
-                      noise=config["noise"])
+                          patch_size=config["patch_size"],
+                          mode=config["mode"],
+                          blend_mode=config["blend_mode"],
+                          noise=config["noise"])
 
     metrics = {"loss": "ptl/val_loss", "acc": "ptl/val_accuracy", "val_iou": "ptl/val_iou"}
 
@@ -41,13 +40,10 @@ def train_segmentation(config, model_name=None, num_epochs=10, num_gpus=0):
 def get_args():
     """Initialize and return program arguments"""
     parser = ArgumentParser()
-    #parser.add_argument("-train", type=str)
+    # parser.add_argument("-train", type=str)
     parser.add_argument("-cpu", dest="cpu", type=int, nargs="?", const=-1)
 
     args = parser.parse_args()
-
-    # if args.train is None:
-    #    args.train = "unet"
 
     if args.cpu is None:
         args.cpu = 16
@@ -68,28 +64,23 @@ if __name__ == "__main__":
     num_epochs = 10
     gpus_per_trial = int(torch.cuda.is_available())  # set this to higher if using GPU
 
-
-    #be carefull when changing the config, everything breaksdown, better fix to one value than removing params
-    #keeping config across models and other files is the new challenge
+    # be carefull when changing the config, everything breaksdown, better fix to one value than removing params
+    # keeping config across models and other files is the new challenge
     config = {
-        # "r2Uet", "attUnet", "r2attUnet", "nestedUnet"
-        "model_name": tune.choice(["unet", "attUnet", "transunet"]), # unet works well now , got some errors about patches with transunet
+        "model_name": tune.choice(["unet", "attUnet", "transunet"]),
+        # unet works well now , got some errors about patches with transunet
         "lr": tune.uniform(1e-4, 1e-1),
         "loss_fn": tune.choice(['noise_robust_dice', "dice_loss"]),
-        "batch_size": tune.choice([2,4]),
-        "num_epochs": tune.choice([35]),
-        #"resize_to": tune.choice([400]),
-        #"num_epochs": tune.choice([10]),
+        "batch_size": tune.choice([2, 4]),
+        "num_epochs": tune.choice([num_epochs]),
         "patch_size": tune.choice([256]),
-        "mode" : tune.choice(["none", "breed", "patch", "patch_random"]),
+        "mode": tune.choice(["none", "breed", "patch", "patch_random"]),
         "blend_mode": tune.choice(["cover", "average", "weighted_average"]),
         "noise": tune.choice([True, False])
-        #"divide_into_four": tune.choice([False])
     }
 
     trainable = tune.with_parameters(
         train_segmentation,
-      	#model_name=args.train,
         num_epochs=num_epochs,
         num_gpus=gpus_per_trial)
 
