@@ -97,7 +97,7 @@ if __name__ == "__main__":
             "cpu": args.cpu,
             "gpu": gpus_per_trial
         },
-        metric="val_iou",
+        metric="val_accuracy",
         mode="max",
         config=config,
         num_samples=num_samples,

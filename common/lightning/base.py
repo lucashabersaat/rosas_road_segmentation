@@ -4,7 +4,7 @@ from torch.nn import Module, BCELoss
 import pytorch_lightning as pl
 from common.losses import NoiseRobustDiceLoss, DiceLoss
 from common.get_model import get_model
-from torchmetrics import Accuracy
+
 
 
 class LitBase(pl.LightningModule):
@@ -55,7 +55,7 @@ class LitBase(pl.LightningModule):
         y_hat = self.model(x)
 
         loss = self.loss_fn(y_hat, y)
-        acc = Accuracy(y_hat, y)
+        acc = LitBase.accuracy(y_hat, y)
         iou = LitBase.IoU(y_hat, y)
 
         self.log("ptl/train_loss", loss)
@@ -69,7 +69,7 @@ class LitBase(pl.LightningModule):
         y_hat = self.model(x)
 
         loss = self.loss_fn(y_hat, y)
-        acc = Accuracy(y_hat, y)
+        acc = LitBase.accuracy(y_hat, y)
         iou = LitBase.IoU(y_hat, y)
 
         return {"val_loss": loss, "val_accuracy": acc, "val_iou": iou}
@@ -88,15 +88,15 @@ class LitBase(pl.LightningModule):
 
     @staticmethod
     def accuracy(y_hat, y):
-        y = torch.flatten(y.cpu()).type(torch.IntTensor)
-        y_hat = torch.flatten(y_hat.cpu())
+        y = torch.flatten(y).type(torch.IntTensor)
+        y_hat = torch.flatten(y_hat)
 
         y_hat = torch.where(y_hat >= 0.5, 1, 0).type(torch.IntTensor)
 
-        tp_tn = torch.count_nonzero(torch.eq(y, y_hat))
+        fp_fn = torch.count_nonzero(torch.logical_or(y, y_hat))
         tp_tn_fp_fn = len(y_hat)
 
-        return tp_tn / tp_tn_fp_fn
+        return (tp_tn_fp_fn -fp_fn)/ tp_tn_fp_fn
 
     @staticmethod
     def IoU(y_hat, y):
@@ -105,8 +105,8 @@ class LitBase(pl.LightningModule):
         meanIoU is the average IoU over all output classes, as we only have one, this is the same.
         """
 
-        y = torch.flatten(y.cpu()).type(torch.IntTensor)
-        y_hat = torch.flatten(y_hat.cpu())
+        y = torch.flatten(y).type(torch.IntTensor)
+        y_hat = torch.flatten(y_hat)
 
         if torch.min(y_hat) < 0 or torch.max(y_hat) > 1:
             print("Not in 0..1 range: ", torch.min(y_hat), torch.max(y_hat))
