@@ -10,7 +10,7 @@ def get_model(model_name, config):
 
     if model_name == "unet":
         model = UNet()
-    elif model_name == "unet2":
+    elif model_name == "unet2" or model_name == "u_net2":
         model = U_Net2()
     elif model_name == "attUnet":
         model = AttU_Net()

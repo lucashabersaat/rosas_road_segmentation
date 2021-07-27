@@ -108,7 +108,8 @@ class LitBase(pl.LightningModule):
         y_hat = torch.flatten(y_hat.cpu())
 
         if torch.min(y_hat) < 0 or torch.max(y_hat) > 1:
-            print("Not in 0..1 range: ", torch.min(y_hat), torch.max(y_hat))
+            # print("Not in 0..1 range: ", torch.min(y_hat), torch.max(y_hat))
+            pass
 
         y_hat = torch.where(y_hat >= 0.5, 1, 0).type(torch.IntTensor)
 

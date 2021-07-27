@@ -424,6 +424,8 @@ class TestImageDataSet(torch.utils.data.Dataset):
         self.x_preprocessed = None
         self.n_preprocessed = 0
 
+        self.mean = None
+        self.std = None
         self.size = size
 
         self.enhance = enhance
@@ -517,6 +519,12 @@ class TestImageDataSet(torch.utils.data.Dataset):
 
                     x_preprocessed[preprocessed_index] = x_cropped.cpu().numpy()
                     preprocessed_index += 1
+
+        # center
+        self.mean = x_preprocessed.mean()
+        self.std = x_preprocessed.std()
+        x_preprocessed -= self.mean
+        x_preprocessed /= self.std
 
         self.x_preprocessed = x_preprocessed
         self.n_preprocessed = len(self.x_preprocessed)

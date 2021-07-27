@@ -171,4 +171,4 @@ if __name__ == "__main__":
         )
         model, data = handle_train(trainer, config, args.train)
 
-    # predict(trainer, model, data)
+    predict(trainer, model, data)
