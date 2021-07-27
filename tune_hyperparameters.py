@@ -76,7 +76,8 @@ if __name__ == "__main__":
         "patch_size": tune.choice([256]),
         "mode": tune.choice(["none", "breed", "patch", "patch_random"]),
         "blend_mode": tune.choice(["cover", "average", "weighted_average"]),
-        "noise": tune.choice([True, False])
+        "noise": tune.choice([True, False]),
+        "threshold": tune.uniform(0.2, 0.8)
     }
 
     trainable = tune.with_parameters(
