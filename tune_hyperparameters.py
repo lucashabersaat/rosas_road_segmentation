@@ -16,7 +16,7 @@ def train_segmentation(config, model_name=None, num_epochs=10, num_gpus=0):
     lit_model = LitBase(config, model)
     # print(config["model_name"])
     data = RoadDataModule(batch_size=config["batch_size"],
-                      resize_to=config["resize_to"],
+                     # resize_to=config["resize_to"],
                       patch_size= config["patch_size"],
                       mode=config["mode"],
                       blend_mode=config["blend_mode"],
@@ -71,14 +71,14 @@ if __name__ == "__main__":
     #keeping config across models and other files is the new challenge
     config = {
         # "r2Uet", "attUnet", "r2attUnet", "nestedUnet"
-        "model_name": tune.choice(["unet", "attUnet", "transunet", "unet2"]), # unet works well now , got some errors about patches with transunet
+        "model_name": tune.choice(["unet", "attUnet", "transunet"]), # unet works well now , got some errors about patches with transunet
         "lr": tune.uniform(1e-4, 1e-1),
-        "loss_fn": tune.choice(['noise_robust_dice', "dice_loss", "bce"]),
+        "loss_fn": tune.choice(['noise_robust_dice', "dice_loss"]),
         "batch_size": tune.choice([2,4]),
         "num_epochs": tune.choice([35]),
         #"resize_to": tune.choice([400]),
         #"num_epochs": tune.choice([10]),
-        #"patch_size": tune.choice([256]),
+        "patch_size": tune.choice([256]),
         "mode" : tune.choice(["none", "breed", "patch", "patch_random"]),
         "blend_mode": tune.choice(["cover", "average", "weighted_average"]),
         "noise": tune.choice([True, False])
