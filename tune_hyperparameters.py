@@ -64,8 +64,8 @@ if __name__ == "__main__":
     callbacks = [TuneReportCallback(metrics, on="validation_end")]
     trainer = pl.Trainer(callbacks=callbacks)
 
-    num_samples = 1
-    num_epochs = 1
+    num_samples = 2
+    num_epochs = 2
     gpus_per_trial = 1#int(torch.cuda.is_available())  # set this to higher if using GPU
 
 
@@ -87,6 +87,21 @@ if __name__ == "__main__":
         #"divide_into_four": tune.choice([False]),
 	"threshold": tune.uniform(0.2, 0.8)
     }
+
+    """
+        config_lucas_suggestion = {
+        "model_name": tune.choice(["unet", "transunet"]),
+        "lr": tune.uniform(1e-4, 1e-1),
+        "loss_fn": tune.choice(['noise_robust_dice', "dice_loss"]),
+        "batch_size": tune.choice([2, 4]),
+        "num_epochs": tune.choice([num_epochs]),
+        "patch_size": tune.choice([256]),
+        "mode": tune.choice(["patch"]),
+        "blend_mode": tune.choice(["weighted_average"]),
+        "noise": tune.choice([True, False]),
+        "threshold": tune.uniform(0.2, 0.8)
+    }
+    """
 
     trainable = tune.with_parameters(
         train_segmentation,

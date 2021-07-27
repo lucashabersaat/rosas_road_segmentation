@@ -59,8 +59,8 @@ class LitBase(pl.LightningModule):
         y_hat = self.model(x)
 
         loss = self.loss_fn(y_hat, y)
-        acc = LitBase.accuracy(y_hat, y)
-        iou = LitBase.IoU(y_hat, y)
+        acc = self.accuracy(y_hat, y)
+        iou = self.IoU(y_hat, y)
 
         self.log("ptl/train_loss", loss)
         self.log("ptl/train_accuracy", acc)
@@ -73,8 +73,8 @@ class LitBase(pl.LightningModule):
         y_hat = self.model(x)
 
         loss = self.loss_fn(y_hat, y)
-        acc = LitBase.accuracy(y_hat, y)
-        iou = LitBase.IoU(y_hat, y)
+        acc = self.accuracy(y_hat, y)
+        iou = self.IoU(y_hat, y)
 
         return {"val_loss": loss, "val_accuracy": acc, "val_iou": iou}
 
