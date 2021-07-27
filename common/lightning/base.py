@@ -28,6 +28,7 @@ class LitBase(pl.LightningModule):
         self.batch_size = config.get("batch_size")
         self.resize_to = config.get("resize_to")
         self.num_epochs = config.get("num_epochs")
+        self.threshold = config.get("threshold", 0.5)
 
         hyper_parameters = {
             "model": model_name,
@@ -87,19 +88,19 @@ class LitBase(pl.LightningModule):
         self.log("ptl/val_iou", avg_iou, prog_bar=True)
 
     @staticmethod
-    def accuracy(y_hat, y):
+    def accuracy(self,y_hat, y):
         y = torch.flatten(y).type(torch.IntTensor)
         y_hat = torch.flatten(y_hat)
 
-        y_hat = torch.where(y_hat >= 0.5, 1, 0).type(torch.IntTensor)
+        y_hat = torch.where(y_hat >= self.threshold, 1, 0).type(torch.IntTensor)
 
-        fp_fn = torch.count_nonzero(torch.logical_or(y, y_hat))
+        fp_fn = torch.count_nonzero(torch.logical_xor(y, y_hat))
         tp_tn_fp_fn = len(y_hat)
 
         return (tp_tn_fp_fn -fp_fn)/ tp_tn_fp_fn
 
     @staticmethod
-    def IoU(y_hat, y):
+    def IoU(self,y_hat, y):
         """
         Compute the Intersection Over Union, which is TP / (TP + FP + FN).
         meanIoU is the average IoU over all output classes, as we only have one, this is the same.
@@ -111,7 +112,7 @@ class LitBase(pl.LightningModule):
         if torch.min(y_hat) < 0 or torch.max(y_hat) > 1:
             print("Not in 0..1 range: ", torch.min(y_hat), torch.max(y_hat))
 
-        y_hat = torch.where(y_hat >= 0.5, 1, 0).type(torch.IntTensor)
+        y_hat = torch.where(y_hat >= self.threshold, 1, 0).type(torch.IntTensor)
 
         tp = torch.count_nonzero(torch.logical_and(y, y_hat))
         tp_fp_fn = tp + torch.count_nonzero(torch.logical_xor(y, y_hat))

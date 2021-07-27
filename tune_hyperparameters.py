@@ -10,15 +10,13 @@ import tempfile
 import os
 
 
-os.environ["CUDA_LAUNCH_BLOCKING"] = 1
-def train_segmentation(config, model_name=None, num_epochs=10, num_gpus=0):
+os.environ["CUDA_LAUNCH_BLOCKING"] = str(1)
+def train_segmentation(config, num_epochs=35, num_gpus=1):
     print(config["model_name"])
     model_name = (str)(config["model_name"])
     model = get_model(model_name, config)
     lit_model = LitBase(config, model)
-    # print(config["model_name"])
     data = RoadDataModule(batch_size=config["batch_size"],
-                     # resize_to=config["resize_to"],
                       patch_size= config["patch_size"],
                       mode=config["mode"],
                       blend_mode=config["blend_mode"],
@@ -41,7 +39,6 @@ def train_segmentation(config, model_name=None, num_epochs=10, num_gpus=0):
 def get_args():
     """Initialize and return program arguments"""
     parser = ArgumentParser()
-    #parser.add_argument("-train", type=str)
     parser.add_argument("-cpu", dest="cpu", type=int, nargs="?", const=-1)
 
     args = parser.parse_args()
@@ -77,13 +74,14 @@ if __name__ == "__main__":
         "lr": tune.uniform(1e-4, 1e-1),
         "loss_fn": tune.choice(['noise_robust_dice', "dice_loss"]),
         "batch_size": tune.choice([2,4]),
-        "num_epochs": tune.choice([35]),
+        "num_epochs": tune.choice([num_epochs]),
         #"resize_to": tune.choice([400]),
         #"num_epochs": tune.choice([10]),
         "patch_size": tune.choice([256]),
         "mode" : tune.choice(["none", "breed", "patch", "patch_random"]),
         "blend_mode": tune.choice(["cover", "average", "weighted_average"]),
-        "noise": tune.choice([True, False])
+        "noise": tune.choice([True, False]),
+        "threshold": tune.uniform(0.2, 0.8)
         #"divide_into_four": tune.choice([False])
     }
 
