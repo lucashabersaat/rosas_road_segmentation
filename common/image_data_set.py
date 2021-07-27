@@ -2,20 +2,13 @@ import math
 import os
 
 import cv2
-import numpy as np
 from scipy.signal import convolve2d
-import torch
 from torchvision import transforms as T
 from torchvision.transforms import functional as TF
 
 from common.util import np_to_tensor
 from common.read_data import load_all_from_path
-from common.plot_data import (
-    show_img,
-    show_two_imgs,
-    show_two_imgs_overlay,
-    show_first_n,
-)
+from common.plot_data import *
 
 
 class ImageDataSet(torch.utils.data.Dataset):
@@ -25,15 +18,15 @@ class ImageDataSet(torch.utils.data.Dataset):
     """
 
     def __init__(
-        self,
-        path: str,
-        device: str,
-        size: int = 400,
-        mode: str = "none",
-        variants: int = 5,
-        patch_size: int = 256,
-        enhance: bool = True,
-        noise: bool = True
+            self,
+            path: str,
+            device: str,
+            size: int = 400,
+            mode: str = "none",
+            variants: int = 5,
+            patch_size: int = 256,
+            enhance: bool = True,
+            noise: bool = True,
     ):
         """
         Init initializes the dataset by loading the images from the file system
@@ -50,6 +43,8 @@ class ImageDataSet(torch.utils.data.Dataset):
         self.y_preprocessed = None
         self.n_preprocessed = 0
 
+        self.mean = None
+        self.std = None
         self.size = size
 
         assert mode in ["none", "breed", "patch", "patch_random"]
@@ -87,7 +82,11 @@ class ImageDataSet(torch.utils.data.Dataset):
 
             x = torch.add(x, gaussian_noise)
 
-        x = ImageDataSet._normalize(x)
+        # x = ImageDataSet._normalize(x)
+        if self.mean is not None:
+            x -= self.mean
+        if self.std is not None:
+            x /= self.std
 
         return x, y
 
@@ -131,6 +130,7 @@ class ImageDataSet(torch.utils.data.Dataset):
         Preprocess chooses the preprocessing method and applies the enhancement
         methods.
         """
+
         if self.mode == "none":
             self._preprocess_none()
         if self.mode == "breed":
@@ -144,6 +144,9 @@ class ImageDataSet(torch.utils.data.Dataset):
             for img_index in range(self.n_preprocessed):
                 x, _ = self.__getitem__(img_index)
                 self.x_preprocessed[img_index] = ImageDataSet.enhance(x).cpu().numpy()
+
+        self.mean = self.x.mean()
+        self.std = self.x.std()
 
     def _preprocess_none(self):
         """
@@ -375,7 +378,7 @@ class ImageDataSet(torch.utils.data.Dataset):
         x = np.float32(x.cpu())
 
         for c in range(len(x)):
-            x[c] = convolve2d(x[c], filter, mode='same', boundary='symm')
+            x[c] = convolve2d(x[c], filter, mode="same", boundary="symm")
 
         return torch.from_numpy(x)
 
@@ -399,14 +402,14 @@ class TestImageDataSet(torch.utils.data.Dataset):
     """
 
     def __init__(
-        self,
-        path: str,
-        device: str,
-        size: int = 400,
-        enhance: bool = True,
-        patch_size: int = 256,
-        offset: int = 100,
-        blend_mode: str = "cover",
+            self,
+            path: str,
+            device: str,
+            size: int = 400,
+            enhance: bool = True,
+            patch_size: int = 256,
+            offset: int = 100,
+            blend_mode: str = "cover",
     ):
         """
         Init initializes the dataset by loading the images from the file system
@@ -503,8 +506,8 @@ class TestImageDataSet(torch.utils.data.Dataset):
 
                 for pos_y in range(0, self.size - self.patch_size + 1):
                     if (
-                        pos_y % self.offset != 0
-                        and pos_y + self.patch_size != self.size
+                            pos_y % self.offset != 0
+                            and pos_y + self.patch_size != self.size
                     ):
                         continue
 
@@ -530,12 +533,12 @@ class TestImageDataSet(torch.utils.data.Dataset):
         mask = self._get_mask()
 
         for img_index in range(self.n):
-            print(f'Reassembling image {img_index}')
+            print(f"Reassembling image {img_index}")
 
             img_combined = np.zeros([self.size, self.size], dtype=np.ndarray)
 
             index = img_index * self.variants
-            img_patches = y[index : index + self.variants, :, :, :]
+            img_patches = y[index: index + self.variants, :, :, :]
 
             for patch_x_index in range(self.variants_x):
                 for patch_y_index in range(self.variants_y):
@@ -607,8 +610,8 @@ class TestImageDataSet(torch.utils.data.Dataset):
                             sum_weights = 0.0
                             for value_index in range(len(weighted_values)):
                                 sum_values += (
-                                    weighted_values[value_index][1]
-                                    * weighted_values[value_index][0]
+                                        weighted_values[value_index][1]
+                                        * weighted_values[value_index][0]
                                 )
                                 sum_weights += weighted_values[value_index][1]
                             img_reassembled[0, x_pos, y_pos] = sum_values / sum_weights
@@ -643,7 +646,7 @@ if __name__ == "__main__":
         variants=3,
         patch_size=256,
         enhance=True,
-        noise=True
+        noise=True,
     )
     show_two_imgs(dataset[0][0], dataset[0][1])
 

@@ -31,8 +31,6 @@ def predict(trainer, model, data):
     predictions = np.asarray(predictions).squeeze(1)
 
     # Project values into interval [0, 1]
-    predictions = np.add(predictions, abs(predictions.min()))
-    predictions = np.divide(predictions, predictions.max())
 
     # np.save("predictions.npy", predictions)
 
@@ -173,4 +171,4 @@ if __name__ == "__main__":
         )
         model, data = handle_train(trainer, config, args.train)
 
-    predict(trainer, model, data)
+    # predict(trainer, model, data)
