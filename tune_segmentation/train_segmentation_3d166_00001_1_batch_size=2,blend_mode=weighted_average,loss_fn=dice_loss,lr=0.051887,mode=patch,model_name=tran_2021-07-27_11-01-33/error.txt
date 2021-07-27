@@ -1,0 +1,10 @@
+Failure # 1 (occurred at 2021-07-27_11-04-50)
+Traceback (most recent call last):
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/trial_runner.py", line 726, in _process_trial
+    decision = self._process_trial_result(trial, result)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/trial_runner.py", line 766, in _process_trial_result
+    self._validate_result_metrics(flat_result)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/trial_runner.py", line 875, in _validate_result_metrics
+    raise ValueError(
+ValueError: Trial returned a result which did not include the specified metric(s) `val_accuracy` that `tune.run()` expects. Make sure your calls to `tune.report()` include the metric, or set the TUNE_DISABLE_STRICT_METRIC_CHECKING environment variable to 1. Result: {'loss': 0.6703101992607117, 'acc': 0.505617082118988, 'val_iou': 0.3013755679130554, 'time_this_iter_s': 113.50910210609436, 'done': False, 'timesteps_total': None, 'episodes_total': None, 'training_iteration': 1, 'experiment_id': 'aa5c174047e34350ae675a3210da8d61', 'date': '2021-07-27_11-04-50', 'timestamp': 1627376690, 'time_total_s': 113.50910210609436, 'pid': 11629, 'hostname': 'lo-s4-016', 'node_ip': '10.204.3.66', 'time_since_restore': 113.50910210609436, 'timesteps_since_restore': 0, 'iterations_since_restore': 1, 'trial_id': '3d166_00001', 'config/model_name': 'transunet', 'config/lr': 0.051887442777693964, 'config/loss_fn': 'dice_loss', 'config/batch_size': 2, 'config/num_epochs': 10, 'config/patch_size': 256, 'config/mode': 'patch', 'config/blend_mode': 'weighted_average', 'config/noise': False}
+

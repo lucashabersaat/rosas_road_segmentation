@@ -1,0 +1,10 @@
+Failure # 1 (occurred at 2021-07-27_11-02-51)
+Traceback (most recent call last):
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/trial_runner.py", line 726, in _process_trial
+    decision = self._process_trial_result(trial, result)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/trial_runner.py", line 766, in _process_trial_result
+    self._validate_result_metrics(flat_result)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/trial_runner.py", line 875, in _validate_result_metrics
+    raise ValueError(
+ValueError: Trial returned a result which did not include the specified metric(s) `val_accuracy` that `tune.run()` expects. Make sure your calls to `tune.report()` include the metric, or set the TUNE_DISABLE_STRICT_METRIC_CHECKING environment variable to 1. Result: {'loss': 0.5381368398666382, 'acc': 0.6109786629676819, 'val_iou': 0.3050991892814636, 'time_this_iter_s': 73.2116060256958, 'done': False, 'timesteps_total': None, 'episodes_total': None, 'training_iteration': 1, 'experiment_id': 'f89349063ccc49e8aa626a0b89585200', 'date': '2021-07-27_11-02-51', 'timestamp': 1627376571, 'time_total_s': 73.2116060256958, 'pid': 11631, 'hostname': 'lo-s4-016', 'node_ip': '10.204.3.66', 'time_since_restore': 73.2116060256958, 'timesteps_since_restore': 0, 'iterations_since_restore': 1, 'trial_id': '3d166_00000', 'config/model_name': 'attUnet', 'config/lr': 0.015952528818231115, 'config/loss_fn': 'dice_loss', 'config/batch_size': 4, 'config/num_epochs': 10, 'config/patch_size': 256, 'config/mode': 'patch_random', 'config/blend_mode': 'weighted_average', 'config/noise': True}
+

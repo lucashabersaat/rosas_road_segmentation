@@ -1,0 +1,11 @@
+{
+  "batch_size": 2,
+  "blend_mode": "weighted_average",
+  "loss_fn": "dice_loss",
+  "lr": 0.09835650565384976,
+  "mode": "patch_random",
+  "model_name": "attUnet",
+  "noise": false,
+  "num_epochs": 35,
+  "patch_size": 256
+}
