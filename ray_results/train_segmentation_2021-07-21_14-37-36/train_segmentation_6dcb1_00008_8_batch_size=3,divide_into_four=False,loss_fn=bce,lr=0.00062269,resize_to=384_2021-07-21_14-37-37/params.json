@@ -1,7 +1,0 @@
-{
-  "batch_size": 3,
-  "divide_into_four": false,
-  "loss_fn": "bce",
-  "lr": 0.0006226882434824387,
-  "resize_to": 384
-}

@@ -1,0 +1,11 @@
+{
+  "batch_size": 2,
+  "blend_mode": "weighted_average",
+  "loss_fn": "dice_loss",
+  "lr": 0.01161589524564663,
+  "mode": "patch",
+  "model_name": "unet",
+  "noise": true,
+  "num_epochs": 10,
+  "patch_size": 256
+}
