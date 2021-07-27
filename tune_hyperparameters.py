@@ -7,8 +7,10 @@ from common.get_model import get_model
 import torch
 from argparse import ArgumentParser
 import tempfile
+import os
 
 
+os.environ["CUDA_LAUNCH_BLOCKING"] = 1
 def train_segmentation(config, model_name=None, num_epochs=10, num_gpus=0):
     print(config["model_name"])
     model_name = (str)(config["model_name"])
