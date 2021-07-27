@@ -64,13 +64,14 @@ if __name__ == "__main__":
     callbacks = [TuneReportCallback(metrics, on="validation_end")]
     trainer = pl.Trainer(callbacks=callbacks)
 
-    num_samples = 1
-    num_epochs = 1
-    gpus_per_trial = 0#int(torch.cuda.is_available())  # set this to higher if using GPU
+    num_samples = 10
+    num_epochs = 35
+    gpus_per_trial = 1#int(torch.cuda.is_available())  # set this to higher if using GPU
 
 
     #be carefull when changing the config, everything breaksdown, better fix to one value than removing params
     #keeping config across models and other files is the new challenge
+    """
     config = {
         # "r2Uet", "attUnet", "r2attUnet", "nestedUnet"
         "model_name": tune.choice(["unet", "attUnet", "transunet"]), # unet works well now , got some errors about patches with transunet
@@ -87,9 +88,9 @@ if __name__ == "__main__":
         #"divide_into_four": tune.choice([False]),
 	"threshold": tune.uniform(0.2, 0.8)
     }
-
     """
-        config_lucas_suggestion = {
+
+    config_lucas_suggestion = {
         "model_name": tune.choice(["unet", "transunet"]),
         "lr": tune.uniform(1e-4, 1e-1),
         "loss_fn": tune.choice(['noise_robust_dice', "dice_loss"]),
@@ -101,7 +102,7 @@ if __name__ == "__main__":
         "noise": tune.choice([True, False]),
         "threshold": tune.uniform(0.2, 0.8)
     }
-    """
+    config = config_lucas_suggestion
 
     trainable = tune.with_parameters(
         train_segmentation,
@@ -119,7 +120,7 @@ if __name__ == "__main__":
         mode="max",
         config=config,
         num_samples=num_samples,
-        name="tune_segmentation_proof_of_concept_only_on_cpu")
+        name="tune_segmentation_config_lucas_suggestion")
 
     print("stayin alive, aha aha aha")
 
