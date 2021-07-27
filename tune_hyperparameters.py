@@ -80,6 +80,19 @@ if __name__ == "__main__":
         "threshold": tune.uniform(0.2, 0.8)
     }
 
+    config_lucas_suggestion = {
+        "model_name": tune.choice(["unet", "transunet"]),
+        "lr": tune.uniform(1e-4, 1e-1),
+        "loss_fn": tune.choice(['noise_robust_dice', "dice_loss"]),
+        "batch_size": tune.choice([2, 4]),
+        "num_epochs": tune.choice([num_epochs]),
+        "patch_size": tune.choice([256]),
+        "mode": tune.choice(["patch"]),
+        "blend_mode": tune.choice(["weighted_average"]),
+        "noise": tune.choice([True, False]),
+        "threshold": tune.uniform(0.2, 0.8)
+    }
+
     trainable = tune.with_parameters(
         train_segmentation,
         num_epochs=num_epochs,
