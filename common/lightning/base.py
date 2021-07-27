@@ -6,11 +6,12 @@ from common.losses import NoiseRobustDiceLoss, DiceLoss
 from common.get_model import get_model
 
 
+
 class LitBase(pl.LightningModule):
     def __init__(
-            self,
-            config,
-            model: Optional[Module] = None,
+        self,
+        config,
+        model: Optional[Module] = None,
     ):
         super().__init__()
 
@@ -55,8 +56,8 @@ class LitBase(pl.LightningModule):
         y_hat = self.model(x)
 
         loss = self.loss_fn(y_hat, y)
-        acc = self.accuracy(y_hat, y)
-        iou = self.IoU(y_hat, y)
+        acc = LitBase.accuracy(y_hat, y)
+        iou = LitBase.IoU(y_hat, y)
 
         self.log("ptl/train_loss", loss)
         self.log("ptl/train_accuracy", acc)
@@ -69,8 +70,8 @@ class LitBase(pl.LightningModule):
         y_hat = self.model(x)
 
         loss = self.loss_fn(y_hat, y)
-        acc = self.accuracy(y_hat, y)
-        iou = self.IoU(y_hat, y)
+        acc = LitBase.accuracy(y_hat, y)
+        iou = LitBase.IoU(y_hat, y)
 
         return {"val_loss": loss, "val_accuracy": acc, "val_iou": iou}
 
@@ -86,7 +87,8 @@ class LitBase(pl.LightningModule):
         self.log("ptl/val_accuracy", avg_acc, prog_bar=True)
         self.log("ptl/val_iou", avg_iou, prog_bar=True)
 
-    def accuracy(self, y_hat, y):
+    @staticmethod
+    def accuracy(self,y_hat, y):
         y = torch.flatten(y).type(torch.IntTensor)
         y_hat = torch.flatten(y_hat)
 
@@ -95,9 +97,10 @@ class LitBase(pl.LightningModule):
         fp_fn = torch.count_nonzero(torch.logical_xor(y, y_hat))
         tp_tn_fp_fn = len(y_hat)
 
-        return (tp_tn_fp_fn - fp_fn) / tp_tn_fp_fn
+        return (tp_tn_fp_fn -fp_fn)/ tp_tn_fp_fn
 
-    def IoU(self, y_hat, y):
+    @staticmethod
+    def IoU(self,y_hat, y):
         """
         Compute the Intersection Over Union, which is TP / (TP + FP + FN).
         meanIoU is the average IoU over all output classes, as we only have one, this is the same.
