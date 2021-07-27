@@ -1,0 +1,528 @@
+Sender: LSF System <lsfadmin@lo-s4-046>
+Subject: Job 16835237: <python tune_hyperparameters.py> in cluster <leonhard> Exited
+
+Job <python tune_hyperparameters.py> was submitted from host <lo-login-02> by user <samuelbe> in cluster <leonhard> at Tue Jul 27 17:37:04 2021
+Job was executed on host(s) <20*lo-s4-046>, in queue <gpu.4h>, as user <samuelbe> in cluster <leonhard> at Tue Jul 27 17:37:33 2021
+</cluster/home/samuelbe> was used as the home directory.
+</cluster/home/samuelbe/anotherOne/rosas_road_segmentation> was used as the working directory.
+Started at Tue Jul 27 17:37:33 2021
+Terminated at Tue Jul 27 17:39:08 2021
+Results reported at Tue Jul 27 17:39:08 2021
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+python tune_hyperparameters.py
+------------------------------------------------------------
+
+Exited with exit code 1.
+
+Resource usage summary:
+
+    CPU time :                                   168.00 sec.
+    Max Memory :                                 8120 MB
+    Average Memory :                             2318.20 MB
+    Total Requested Memory :                     163840.00 MB
+    Delta Memory :                               155720.00 MB
+    Max Swap :                                   -
+    Max Processes :                              51
+    Max Threads :                                767
+    Run time :                                   100 sec.
+    Turnaround time :                            124 sec.
+
+The output (if any) follows:
+
+/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/autoscaler/_private/cli_logger.py:57: FutureWarning: Not all Ray CLI dependencies were found. In Ray 1.4+, the Ray CLI, autoscaler, and dashboard will only be usable via `pip install 'ray[default]'`. Please update your install command.
+  warnings.warn(
+Global seed set to 1337
+Global seed set to 1337
+GPU available: True, used: False
+GPU available: True, used: False
+TPU available: False, using: 0 TPU cores
+TPU available: False, using: 0 TPU cores
+/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/connectors/accelerator_connector.py:596: UserWarning: GPU available but not used. Set the gpus flag in your trainer `Trainer(gpus=1)` or script `--gpus=1`.
+  rank_zero_warn(
+2021-07-27 17:37:47,775	INFO services.py:1272 -- View the Ray dashboard at [1m[32mhttp://127.0.0.1:8265[39m[22m
+2021-07-27 17:37:50,550	WARNING function_runner.py:544 -- Function checkpointing is disabled. This may result in unexpected behavior when using checkpointing features or certain schedulers. To enable, set the train function arguments to be `func(config, checkpoint_dir=None)`.
+[2m[36m(pid=33355)[0m GPU available: True, used: True
+[2m[36m(pid=33355)[0m GPU available: True, used: True
+[2m[36m(pid=33355)[0m TPU available: False, using: 0 TPU cores
+[2m[36m(pid=33355)[0m TPU available: False, using: 0 TPU cores
+[2m[36m(pid=33355)[0m LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+[2m[36m(pid=33355)[0m LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+[2m[36m(pid=33355)[0m 
+[2m[36m(pid=33355)[0m   | Name    | Type     | Params
+[2m[36m(pid=33355)[0m -------------------------------------
+[2m[36m(pid=33355)[0m 0 | model   | AttU_Net | 34.9 M
+[2m[36m(pid=33355)[0m 1 | loss_fn | DiceLoss | 0     
+[2m[36m(pid=33355)[0m -------------------------------------
+[2m[36m(pid=33355)[0m 34.9 M    Trainable params
+[2m[36m(pid=33355)[0m 0         Non-trainable params
+[2m[36m(pid=33355)[0m 34.9 M    Total params
+[2m[36m(pid=33355)[0m 139.514   Total estimated model params size (MB)
+[2m[36m(pid=33355)[0m 
+[2m[36m(pid=33355)[0m   | Name    | Type     | Params
+[2m[36m(pid=33355)[0m -------------------------------------
+[2m[36m(pid=33355)[0m 0 | model   | AttU_Net | 34.9 M
+[2m[36m(pid=33355)[0m 1 | loss_fn | DiceLoss | 0     
+[2m[36m(pid=33355)[0m -------------------------------------
+[2m[36m(pid=33355)[0m 34.9 M    Trainable params
+[2m[36m(pid=33355)[0m 0         Non-trainable params
+[2m[36m(pid=33355)[0m 34.9 M    Total params
+[2m[36m(pid=33355)[0m 139.514   Total estimated model params size (MB)
+[2m[36m(pid=33355)[0m /cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/data_loading.py:348: UserWarning: Your val_dataloader has `shuffle=True`, it is best practice to turn this off for val/test/predict dataloaders.
+[2m[36m(pid=33355)[0m   rank_zero_warn(
+[2m[36m(pid=33355)[0m /cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/data_loading.py:102: UserWarning: The dataloader, val dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 40 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+[2m[36m(pid=33355)[0m   rank_zero_warn(
+[2m[36m(pid=33355)[0m /cluster/apps/python/3.8.5_gpu_gcc820/x86_64/lib64/python3.8/site-packages/torch/nn/functional.py:718: UserWarning: Named tensors and all their associated APIs are an experimental feature and subject to change. Please do not use them for anything important until they are released as stable. (Triggered internally at  /pytorch/c10/core/TensorImpl.h:1156.)
+[2m[36m(pid=33355)[0m   return torch.max_pool2d(input, kernel_size, stride, padding, dilation, ceil_mode)
+[2m[36m(pid=33355)[0m 2021-07-27 17:38:27,699	ERROR function_runner.py:254 -- Runner Thread raised error.
+[2m[36m(pid=33355)[0m Traceback (most recent call last):
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/function_runner.py", line 248, in run
+[2m[36m(pid=33355)[0m     self._entrypoint()
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/function_runner.py", line 315, in entrypoint
+[2m[36m(pid=33355)[0m     return self._trainable_func(self.config, self._status_reporter,
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/function_runner.py", line 580, in _trainable_func
+[2m[36m(pid=33355)[0m     output = fn()
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/utils/trainable.py", line 340, in _inner
+[2m[36m(pid=33355)[0m     inner(config, checkpoint_dir=None)
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/utils/trainable.py", line 331, in inner
+[2m[36m(pid=33355)[0m     trainable(config, **fn_kwargs)
+[2m[36m(pid=33355)[0m   File "tune_hyperparameters.py", line 38, in train_segmentation
+[2m[36m(pid=33355)[0m     trainer.fit(lit_model, data)
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 460, in fit
+[2m[36m(pid=33355)[0m     self._run(model)
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 758, in _run
+[2m[36m(pid=33355)[0m     self.dispatch()
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 799, in dispatch
+[2m[36m(pid=33355)[0m     self.accelerator.start_training(self)
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/accelerators/accelerator.py", line 96, in start_training
+[2m[36m(pid=33355)[0m     self.training_type_plugin.start_training(trainer)
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/plugins/training_type/training_type_plugin.py", line 144, in start_training
+[2m[36m(pid=33355)[0m     self._results = trainer.run_stage()
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 809, in run_stage
+[2m[36m(pid=33355)[0m     return self.run_train()
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 844, in run_train
+[2m[36m(pid=33355)[0m     self.run_sanity_check(self.lightning_module)
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 1112, in run_sanity_check
+[2m[36m(pid=33355)[0m     self.run_evaluation()
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 967, in run_evaluation
+[2m[36m(pid=33355)[0m     output = self.evaluation_loop.evaluation_step(batch, batch_idx, dataloader_idx)
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/evaluation_loop.py", line 174, in evaluation_step
+[2m[36m(pid=33355)[0m     output = self.trainer.accelerator.validation_step(args)
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/accelerators/accelerator.py", line 226, in validation_step
+[2m[36m(pid=33355)[0m     return self.training_type_plugin.validation_step(*args)
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/plugins/training_type/training_type_plugin.py", line 161, in validation_step
+[2m[36m(pid=33355)[0m     return self.lightning_module.validation_step(*args, **kwargs)
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/anotherOne/rosas_road_segmentation/common/lightning/base.py", line 76, in validation_step
+[2m[36m(pid=33355)[0m     acc = LitBase.accuracy(y_hat, y)
+[2m[36m(pid=33355)[0m TypeError: accuracy() missing 1 required positional argument: 'y'
+[2m[36m(pid=33355)[0m Exception in thread Thread-2:
+[2m[36m(pid=33355)[0m Traceback (most recent call last):
+[2m[36m(pid=33355)[0m   File "/cluster/apps/python/3.8.5_gpu_gcc820/x86_64/lib64/python3.8/threading.py", line 932, in _bootstrap_inner
+[2m[36m(pid=33355)[0m     self.run()
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/function_runner.py", line 267, in run
+[2m[36m(pid=33355)[0m     raise e
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/function_runner.py", line 248, in run
+[2m[36m(pid=33355)[0m     self._entrypoint()
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/function_runner.py", line 315, in entrypoint
+[2m[36m(pid=33355)[0m     return self._trainable_func(self.config, self._status_reporter,
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/function_runner.py", line 580, in _trainable_func
+[2m[36m(pid=33355)[0m     output = fn()
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/utils/trainable.py", line 340, in _inner
+[2m[36m(pid=33355)[0m     inner(config, checkpoint_dir=None)
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/utils/trainable.py", line 331, in inner
+[2m[36m(pid=33355)[0m     trainable(config, **fn_kwargs)
+[2m[36m(pid=33355)[0m   File "tune_hyperparameters.py", line 38, in train_segmentation
+[2m[36m(pid=33355)[0m     trainer.fit(lit_model, data)
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 460, in fit
+[2m[36m(pid=33355)[0m     self._run(model)
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 758, in _run
+[2m[36m(pid=33355)[0m     self.dispatch()
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 799, in dispatch
+[2m[36m(pid=33355)[0m     self.accelerator.start_training(self)
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/accelerators/accelerator.py", line 96, in start_training
+[2m[36m(pid=33355)[0m     self.training_type_plugin.start_training(trainer)
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/plugins/training_type/training_type_plugin.py", line 144, in start_training
+[2m[36m(pid=33355)[0m     self._results = trainer.run_stage()
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 809, in run_stage
+[2m[36m(pid=33355)[0m     return self.run_train()
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 844, in run_train
+[2m[36m(pid=33355)[0m     self.run_sanity_check(self.lightning_module)
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 1112, in run_sanity_check
+[2m[36m(pid=33355)[0m     self.run_evaluation()
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 967, in run_evaluation
+[2m[36m(pid=33355)[0m     output = self.evaluation_loop.evaluation_step(batch, batch_idx, dataloader_idx)
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/evaluation_loop.py", line 174, in evaluation_step
+[2m[36m(pid=33355)[0m     output = self.trainer.accelerator.validation_step(args)
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/accelerators/accelerator.py", line 226, in validation_step
+[2m[36m(pid=33355)[0m     return self.training_type_plugin.validation_step(*args)
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/plugins/training_type/training_type_plugin.py", line 161, in validation_step
+[2m[36m(pid=33355)[0m     return self.lightning_module.validation_step(*args, **kwargs)
+[2m[36m(pid=33355)[0m   File "/cluster/home/samuelbe/anotherOne/rosas_road_segmentation/common/lightning/base.py", line 76, in validation_step
+[2m[36m(pid=33355)[0m     acc = LitBase.accuracy(y_hat, y)
+[2m[36m(pid=33355)[0m TypeError: accuracy() missing 1 required positional argument: 'y'
+2021-07-27 17:38:27,816	ERROR trial_runner.py:748 -- Trial train_segmentation_99d80_00000: Error processing event.
+Traceback (most recent call last):
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/trial_runner.py", line 718, in _process_trial
+    results = self.trial_executor.fetch_result(trial)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/ray_trial_executor.py", line 688, in fetch_result
+    result = ray.get(trial_future[0], timeout=DEFAULT_GET_TIMEOUT)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/_private/client_mode_hook.py", line 62, in wrapper
+    return func(*args, **kwargs)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/worker.py", line 1495, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(TuneError): [36mray::ImplicitFunc.train_buffered()[39m (pid=33355, ip=10.204.3.96)
+  File "python/ray/_raylet.pyx", line 501, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 451, in ray._raylet.execute_task.function_executor
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/_private/function_manager.py", line 563, in actor_method_executor
+    return method(__ray_actor, *args, **kwargs)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/trainable.py", line 173, in train_buffered
+    result = self.train()
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/trainable.py", line 232, in train
+    result = self.step()
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/function_runner.py", line 366, in step
+    self._report_thread_runner_error(block=True)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/function_runner.py", line 512, in _report_thread_runner_error
+    raise TuneError(
+ray.tune.error.TuneError: Trial raised an exception. Traceback:
+[36mray::ImplicitFunc.train_buffered()[39m (pid=33355, ip=10.204.3.96)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/function_runner.py", line 248, in run
+    self._entrypoint()
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/function_runner.py", line 315, in entrypoint
+    return self._trainable_func(self.config, self._status_reporter,
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/function_runner.py", line 580, in _trainable_func
+    output = fn()
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/utils/trainable.py", line 340, in _inner
+    inner(config, checkpoint_dir=None)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/utils/trainable.py", line 331, in inner
+    trainable(config, **fn_kwargs)
+  File "tune_hyperparameters.py", line 38, in train_segmentation
+    trainer.fit(lit_model, data)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 460, in fit
+    self._run(model)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 758, in _run
+    self.dispatch()
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 799, in dispatch
+    self.accelerator.start_training(self)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/accelerators/accelerator.py", line 96, in start_training
+    self.training_type_plugin.start_training(trainer)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/plugins/training_type/training_type_plugin.py", line 144, in start_training
+    self._results = trainer.run_stage()
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 809, in run_stage
+    return self.run_train()
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 844, in run_train
+    self.run_sanity_check(self.lightning_module)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 1112, in run_sanity_check
+    self.run_evaluation()
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 967, in run_evaluation
+    output = self.evaluation_loop.evaluation_step(batch, batch_idx, dataloader_idx)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/evaluation_loop.py", line 174, in evaluation_step
+    output = self.trainer.accelerator.validation_step(args)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/accelerators/accelerator.py", line 226, in validation_step
+    return self.training_type_plugin.validation_step(*args)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/plugins/training_type/training_type_plugin.py", line 161, in validation_step
+    return self.lightning_module.validation_step(*args, **kwargs)
+  File "/cluster/home/samuelbe/anotherOne/rosas_road_segmentation/common/lightning/base.py", line 76, in validation_step
+    acc = LitBase.accuracy(y_hat, y)
+TypeError: accuracy() missing 1 required positional argument: 'y'
+[2m[36m(pid=33351)[0m GPU available: True, used: True
+[2m[36m(pid=33351)[0m GPU available: True, used: True
+[2m[36m(pid=33351)[0m TPU available: False, using: 0 TPU cores
+[2m[36m(pid=33351)[0m TPU available: False, using: 0 TPU cores
+[2m[36m(pid=33351)[0m LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+[2m[36m(pid=33351)[0m LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+[2m[36m(pid=33351)[0m 
+[2m[36m(pid=33351)[0m   | Name    | Type                | Params
+[2m[36m(pid=33351)[0m ------------------------------------------------
+[2m[36m(pid=33351)[0m 0 | model   | UNet                | 31.0 M
+[2m[36m(pid=33351)[0m 1 | loss_fn | NoiseRobustDiceLoss | 0     
+[2m[36m(pid=33351)[0m ------------------------------------------------
+[2m[36m(pid=33351)[0m 31.0 M    Trainable params
+[2m[36m(pid=33351)[0m 0         Non-trainable params
+[2m[36m(pid=33351)[0m 31.0 M    Total params
+[2m[36m(pid=33351)[0m 124.151   Total estimated model params size (MB)
+[2m[36m(pid=33351)[0m 
+[2m[36m(pid=33351)[0m   | Name    | Type                | Params
+[2m[36m(pid=33351)[0m ------------------------------------------------
+[2m[36m(pid=33351)[0m 0 | model   | UNet                | 31.0 M
+[2m[36m(pid=33351)[0m 1 | loss_fn | NoiseRobustDiceLoss | 0     
+[2m[36m(pid=33351)[0m ------------------------------------------------
+[2m[36m(pid=33351)[0m 31.0 M    Trainable params
+[2m[36m(pid=33351)[0m 0         Non-trainable params
+[2m[36m(pid=33351)[0m 31.0 M    Total params
+[2m[36m(pid=33351)[0m 124.151   Total estimated model params size (MB)
+[2m[36m(pid=33351)[0m /cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/data_loading.py:348: UserWarning: Your val_dataloader has `shuffle=True`, it is best practice to turn this off for val/test/predict dataloaders.
+[2m[36m(pid=33351)[0m   rank_zero_warn(
+[2m[36m(pid=33351)[0m /cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/data_loading.py:102: UserWarning: The dataloader, val dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 40 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+[2m[36m(pid=33351)[0m   rank_zero_warn(
+[2m[36m(pid=33351)[0m /cluster/apps/python/3.8.5_gpu_gcc820/x86_64/lib64/python3.8/site-packages/torch/nn/functional.py:718: UserWarning: Named tensors and all their associated APIs are an experimental feature and subject to change. Please do not use them for anything important until they are released as stable. (Triggered internally at  /pytorch/c10/core/TensorImpl.h:1156.)
+[2m[36m(pid=33351)[0m   return torch.max_pool2d(input, kernel_size, stride, padding, dilation, ceil_mode)
+[2m[36m(pid=33351)[0m 2021-07-27 17:38:59,808	ERROR function_runner.py:254 -- Runner Thread raised error.
+[2m[36m(pid=33351)[0m Traceback (most recent call last):
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/function_runner.py", line 248, in run
+[2m[36m(pid=33351)[0m     self._entrypoint()
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/function_runner.py", line 315, in entrypoint
+[2m[36m(pid=33351)[0m     return self._trainable_func(self.config, self._status_reporter,
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/function_runner.py", line 580, in _trainable_func
+[2m[36m(pid=33351)[0m     output = fn()
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/utils/trainable.py", line 340, in _inner
+[2m[36m(pid=33351)[0m     inner(config, checkpoint_dir=None)
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/utils/trainable.py", line 331, in inner
+[2m[36m(pid=33351)[0m     trainable(config, **fn_kwargs)
+[2m[36m(pid=33351)[0m   File "tune_hyperparameters.py", line 38, in train_segmentation
+[2m[36m(pid=33351)[0m     trainer.fit(lit_model, data)
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 460, in fit
+[2m[36m(pid=33351)[0m     self._run(model)
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 758, in _run
+[2m[36m(pid=33351)[0m     self.dispatch()
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 799, in dispatch
+[2m[36m(pid=33351)[0m     self.accelerator.start_training(self)
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/accelerators/accelerator.py", line 96, in start_training
+[2m[36m(pid=33351)[0m     self.training_type_plugin.start_training(trainer)
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/plugins/training_type/training_type_plugin.py", line 144, in start_training
+[2m[36m(pid=33351)[0m     self._results = trainer.run_stage()
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 809, in run_stage
+[2m[36m(pid=33351)[0m     return self.run_train()
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 844, in run_train
+[2m[36m(pid=33351)[0m     self.run_sanity_check(self.lightning_module)
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 1112, in run_sanity_check
+[2m[36m(pid=33351)[0m     self.run_evaluation()
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 967, in run_evaluation
+[2m[36m(pid=33351)[0m     output = self.evaluation_loop.evaluation_step(batch, batch_idx, dataloader_idx)
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/evaluation_loop.py", line 174, in evaluation_step
+[2m[36m(pid=33351)[0m     output = self.trainer.accelerator.validation_step(args)
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/accelerators/accelerator.py", line 226, in validation_step
+[2m[36m(pid=33351)[0m     return self.training_type_plugin.validation_step(*args)
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/plugins/training_type/training_type_plugin.py", line 161, in validation_step
+[2m[36m(pid=33351)[0m     return self.lightning_module.validation_step(*args, **kwargs)
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/anotherOne/rosas_road_segmentation/common/lightning/base.py", line 76, in validation_step
+[2m[36m(pid=33351)[0m     acc = LitBase.accuracy(y_hat, y)
+[2m[36m(pid=33351)[0m TypeError: accuracy() missing 1 required positional argument: 'y'
+[2m[36m(pid=33351)[0m Exception in thread Thread-2:
+[2m[36m(pid=33351)[0m Traceback (most recent call last):
+[2m[36m(pid=33351)[0m   File "/cluster/apps/python/3.8.5_gpu_gcc820/x86_64/lib64/python3.8/threading.py", line 932, in _bootstrap_inner
+[2m[36m(pid=33351)[0m     self.run()
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/function_runner.py", line 267, in run
+[2m[36m(pid=33351)[0m     raise e
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/function_runner.py", line 248, in run
+[2m[36m(pid=33351)[0m     self._entrypoint()
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/function_runner.py", line 315, in entrypoint
+[2m[36m(pid=33351)[0m     return self._trainable_func(self.config, self._status_reporter,
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/function_runner.py", line 580, in _trainable_func
+[2m[36m(pid=33351)[0m     output = fn()
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/utils/trainable.py", line 340, in _inner
+[2m[36m(pid=33351)[0m     inner(config, checkpoint_dir=None)
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/utils/trainable.py", line 331, in inner
+[2m[36m(pid=33351)[0m     trainable(config, **fn_kwargs)
+[2m[36m(pid=33351)[0m   File "tune_hyperparameters.py", line 38, in train_segmentation
+[2m[36m(pid=33351)[0m     trainer.fit(lit_model, data)
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 460, in fit
+[2m[36m(pid=33351)[0m     self._run(model)
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 758, in _run
+[2m[36m(pid=33351)[0m     self.dispatch()
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 799, in dispatch
+[2m[36m(pid=33351)[0m     self.accelerator.start_training(self)
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/accelerators/accelerator.py", line 96, in start_training
+[2m[36m(pid=33351)[0m     self.training_type_plugin.start_training(trainer)
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/plugins/training_type/training_type_plugin.py", line 144, in start_training
+[2m[36m(pid=33351)[0m     self._results = trainer.run_stage()
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 809, in run_stage
+[2m[36m(pid=33351)[0m     return self.run_train()
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 844, in run_train
+[2m[36m(pid=33351)[0m     self.run_sanity_check(self.lightning_module)
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 1112, in run_sanity_check
+[2m[36m(pid=33351)[0m     self.run_evaluation()
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 967, in run_evaluation
+[2m[36m(pid=33351)[0m     output = self.evaluation_loop.evaluation_step(batch, batch_idx, dataloader_idx)
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/evaluation_loop.py", line 174, in evaluation_step
+[2m[36m(pid=33351)[0m     output = self.trainer.accelerator.validation_step(args)
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/accelerators/accelerator.py", line 226, in validation_step
+[2m[36m(pid=33351)[0m     return self.training_type_plugin.validation_step(*args)
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/plugins/training_type/training_type_plugin.py", line 161, in validation_step
+[2m[36m(pid=33351)[0m     return self.lightning_module.validation_step(*args, **kwargs)
+[2m[36m(pid=33351)[0m   File "/cluster/home/samuelbe/anotherOne/rosas_road_segmentation/common/lightning/base.py", line 76, in validation_step
+[2m[36m(pid=33351)[0m     acc = LitBase.accuracy(y_hat, y)
+[2m[36m(pid=33351)[0m TypeError: accuracy() missing 1 required positional argument: 'y'
+2021-07-27 17:38:59,937	ERROR trial_runner.py:748 -- Trial train_segmentation_99d80_00001: Error processing event.
+Traceback (most recent call last):
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/trial_runner.py", line 718, in _process_trial
+    results = self.trial_executor.fetch_result(trial)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/ray_trial_executor.py", line 688, in fetch_result
+    result = ray.get(trial_future[0], timeout=DEFAULT_GET_TIMEOUT)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/_private/client_mode_hook.py", line 62, in wrapper
+    return func(*args, **kwargs)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/worker.py", line 1495, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(TuneError): [36mray::ImplicitFunc.train_buffered()[39m (pid=33351, ip=10.204.3.96)
+  File "python/ray/_raylet.pyx", line 501, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 451, in ray._raylet.execute_task.function_executor
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/_private/function_manager.py", line 563, in actor_method_executor
+    return method(__ray_actor, *args, **kwargs)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/trainable.py", line 173, in train_buffered
+    result = self.train()
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/trainable.py", line 232, in train
+    result = self.step()
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/function_runner.py", line 366, in step
+    self._report_thread_runner_error(block=True)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/function_runner.py", line 512, in _report_thread_runner_error
+    raise TuneError(
+ray.tune.error.TuneError: Trial raised an exception. Traceback:
+[36mray::ImplicitFunc.train_buffered()[39m (pid=33351, ip=10.204.3.96)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/function_runner.py", line 248, in run
+    self._entrypoint()
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/function_runner.py", line 315, in entrypoint
+    return self._trainable_func(self.config, self._status_reporter,
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/function_runner.py", line 580, in _trainable_func
+    output = fn()
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/utils/trainable.py", line 340, in _inner
+    inner(config, checkpoint_dir=None)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/utils/trainable.py", line 331, in inner
+    trainable(config, **fn_kwargs)
+  File "tune_hyperparameters.py", line 38, in train_segmentation
+    trainer.fit(lit_model, data)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 460, in fit
+    self._run(model)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 758, in _run
+    self.dispatch()
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 799, in dispatch
+    self.accelerator.start_training(self)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/accelerators/accelerator.py", line 96, in start_training
+    self.training_type_plugin.start_training(trainer)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/plugins/training_type/training_type_plugin.py", line 144, in start_training
+    self._results = trainer.run_stage()
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 809, in run_stage
+    return self.run_train()
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 844, in run_train
+    self.run_sanity_check(self.lightning_module)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 1112, in run_sanity_check
+    self.run_evaluation()
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 967, in run_evaluation
+    output = self.evaluation_loop.evaluation_step(batch, batch_idx, dataloader_idx)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/evaluation_loop.py", line 174, in evaluation_step
+    output = self.trainer.accelerator.validation_step(args)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/accelerators/accelerator.py", line 226, in validation_step
+    return self.training_type_plugin.validation_step(*args)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/plugins/training_type/training_type_plugin.py", line 161, in validation_step
+    return self.lightning_module.validation_step(*args, **kwargs)
+  File "/cluster/home/samuelbe/anotherOne/rosas_road_segmentation/common/lightning/base.py", line 76, in validation_step
+    acc = LitBase.accuracy(y_hat, y)
+TypeError: accuracy() missing 1 required positional argument: 'y'
+== Status ==
+Memory usage on this node: 28.8/251.8 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 0/40 CPUs, 0/1 GPUs, 0.0/150.05 GiB heap, 0.0/68.3 GiB objects (0.0/1.0 accelerator_type:GTX)
+Result logdir: /cluster/home/samuelbe/ray_results/tune_segmentation_proof_of_concept
+Number of trials: 2/2 (2 PENDING)
++--------------------------------+----------+-------+--------------+------------------+-------------------+-----------+--------------+--------------+---------+--------------+--------------+-------------+
+| Trial name                     | status   | loc   |   batch_size | blend_mode       | loss_fn           |        lr | mode         | model_name   | noise   |   num_epochs |   patch_size |   threshold |
+|--------------------------------+----------+-------+--------------+------------------+-------------------+-----------+--------------+--------------+---------+--------------+--------------+-------------|
+| train_segmentation_99d80_00000 | PENDING  |       |            4 | weighted_average | dice_loss         | 0.0159525 | patch_random | attUnet      | True    |           10 |          256 |    0.341233 |
+| train_segmentation_99d80_00001 | PENDING  |       |            2 | cover            | noise_robust_dice | 0.0262681 | patch_random | unet         | False   |           10 |          256 |    0.681422 |
++--------------------------------+----------+-------+--------------+------------------+-------------------+-----------+--------------+--------------+---------+--------------+--------------+-------------+
+
+
+[2m[36m(pid=33355)[0m attUnet
+== Status ==
+Memory usage on this node: 29.3/251.8 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 16.0/40 CPUs, 1.0/1 GPUs, 0.0/150.05 GiB heap, 0.0/68.3 GiB objects (0.0/1.0 accelerator_type:GTX)
+Result logdir: /cluster/home/samuelbe/ray_results/tune_segmentation_proof_of_concept
+Number of trials: 2/2 (1 PENDING, 1 RUNNING)
++--------------------------------+----------+-------+--------------+------------------+-------------------+-----------+--------------+--------------+---------+--------------+--------------+-------------+
+| Trial name                     | status   | loc   |   batch_size | blend_mode       | loss_fn           |        lr | mode         | model_name   | noise   |   num_epochs |   patch_size |   threshold |
+|--------------------------------+----------+-------+--------------+------------------+-------------------+-----------+--------------+--------------+---------+--------------+--------------+-------------|
+| train_segmentation_99d80_00000 | RUNNING  |       |            4 | weighted_average | dice_loss         | 0.0159525 | patch_random | attUnet      | True    |           10 |          256 |    0.341233 |
+| train_segmentation_99d80_00001 | PENDING  |       |            2 | cover            | noise_robust_dice | 0.0262681 | patch_random | unet         | False   |           10 |          256 |    0.681422 |
++--------------------------------+----------+-------+--------------+------------------+-------------------+-----------+--------------+--------------+---------+--------------+--------------+-------------+
+
+
+== Status ==
+Memory usage on this node: 30.7/251.8 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 16.0/40 CPUs, 1.0/1 GPUs, 0.0/150.05 GiB heap, 0.0/68.3 GiB objects (0.0/16.0 CPU_group_0_252f27beda00f137686533461276b8d3, 0.0/1.0 GPU_group_252f27beda00f137686533461276b8d3, 0.0/1.0 GPU_group_0_252f27beda00f137686533461276b8d3, 0.0/1.0 accelerator_type:GTX, 0.0/16.0 CPU_group_252f27beda00f137686533461276b8d3)
+Result logdir: /cluster/home/samuelbe/ray_results/tune_segmentation_proof_of_concept
+Number of trials: 2/2 (1 PENDING, 1 RUNNING)
++--------------------------------+----------+-------+--------------+------------------+-------------------+-----------+--------------+--------------+---------+--------------+--------------+-------------+
+| Trial name                     | status   | loc   |   batch_size | blend_mode       | loss_fn           |        lr | mode         | model_name   | noise   |   num_epochs |   patch_size |   threshold |
+|--------------------------------+----------+-------+--------------+------------------+-------------------+-----------+--------------+--------------+---------+--------------+--------------+-------------|
+| train_segmentation_99d80_00000 | RUNNING  |       |            4 | weighted_average | dice_loss         | 0.0159525 | patch_random | attUnet      | True    |           10 |          256 |    0.341233 |
+| train_segmentation_99d80_00001 | PENDING  |       |            2 | cover            | noise_robust_dice | 0.0262681 | patch_random | unet         | False   |           10 |          256 |    0.681422 |
++--------------------------------+----------+-------+--------------+------------------+-------------------+-----------+--------------+--------------+---------+--------------+--------------+-------------+
+
+
+[2m[36m(pid=33355)[0m Validation sanity check: 0it [00:00, ?it/s]Validation sanity check:   0%|          | 0/2 [00:00<?, ?it/s]
+Result for train_segmentation_99d80_00000:
+  {}
+  
+== Status ==
+Memory usage on this node: 34.0/251.8 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 0/40 CPUs, 0/1 GPUs, 0.0/150.05 GiB heap, 0.0/68.3 GiB objects (0.0/16.0 CPU_group_0_252f27beda00f137686533461276b8d3, 0.0/1.0 GPU_group_252f27beda00f137686533461276b8d3, 0.0/1.0 GPU_group_0_252f27beda00f137686533461276b8d3, 0.0/1.0 accelerator_type:GTX, 0.0/16.0 CPU_group_252f27beda00f137686533461276b8d3)
+Result logdir: /cluster/home/samuelbe/ray_results/tune_segmentation_proof_of_concept
+Number of trials: 2/2 (1 ERROR, 1 PENDING)
++--------------------------------+----------+-------+--------------+------------------+-------------------+-----------+--------------+--------------+---------+--------------+--------------+-------------+
+| Trial name                     | status   | loc   |   batch_size | blend_mode       | loss_fn           |        lr | mode         | model_name   | noise   |   num_epochs |   patch_size |   threshold |
+|--------------------------------+----------+-------+--------------+------------------+-------------------+-----------+--------------+--------------+---------+--------------+--------------+-------------|
+| train_segmentation_99d80_00001 | PENDING  |       |            2 | cover            | noise_robust_dice | 0.0262681 | patch_random | unet         | False   |           10 |          256 |    0.681422 |
+| train_segmentation_99d80_00000 | ERROR    |       |            4 | weighted_average | dice_loss         | 0.0159525 | patch_random | attUnet      | True    |           10 |          256 |    0.341233 |
++--------------------------------+----------+-------+--------------+------------------+-------------------+-----------+--------------+--------------+---------+--------------+--------------+-------------+
+Number of errored trials: 1
++--------------------------------+--------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Trial name                     |   # failures | error file                                                                                                                                                                                                                             |
+|--------------------------------+--------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| train_segmentation_99d80_00000 |            1 | /cluster/home/samuelbe/ray_results/tune_segmentation_proof_of_concept/train_segmentation_99d80_00000_0_batch_size=4,blend_mode=weighted_average,loss_fn=dice_loss,lr=0.015953,mode=patch_random,model_na_2021-07-27_17-37-50/error.txt |
++--------------------------------+--------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+[2m[36m(pid=33351)[0m unet
+[2m[36m(pid=33351)[0m Validation sanity check: 0it [00:00, ?it/s]Validation sanity check:   0%|          | 0/2 [00:00<?, ?it/s]
+Result for train_segmentation_99d80_00001:
+  {}
+  
+== Status ==
+Memory usage on this node: 34.0/251.8 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 0/40 CPUs, 0/1 GPUs, 0.0/150.05 GiB heap, 0.0/68.3 GiB objects (0.0/1.0 GPU_group_252f27beda00f137686533461276b8d3, 0.0/1.0 accelerator_type:GTX, 0.0/1.0 GPU_group_0_252f27beda00f137686533461276b8d3, 0.0/16.0 CPU_group_0_252f27beda00f137686533461276b8d3, 0.0/16.0 CPU_group_252f27beda00f137686533461276b8d3)
+Result logdir: /cluster/home/samuelbe/ray_results/tune_segmentation_proof_of_concept
+Number of trials: 2/2 (2 ERROR)
++--------------------------------+----------+-------+--------------+------------------+-------------------+-----------+--------------+--------------+---------+--------------+--------------+-------------+
+| Trial name                     | status   | loc   |   batch_size | blend_mode       | loss_fn           |        lr | mode         | model_name   | noise   |   num_epochs |   patch_size |   threshold |
+|--------------------------------+----------+-------+--------------+------------------+-------------------+-----------+--------------+--------------+---------+--------------+--------------+-------------|
+| train_segmentation_99d80_00000 | ERROR    |       |            4 | weighted_average | dice_loss         | 0.0159525 | patch_random | attUnet      | True    |           10 |          256 |    0.341233 |
+| train_segmentation_99d80_00001 | ERROR    |       |            2 | cover            | noise_robust_dice | 0.0262681 | patch_random | unet         | False   |           10 |          256 |    0.681422 |
++--------------------------------+----------+-------+--------------+------------------+-------------------+-----------+--------------+--------------+---------+--------------+--------------+-------------+
+Number of errored trials: 2
++--------------------------------+--------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Trial name                     |   # failures | error file                                                                                                                                                                                                                             |
+|--------------------------------+--------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| train_segmentation_99d80_00000 |            1 | /cluster/home/samuelbe/ray_results/tune_segmentation_proof_of_concept/train_segmentation_99d80_00000_0_batch_size=4,blend_mode=weighted_average,loss_fn=dice_loss,lr=0.015953,mode=patch_random,model_na_2021-07-27_17-37-50/error.txt |
+| train_segmentation_99d80_00001 |            1 | /cluster/home/samuelbe/ray_results/tune_segmentation_proof_of_concept/train_segmentation_99d80_00001_1_batch_size=2,blend_mode=cover,loss_fn=noise_robust_dice,lr=0.026268,mode=patch_random,model_name=_2021-07-27_17-37-51/error.txt |
++--------------------------------+--------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+== Status ==
+Memory usage on this node: 34.0/251.8 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 0/40 CPUs, 0/1 GPUs, 0.0/150.05 GiB heap, 0.0/68.3 GiB objects (0.0/1.0 GPU_group_252f27beda00f137686533461276b8d3, 0.0/1.0 accelerator_type:GTX, 0.0/1.0 GPU_group_0_252f27beda00f137686533461276b8d3, 0.0/16.0 CPU_group_0_252f27beda00f137686533461276b8d3, 0.0/16.0 CPU_group_252f27beda00f137686533461276b8d3)
+Result logdir: /cluster/home/samuelbe/ray_results/tune_segmentation_proof_of_concept
+Number of trials: 2/2 (2 ERROR)
++--------------------------------+----------+-------+--------------+------------------+-------------------+-----------+--------------+--------------+---------+--------------+--------------+-------------+
+| Trial name                     | status   | loc   |   batch_size | blend_mode       | loss_fn           |        lr | mode         | model_name   | noise   |   num_epochs |   patch_size |   threshold |
+|--------------------------------+----------+-------+--------------+------------------+-------------------+-----------+--------------+--------------+---------+--------------+--------------+-------------|
+| train_segmentation_99d80_00000 | ERROR    |       |            4 | weighted_average | dice_loss         | 0.0159525 | patch_random | attUnet      | True    |           10 |          256 |    0.341233 |
+| train_segmentation_99d80_00001 | ERROR    |       |            2 | cover            | noise_robust_dice | 0.0262681 | patch_random | unet         | False   |           10 |          256 |    0.681422 |
++--------------------------------+----------+-------+--------------+------------------+-------------------+-----------+--------------+--------------+---------+--------------+--------------+-------------+
+Number of errored trials: 2
++--------------------------------+--------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Trial name                     |   # failures | error file                                                                                                                                                                                                                             |
+|--------------------------------+--------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| train_segmentation_99d80_00000 |            1 | /cluster/home/samuelbe/ray_results/tune_segmentation_proof_of_concept/train_segmentation_99d80_00000_0_batch_size=4,blend_mode=weighted_average,loss_fn=dice_loss,lr=0.015953,mode=patch_random,model_na_2021-07-27_17-37-50/error.txt |
+| train_segmentation_99d80_00001 |            1 | /cluster/home/samuelbe/ray_results/tune_segmentation_proof_of_concept/train_segmentation_99d80_00001_1_batch_size=2,blend_mode=cover,loss_fn=noise_robust_dice,lr=0.026268,mode=patch_random,model_name=_2021-07-27_17-37-51/error.txt |
++--------------------------------+--------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+Traceback (most recent call last):
+  File "tune_hyperparameters.py", line 97, in <module>
+    analysis = tune.run(
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/tune.py", line 543, in run
+    raise TuneError("Trials did not complete", incomplete_trials)
+ray.tune.error.TuneError: ('Trials did not complete', [train_segmentation_99d80_00000, train_segmentation_99d80_00001])

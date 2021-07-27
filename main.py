@@ -155,7 +155,8 @@ if __name__ == "__main__":
         "enhance": True,
         "offset": 100,
         "blend_mode": "weighted_average",
-        "noise": True
+        "noise": True,
+	"threshold": 0.5
     }
 
     if args.load is not None:
