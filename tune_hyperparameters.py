@@ -64,9 +64,9 @@ if __name__ == "__main__":
     callbacks = [TuneReportCallback(metrics, on="validation_end")]
     trainer = pl.Trainer(callbacks=callbacks)
 
-    num_samples = 2
-    num_epochs = 2
-    gpus_per_trial = 1#int(torch.cuda.is_available())  # set this to higher if using GPU
+    num_samples = 1
+    num_epochs = 1
+    gpus_per_trial = 0#int(torch.cuda.is_available())  # set this to higher if using GPU
 
 
     #be carefull when changing the config, everything breaksdown, better fix to one value than removing params
@@ -112,14 +112,14 @@ if __name__ == "__main__":
     analysis = tune.run(
         trainable,
         resources_per_trial={
-            "cpu": args.cpu,
+            #"cpu": args.cpu,
             "gpu": gpus_per_trial
         },
-        metric="val_accuracy",
+        metric="acc",
         mode="max",
         config=config,
         num_samples=num_samples,
-        name="tune_segmentation_proof_of_concept")
+        name="tune_segmentation_proof_of_concept_only_on_cpu")
 
     print("stayin alive, aha aha aha")
 
