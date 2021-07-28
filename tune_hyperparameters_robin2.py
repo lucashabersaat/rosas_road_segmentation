@@ -118,7 +118,7 @@ if __name__ == "__main__":
         config=config,
         num_samples=num_samples,
         local_dir="/cluster/scratch/samuelbe",
-        name="tune_segmentation_config_robin_2")
+        name="tune_segmentation_config_robin_3")
 
     print("stayin alive, aha aha aha")
 

@@ -72,7 +72,7 @@ if __name__ == "__main__":
 
     # CONFIG 1
 
-    num_samples = 9
+    num_samples = 6
     config = {
         "model_name": tune.choice(["transunet"]),
         "lr": tune.choice([1e-4]),
@@ -80,8 +80,8 @@ if __name__ == "__main__":
         "batch_size": tune.choice([4]),
         "num_epochs": tune.choice([num_epochs]),
         "patch_size": tune.choice([256]),
-        "mode": tune.choice(["breed", "patch_random"]),
-        "variants": tune.choice([3, 5, 7]),
+        "mode": tune.grid_search(["breed", "patch_random"]),
+        "variants": tune.grid_search([3, 5, 7]),
         "blend_mode": tune.choice(["weighted_average"]),
         "noise": tune.choice([True]),
         "enhance": tune.choice([True]),

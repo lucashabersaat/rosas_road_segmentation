@@ -64,14 +64,14 @@ if __name__ == "__main__":
     callbacks = [TuneReportCallback(metrics, on="validation_end")]
     trainer = pl.Trainer(callbacks=callbacks)
 
-    num_samples = 10
+    num_samples = 16
     num_epochs = 35
     gpus_per_trial = 1#int(torch.cuda.is_available())  # set this to higher if using GPU
 
 
     config_learning_rate = {
         "model_name": tune.choice(["transunet"]),
-        "lr": tune.uniform(1e-4, 1e-1),
+        "lr": tune.grid_search([1e-4, 1e-3, 1e-2, 1e-1]),
         "loss_fn": tune.choice(['noise_robust_dice']),
         "batch_size": tune.choice([4]),
         "num_epochs": tune.choice([num_epochs]),
@@ -79,9 +79,24 @@ if __name__ == "__main__":
         "mode": tune.choice(["patch"]),
         "blend_mode": tune.choice(["weighted_average"]),
         "noise": tune.choice([True]),
-        # "threshold": tune.uniform(0.2, 0.8)
+        "variants": tune.choice([5]),
+        "enhance": tune.choice([True]),
+        "threshold": tune.grid_search([0.2, 0.4, 0.6, 0.8])
     }
 
+    # config = {
+    #     "model_name": tune.choice(["transunet"]),
+    #     "lr": tune.choice([1e-4]),
+    #     "loss_fn": tune.choice(['noise_robust_dice']),
+    #     "batch_size": tune.choice([4]),
+    #     "num_epochs": tune.choice([num_epochs]),
+    #     "patch_size": tune.choice([256]),
+    #     "mode": tune.choice(["patch"]),
+    #     "variants": tune.choice([5]),
+    #     "blend_mode": tune.choice(["weighted_average"]),
+    #     "noise": tune.choice([True, False]),
+    #     "enhance": tune.choice([True, False]),
+    # }
 
     # set num_samples to 3, if you test this config_patch_size
     config_patch_size = {
