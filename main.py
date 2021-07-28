@@ -126,10 +126,7 @@ def handle_train(trainer, config, model_name):
         enhance=config["enhance"],
         offset=config["offset"],
         blend_mode=config["blend_mode"],
-        noise=config["noise"],
-        lr=config["lr"],
-        loss_fn=config["loss_fn"]
-
+        noise=config["noise"]
     )
     lit_model = LitBase(config, model)
 
@@ -160,7 +157,7 @@ if __name__ == "__main__":
         "blend_mode": "weighted_average",
         "noise": True,
 	    "threshold": 0.7
-    }
+        }
 
     if args.load is not None:
         # load
