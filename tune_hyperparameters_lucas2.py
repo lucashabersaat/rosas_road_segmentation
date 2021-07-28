@@ -115,7 +115,7 @@ if __name__ == "__main__":
         mode="max",
         config=config,
         num_samples=num_samples,
-        name="tune_segmentation_config_lucas_suggestion")
+        name="tune_segmentation_config_patch_size_lucas")
 
     print("stayin alive, aha aha aha")
 
