@@ -1,0 +1,789 @@
+Sender: LSF System <lsfadmin@lo-s4-024>
+Subject: Job 16836130: <python tune_hyperparameters.py> in cluster <leonhard> Exited
+
+Job <python tune_hyperparameters.py> was submitted from host <lo-login-02> by user <samuelbe> in cluster <leonhard> at Tue Jul 27 18:23:47 2021
+Job was executed on host(s) <20*lo-s4-024>, in queue <gpu.4h>, as user <samuelbe> in cluster <leonhard> at Tue Jul 27 19:00:22 2021
+</cluster/home/samuelbe> was used as the home directory.
+</cluster/home/samuelbe/anotherOne/rosas_road_segmentation> was used as the working directory.
+Started at Tue Jul 27 19:00:22 2021
+Terminated at Tue Jul 27 20:04:20 2021
+Results reported at Tue Jul 27 20:04:20 2021
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+python tune_hyperparameters.py
+------------------------------------------------------------
+
+Exited with exit code 1.
+
+Resource usage summary:
+
+    CPU time :                                   9303.00 sec.
+    Max Memory :                                 14778 MB
+    Average Memory :                             11615.03 MB
+    Total Requested Memory :                     163840.00 MB
+    Delta Memory :                               149062.00 MB
+    Max Swap :                                   -
+    Max Processes :                              51
+    Max Threads :                                771
+    Run time :                                   3857 sec.
+    Turnaround time :                            6033 sec.
+
+The output (if any) follows:
+
+/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/autoscaler/_private/cli_logger.py:57: FutureWarning: Not all Ray CLI dependencies were found. In Ray 1.4+, the Ray CLI, autoscaler, and dashboard will only be usable via `pip install 'ray[default]'`. Please update your install command.
+  warnings.warn(
+Global seed set to 1337
+Global seed set to 1337
+GPU available: True, used: False
+GPU available: True, used: False
+TPU available: False, using: 0 TPU cores
+TPU available: False, using: 0 TPU cores
+/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/connectors/accelerator_connector.py:596: UserWarning: GPU available but not used. Set the gpus flag in your trainer `Trainer(gpus=1)` or script `--gpus=1`.
+  rank_zero_warn(
+2021-07-27 19:00:38,528	INFO services.py:1272 -- View the Ray dashboard at [1m[32mhttp://127.0.0.1:8265[39m[22m
+2021-07-27 19:00:41,267	WARNING function_runner.py:544 -- Function checkpointing is disabled. This may result in unexpected behavior when using checkpointing features or certain schedulers. To enable, set the train function arguments to be `func(config, checkpoint_dir=None)`.
+== Status ==
+Memory usage on this node: 29.4/251.8 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 0/40 CPUs, 0/1 GPUs, 0.0/148.28 GiB heap, 0.0/67.54 GiB objects (0.0/1.0 accelerator_type:GTX)
+Result logdir: /cluster/home/samuelbe/ray_results/tune_segmentation_proof_of_concept_only_on_cpu
+Number of trials: 2/2 (2 PENDING)
++--------------------------------+----------+-------+--------------+------------------+-------------------+-----------+--------------+--------------+---------+--------------+--------------+-------------+
+| Trial name                     | status   | loc   |   batch_size | blend_mode       | loss_fn           |        lr | mode         | model_name   | noise   |   num_epochs |   patch_size |   threshold |
+|--------------------------------+----------+-------+--------------+------------------+-------------------+-----------+--------------+--------------+---------+--------------+--------------+-------------|
+| train_segmentation_2c9f4_00000 | PENDING  |       |            4 | weighted_average | dice_loss         | 0.0159525 | patch_random | attUnet      | True    |            2 |          256 |    0.341233 |
+| train_segmentation_2c9f4_00001 | PENDING  |       |            2 | cover            | noise_robust_dice | 0.0262681 | patch_random | unet         | False   |            2 |          256 |    0.681422 |
++--------------------------------+----------+-------+--------------+------------------+-------------------+-----------+--------------+--------------+---------+--------------+--------------+-------------+
+
+
+[2m[36m(pid=11620)[0m attUnet
+[2m[36m(pid=11617)[0m unet
+[2m[36m(pid=11620)[0m Validation sanity check: 0it [00:00, ?it/s]Validation sanity check:   0%|          | 0/2 [00:00<?, ?it/s]
+[2m[36m(pid=11617)[0m Validation sanity check: 0it [00:00, ?it/s]Validation sanity check:   0%|          | 0/2 [00:00<?, ?it/s]
+[2m[36m(pid=11617)[0m Validation sanity check:  50%|█████     | 1/2 [00:03<00:03,  3.34s/it]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-0.0867) tensor(-0.0375)
+[2m[36m(pid=11620)[0m Validation sanity check:  50%|█████     | 1/2 [00:10<00:10, 10.00s/it]
+[2m[36m(pid=11617)[0m Validation sanity check: 100%|██████████| 2/2 [00:06<00:00,  3.37s/it]                                                                      
+[2m[36m(pid=11617)[0m Training: 0it [00:00, ?it/s]Training:   0%|          | 0/250 [00:00<?, ?it/s]Epoch 0:   0%|          | 0/250 [00:00<?, ?it/s] 
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-0.0866) tensor(-0.0367)
+[2m[36m(pid=11620)[0m Validation sanity check: 100%|██████████| 2/2 [00:19<00:00,  9.83s/it]
+[2m[36m(pid=11620)[0m                                                                       Training: 0it [00:00, ?it/s]Training:   0%|          | 0/126 [00:00<?, ?it/s]Epoch 0:   0%|          | 0/126 [00:00<?, ?it/s] 
+[2m[36m(pid=11617)[0m Epoch 0:   0%|          | 1/250 [00:10<45:09, 10.88s/it]Epoch 0:   0%|          | 1/250 [00:10<45:09, 10.88s/it, loss=1, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-1.4073, grad_fn=<MinBackward1>) tensor(4.5552, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:   1%|          | 2/250 [00:21<45:12, 10.94s/it, loss=1, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:   1%|          | 2/250 [00:21<45:12, 10.94s/it, loss=0.793, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:   1%|          | 3/250 [00:32<45:08, 10.97s/it, loss=0.793, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:   1%|          | 3/250 [00:32<45:08, 10.97s/it, loss=0.784, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:   1%|          | 1/126 [00:31<1:06:14, 31.79s/it]Epoch 0:   1%|          | 1/126 [00:31<1:06:14, 31.79s/it, loss=0.708, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:   2%|▏         | 4/250 [00:43<44:55, 10.96s/it, loss=0.784, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:   2%|▏         | 4/250 [00:43<44:55, 10.96s/it, loss=0.776, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-5.3780, grad_fn=<MinBackward1>) tensor(4.4648, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:   2%|▏         | 5/250 [00:57<46:44, 11.45s/it, loss=0.776, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:   2%|▏         | 5/250 [00:57<46:44, 11.45s/it, loss=0.758, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:   2%|▏         | 6/250 [01:09<46:46, 11.50s/it, loss=0.758, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:   2%|▏         | 6/250 [01:09<46:46, 11.50s/it, loss=0.777, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:   2%|▏         | 2/126 [01:05<1:08:03, 32.93s/it, loss=0.708, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:   2%|▏         | 2/126 [01:05<1:08:03, 32.93s/it, loss=0.667, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:   3%|▎         | 7/250 [01:20<46:31, 11.49s/it, loss=0.777, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:   3%|▎         | 7/250 [01:20<46:31, 11.49s/it, loss=0.767, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-3.1448, grad_fn=<MinBackward1>) tensor(5.4479, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:   3%|▎         | 8/250 [01:31<45:59, 11.40s/it, loss=0.767, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:   3%|▎         | 8/250 [01:31<45:59, 11.40s/it, loss=0.762, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:   4%|▎         | 9/250 [01:41<45:17, 11.28s/it, loss=0.762, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:   4%|▎         | 9/250 [01:41<45:17, 11.28s/it, loss=0.75, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000] 
+[2m[36m(pid=11620)[0m Epoch 0:   2%|▏         | 3/126 [01:38<1:07:15, 32.81s/it, loss=0.667, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:   2%|▏         | 3/126 [01:38<1:07:15, 32.81s/it, loss=0.675, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:   4%|▍         | 10/250 [01:51<44:41, 11.17s/it, loss=0.75, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:   4%|▍         | 10/250 [01:51<44:41, 11.17s/it, loss=0.755, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-2.8242, grad_fn=<MinBackward1>) tensor(25.7701, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:   4%|▍         | 11/250 [02:02<44:22, 11.14s/it, loss=0.755, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:   4%|▍         | 11/250 [02:02<44:22, 11.14s/it, loss=0.758, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:   5%|▍         | 12/250 [02:13<44:03, 11.11s/it, loss=0.758, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:   5%|▍         | 12/250 [02:13<44:03, 11.11s/it, loss=0.756, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:   3%|▎         | 4/126 [02:10<1:06:15, 32.59s/it, loss=0.675, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:   3%|▎         | 4/126 [02:10<1:06:15, 32.59s/it, loss=0.663, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:   5%|▌         | 13/250 [02:24<44:00, 11.14s/it, loss=0.756, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:   5%|▌         | 13/250 [02:24<44:00, 11.14s/it, loss=0.755, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-4.1879, grad_fn=<MinBackward1>) tensor(22.6584, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:   6%|▌         | 14/250 [02:35<43:35, 11.08s/it, loss=0.755, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:   6%|▌         | 14/250 [02:35<43:35, 11.08s/it, loss=0.748, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:   6%|▌         | 15/250 [02:45<43:10, 11.02s/it, loss=0.748, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:   6%|▌         | 15/250 [02:45<43:10, 11.02s/it, loss=0.74, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000] 
+[2m[36m(pid=11620)[0m Epoch 0:   4%|▍         | 5/126 [02:41<1:05:10, 32.32s/it, loss=0.663, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:   4%|▍         | 5/126 [02:41<1:05:10, 32.32s/it, loss=0.681, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:   6%|▋         | 16/250 [02:55<42:46, 10.97s/it, loss=0.74, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:   6%|▋         | 16/250 [02:55<42:46, 10.97s/it, loss=0.735, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-4.5771, grad_fn=<MinBackward1>) tensor(29.0854, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:   7%|▋         | 17/250 [03:05<42:28, 10.94s/it, loss=0.735, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:   7%|▋         | 17/250 [03:05<42:28, 10.94s/it, loss=0.733, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:   7%|▋         | 18/250 [03:16<42:08, 10.90s/it, loss=0.733, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:   7%|▋         | 18/250 [03:16<42:08, 10.90s/it, loss=0.746, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:   5%|▍         | 6/126 [03:13<1:04:23, 32.20s/it, loss=0.681, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:   5%|▍         | 6/126 [03:13<1:04:23, 32.20s/it, loss=0.672, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:   8%|▊         | 19/250 [03:26<41:49, 10.86s/it, loss=0.746, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:   8%|▊         | 19/250 [03:26<41:49, 10.86s/it, loss=0.739, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-5.9884, grad_fn=<MinBackward1>) tensor(24.7125, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:   8%|▊         | 20/250 [03:37<41:37, 10.86s/it, loss=0.739, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:   8%|▊         | 20/250 [03:37<41:37, 10.86s/it, loss=0.743, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:   8%|▊         | 21/250 [03:47<41:18, 10.82s/it, loss=0.743, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:   8%|▊         | 21/250 [03:47<41:18, 10.82s/it, loss=0.717, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:   6%|▌         | 7/126 [03:44<1:03:38, 32.09s/it, loss=0.672, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:   6%|▌         | 7/126 [03:44<1:03:38, 32.09s/it, loss=0.653, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:   9%|▉         | 22/250 [03:57<41:01, 10.80s/it, loss=0.717, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:   9%|▉         | 22/250 [03:57<41:01, 10.80s/it, loss=0.735, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-6.2931, grad_fn=<MinBackward1>) tensor(21.5630, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:   9%|▉         | 23/250 [04:07<40:45, 10.77s/it, loss=0.735, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:   9%|▉         | 23/250 [04:07<40:45, 10.77s/it, loss=0.729, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  10%|▉         | 24/250 [04:18<40:31, 10.76s/it, loss=0.729, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  10%|▉         | 24/250 [04:18<40:31, 10.76s/it, loss=0.721, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:   6%|▋         | 8/126 [04:16<1:02:57, 32.01s/it, loss=0.653, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:   6%|▋         | 8/126 [04:16<1:02:57, 32.01s/it, loss=0.645, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  10%|█         | 25/250 [04:29<40:21, 10.76s/it, loss=0.721, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  10%|█         | 25/250 [04:29<40:21, 10.76s/it, loss=0.726, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-7.1960, grad_fn=<MinBackward1>) tensor(12.5899, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  10%|█         | 26/250 [04:40<40:15, 10.79s/it, loss=0.726, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  10%|█         | 26/250 [04:40<40:15, 10.79s/it, loss=0.716, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  11%|█         | 27/250 [04:50<40:00, 10.76s/it, loss=0.716, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  11%|█         | 27/250 [04:50<40:00, 10.76s/it, loss=0.71, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000] 
+[2m[36m(pid=11620)[0m Epoch 0:   7%|▋         | 9/126 [04:47<1:02:21, 31.98s/it, loss=0.645, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:   7%|▋         | 9/126 [04:47<1:02:21, 31.98s/it, loss=0.637, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  11%|█         | 28/250 [05:00<39:45, 10.74s/it, loss=0.71, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  11%|█         | 28/250 [05:00<39:45, 10.74s/it, loss=0.708, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-8.5723, grad_fn=<MinBackward1>) tensor(11.8828, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  12%|█▏        | 29/250 [05:11<39:35, 10.75s/it, loss=0.708, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  12%|█▏        | 29/250 [05:11<39:35, 10.75s/it, loss=0.717, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  12%|█▏        | 30/250 [05:22<39:21, 10.73s/it, loss=0.717, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  12%|█▏        | 30/250 [05:22<39:21, 10.73s/it, loss=0.727, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:   8%|▊         | 10/126 [05:19<1:01:51, 31.99s/it, loss=0.637, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:   8%|▊         | 10/126 [05:19<1:01:51, 31.99s/it, loss=0.647, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  12%|█▏        | 31/250 [05:32<39:06, 10.72s/it, loss=0.727, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  12%|█▏        | 31/250 [05:32<39:06, 10.72s/it, loss=0.707, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-8.5409, grad_fn=<MinBackward1>) tensor(10.6186, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  13%|█▎        | 32/250 [05:43<38:57, 10.72s/it, loss=0.707, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  13%|█▎        | 32/250 [05:43<38:57, 10.72s/it, loss=0.706, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  13%|█▎        | 33/250 [05:53<38:45, 10.72s/it, loss=0.706, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  13%|█▎        | 33/250 [05:53<38:45, 10.72s/it, loss=0.698, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:   9%|▊         | 11/126 [05:53<1:01:30, 32.09s/it, loss=0.647, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:   9%|▊         | 11/126 [05:53<1:01:30, 32.09s/it, loss=0.649, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  14%|█▎        | 34/250 [06:04<38:32, 10.71s/it, loss=0.698, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  14%|█▎        | 34/250 [06:04<38:32, 10.71s/it, loss=0.691, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-8.7110, grad_fn=<MinBackward1>) tensor(10.9553, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  14%|█▍        | 35/250 [06:14<38:19, 10.70s/it, loss=0.691, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  14%|█▍        | 35/250 [06:14<38:19, 10.70s/it, loss=0.708, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  14%|█▍        | 36/250 [06:24<38:06, 10.68s/it, loss=0.708, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  14%|█▍        | 36/250 [06:24<38:06, 10.68s/it, loss=0.705, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  10%|▉         | 12/126 [06:24<1:00:54, 32.06s/it, loss=0.649, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  10%|▉         | 12/126 [06:24<1:00:54, 32.06s/it, loss=0.638, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  15%|█▍        | 37/250 [06:34<37:53, 10.67s/it, loss=0.705, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  15%|█▍        | 37/250 [06:34<37:53, 10.67s/it, loss=0.696, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-8.6425, grad_fn=<MinBackward1>) tensor(11.5444, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  15%|█▌        | 38/250 [06:45<37:42, 10.67s/it, loss=0.696, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  15%|█▌        | 38/250 [06:45<37:42, 10.67s/it, loss=0.682, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  16%|█▌        | 39/250 [06:55<37:28, 10.66s/it, loss=0.682, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  16%|█▌        | 39/250 [06:55<37:28, 10.66s/it, loss=0.685, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  10%|█         | 13/126 [06:56<1:00:21, 32.05s/it, loss=0.638, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  10%|█         | 13/126 [06:56<1:00:21, 32.05s/it, loss=0.632, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  16%|█▌        | 40/250 [07:05<37:14, 10.64s/it, loss=0.685, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  16%|█▌        | 40/250 [07:05<37:14, 10.64s/it, loss=0.682, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-13.3877, grad_fn=<MinBackward1>) tensor(12.9608, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  16%|█▋        | 41/250 [07:15<37:01, 10.63s/it, loss=0.682, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  16%|█▋        | 41/250 [07:15<37:01, 10.63s/it, loss=0.685, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  17%|█▋        | 42/250 [07:25<36:47, 10.61s/it, loss=0.685, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  17%|█▋        | 42/250 [07:25<36:47, 10.61s/it, loss=0.672, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  11%|█         | 14/126 [07:28<59:44, 32.00s/it, loss=0.632, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]  Epoch 0:  11%|█         | 14/126 [07:28<59:44, 32.00s/it, loss=0.635, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  17%|█▋        | 43/250 [07:36<36:36, 10.61s/it, loss=0.672, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  17%|█▋        | 43/250 [07:36<36:36, 10.61s/it, loss=0.676, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-21.0203, grad_fn=<MinBackward1>) tensor(12.2388, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  18%|█▊        | 44/250 [07:46<36:26, 10.61s/it, loss=0.676, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  18%|█▊        | 44/250 [07:46<36:26, 10.61s/it, loss=0.683, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  18%|█▊        | 45/250 [07:57<36:15, 10.61s/it, loss=0.683, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  18%|█▊        | 45/250 [07:57<36:15, 10.61s/it, loss=0.683, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  12%|█▏        | 15/126 [07:59<59:05, 31.94s/it, loss=0.635, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  12%|█▏        | 15/126 [07:59<59:05, 31.94s/it, loss=0.63, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000] 
+[2m[36m(pid=11617)[0m Epoch 0:  18%|█▊        | 46/250 [08:07<36:03, 10.60s/it, loss=0.683, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  18%|█▊        | 46/250 [08:07<36:03, 10.60s/it, loss=0.685, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-11.4932, grad_fn=<MinBackward1>) tensor(13.2565, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  19%|█▉        | 47/250 [08:18<35:52, 10.60s/it, loss=0.685, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  19%|█▉        | 47/250 [08:18<35:52, 10.60s/it, loss=0.691, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  19%|█▉        | 48/250 [08:28<35:41, 10.60s/it, loss=0.691, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  19%|█▉        | 48/250 [08:28<35:41, 10.60s/it, loss=0.695, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  13%|█▎        | 16/126 [08:29<58:26, 31.87s/it, loss=0.63, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  13%|█▎        | 16/126 [08:29<58:26, 31.87s/it, loss=0.621, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  20%|█▉        | 49/250 [08:39<35:29, 10.59s/it, loss=0.695, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  20%|█▉        | 49/250 [08:39<35:29, 10.59s/it, loss=0.689, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-19.8217, grad_fn=<MinBackward1>) tensor(13.9930, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  20%|██        | 50/250 [08:49<35:17, 10.59s/it, loss=0.689, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  20%|██        | 50/250 [08:49<35:17, 10.59s/it, loss=0.673, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  20%|██        | 51/250 [09:00<35:08, 10.60s/it, loss=0.673, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  20%|██        | 51/250 [09:00<35:08, 10.60s/it, loss=0.688, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  13%|█▎        | 17/126 [09:00<57:46, 31.80s/it, loss=0.621, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  13%|█▎        | 17/126 [09:00<57:46, 31.80s/it, loss=0.619, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  21%|██        | 52/250 [09:11<34:58, 10.60s/it, loss=0.688, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  21%|██        | 52/250 [09:11<34:58, 10.60s/it, loss=0.685, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-16.4750, grad_fn=<MinBackward1>) tensor(12.1967, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  21%|██        | 53/250 [09:21<34:47, 10.59s/it, loss=0.685, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  21%|██        | 53/250 [09:21<34:47, 10.59s/it, loss=0.688, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  22%|██▏       | 54/250 [09:32<34:37, 10.60s/it, loss=0.688, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  22%|██▏       | 54/250 [09:32<34:37, 10.60s/it, loss=0.702, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  14%|█▍        | 18/126 [09:31<57:10, 31.76s/it, loss=0.619, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  14%|█▍        | 18/126 [09:31<57:10, 31.76s/it, loss=0.605, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  22%|██▏       | 55/250 [09:42<34:25, 10.59s/it, loss=0.702, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  22%|██▏       | 55/250 [09:42<34:25, 10.59s/it, loss=0.692, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-13.6010, grad_fn=<MinBackward1>) tensor(13.8069, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  22%|██▏       | 56/250 [09:52<34:13, 10.58s/it, loss=0.692, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  22%|██▏       | 56/250 [09:52<34:13, 10.58s/it, loss=0.697, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  23%|██▎       | 57/250 [10:02<34:01, 10.58s/it, loss=0.697, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  23%|██▎       | 57/250 [10:02<34:01, 10.58s/it, loss=0.716, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  15%|█▌        | 19/126 [10:02<56:34, 31.72s/it, loss=0.605, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  15%|█▌        | 19/126 [10:02<56:34, 31.72s/it, loss=0.606, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  23%|██▎       | 58/250 [10:13<33:49, 10.57s/it, loss=0.716, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  23%|██▎       | 58/250 [10:13<33:49, 10.57s/it, loss=0.71, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000] 
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-15.0239, grad_fn=<MinBackward1>) tensor(12.5630, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  24%|██▎       | 59/250 [10:23<33:39, 10.57s/it, loss=0.71, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  24%|██▎       | 59/250 [10:23<33:39, 10.57s/it, loss=0.708, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  24%|██▍       | 60/250 [10:35<33:31, 10.59s/it, loss=0.708, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  24%|██▍       | 60/250 [10:35<33:31, 10.59s/it, loss=0.703, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  16%|█▌        | 20/126 [10:34<56:01, 31.71s/it, loss=0.606, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  16%|█▌        | 20/126 [10:34<56:01, 31.71s/it, loss=0.604, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  24%|██▍       | 61/250 [10:46<33:21, 10.59s/it, loss=0.703, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  24%|██▍       | 61/250 [10:46<33:21, 10.59s/it, loss=0.708, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  
+[2m[36m(pid=11620)[0m tensor(-20.9021, grad_fn=<MinBackward1>) tensor(12.5281, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  25%|██▍       | 62/250 [10:56<33:10, 10.59s/it, loss=0.708, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  25%|██▍       | 62/250 [10:56<33:10, 10.59s/it, loss=0.713, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  25%|██▌       | 63/250 [11:07<33:01, 10.60s/it, loss=0.713, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  25%|██▌       | 63/250 [11:07<33:01, 10.60s/it, loss=0.708, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  17%|█▋        | 21/126 [11:06<55:32, 31.74s/it, loss=0.604, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  17%|█▋        | 21/126 [11:06<55:32, 31.74s/it, loss=0.596, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  26%|██▌       | 64/250 [11:17<32:49, 10.59s/it, loss=0.708, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  26%|██▌       | 64/250 [11:17<32:49, 10.59s/it, loss=0.705, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-14.3273, grad_fn=<MinBackward1>) tensor(12.1756, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  26%|██▌       | 65/250 [11:27<32:37, 10.58s/it, loss=0.705, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  26%|██▌       | 65/250 [11:27<32:37, 10.58s/it, loss=0.697, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  26%|██▋       | 66/250 [11:37<32:25, 10.57s/it, loss=0.697, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  26%|██▋       | 66/250 [11:37<32:25, 10.57s/it, loss=0.695, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  17%|█▋        | 22/126 [11:37<54:59, 31.73s/it, loss=0.596, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  17%|█▋        | 22/126 [11:37<54:59, 31.73s/it, loss=0.584, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  27%|██▋       | 67/250 [11:48<32:13, 10.57s/it, loss=0.695, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  27%|██▋       | 67/250 [11:48<32:13, 10.57s/it, loss=0.698, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-19.1150, grad_fn=<MinBackward1>) 
+[2m[36m(pid=11620)[0m tensor(12.4461, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  27%|██▋       | 68/250 [11:58<32:02, 10.56s/it, loss=0.698, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  27%|██▋       | 68/250 [11:58<32:02, 10.56s/it, loss=0.703, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  28%|██▊       | 69/250 [12:08<31:51, 10.56s/it, loss=0.703, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  28%|██▊       | 69/250 [12:08<31:51, 10.56s/it, loss=0.711, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  18%|█▊        | 23/126 [12:09<54:24, 31.70s/it, loss=0.584, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  18%|█▊        | 23/126 [12:09<54:24, 31.70s/it, loss=0.572, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  28%|██▊       | 70/250 [12:18<31:39, 10.55s/it, loss=0.711, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  28%|██▊       | 70/250 [12:18<31:39, 10.55s/it, loss=0.717, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-23.0466, grad_fn=<MinBackward1>) tensor(13.0085, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  28%|██▊       | 71/250 [12:28<31:27, 10.54s/it, loss=0.717, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  28%|██▊       | 71/250 [12:28<31:27, 10.54s/it, loss=0.718, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  29%|██▉       | 72/250 [12:38<31:15, 10.54s/it, loss=0.718, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  29%|██▉       | 72/250 [12:38<31:15, 10.54s/it, loss=0.721, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  19%|█▉        | 24/126 [12:40<53:51, 31.68s/it, loss=0.572, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  19%|█▉        | 24/126 [12:40<53:51, 31.68s/it, loss=0.571, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  29%|██▉       | 73/250 [12:48<31:04, 10.53s/it, loss=0.721, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  29%|██▉       | 73/250 [12:48<31:04, 10.53s/it, loss=0.732, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-20.0372, grad_fn=<MinBackward1>) tensor(13.7939, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  30%|██▉       | 74/250 [12:59<30:52, 10.53s/it, loss=0.732, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  30%|██▉       | 74/250 [12:59<30:52, 10.53s/it, loss=0.733, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  30%|███       | 75/250 [13:09<30:41, 10.52s/it, loss=0.733, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  30%|███       | 75/250 [13:09<30:41, 10.52s/it, loss=0.726, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  20%|█▉        | 25/126 [13:11<53:18, 31.67s/it, loss=0.571, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  20%|█▉        | 25/126 [13:11<53:18, 31.67s/it, loss=0.566, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  30%|███       | 76/250 [13:19<30:29, 10.52s/it, loss=0.726, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  30%|███       | 76/250 [13:19<30:29, 10.52s/it, loss=0.728, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-19.0925, grad_fn=<MinBackward1>) tensor(12.9461, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  31%|███       | 77/250 [13:29<30:18, 10.51s/it, loss=0.728, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  31%|███       | 77/250 [13:29<30:18, 10.51s/it, loss=0.729, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  31%|███       | 78/250 [13:39<30:06, 10.51s/it, loss=0.729, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  31%|███       | 78/250 [13:39<30:06, 10.51s/it, loss=0.742, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  32%|███▏      | 79/250 [13:49<29:55, 10.50s/it, loss=0.742, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  32%|███▏      | 79/250 [13:49<29:55, 10.50s/it, loss=0.742, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  21%|██        | 26/126 [13:43<52:48, 31.68s/it, loss=0.566, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  21%|██        | 26/126 [13:43<52:48, 31.68s/it, loss=0.559, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  32%|███▏      | 80/250 [14:00<29:45, 10.50s/it, loss=0.742, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  32%|███▏      | 80/250 [14:00<29:45, 10.50s/it, loss=0.738, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-24.6622, grad_fn=<MinBackward1>) tensor(13.4811, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  32%|███▏      | 81/250 [14:10<29:34, 10.50s/it, loss=0.738, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  32%|███▏      | 81/250 [14:10<29:34, 10.50s/it, loss=0.745, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  33%|███▎      | 82/250 [14:20<29:23, 10.50s/it, loss=0.745, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  33%|███▎      | 82/250 [14:20<29:23, 10.50s/it, loss=0.737, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  21%|██▏       | 27/126 [14:15<52:15, 31.67s/it, loss=0.559, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  21%|██▏       | 27/126 [14:15<52:15, 31.67s/it, loss=0.56, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000] 
+[2m[36m(pid=11617)[0m Epoch 0:  33%|███▎      | 83/250 [14:31<29:12, 10.50s/it, loss=0.737, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  33%|███▎      | 83/250 [14:31<29:12, 10.50s/it, loss=0.753, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-17.3418, grad_fn=<MinBackward1>) tensor(14.0407, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  34%|███▎      | 84/250 [14:41<29:01, 10.49s/it, loss=0.753, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  34%|███▎      | 84/250 [14:41<29:01, 10.49s/it, loss=0.749, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  34%|███▍      | 85/250 [14:51<28:50, 10.49s/it, loss=0.749, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  34%|███▍      | 85/250 [14:51<28:50, 10.49s/it, loss=0.76, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000] 
+[2m[36m(pid=11620)[0m Epoch 0:  22%|██▏       | 28/126 [14:46<51:42, 31.66s/it, loss=0.56, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  22%|██▏       | 28/126 [14:46<51:42, 31.66s/it, loss=0.562, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  34%|███▍      | 86/250 [15:01<28:38, 10.48s/it, loss=0.76, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  34%|███▍      | 86/250 [15:01<28:38, 10.48s/it, loss=0.76, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-16.8674, grad_fn=<MinBackward1>) tensor(13.6429, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  35%|███▍      | 87/250 [15:11<28:27, 10.48s/it, loss=0.76, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  35%|███▍      | 87/250 [15:11<28:27, 10.48s/it, loss=0.765, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  35%|███▌      | 88/250 [15:21<28:16, 10.47s/it, loss=0.765, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  35%|███▌      | 88/250 [15:21<28:16, 10.47s/it, loss=0.763, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  23%|██▎       | 29/126 [15:18<51:11, 31.67s/it, loss=0.562, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  23%|██▎       | 29/126 [15:18<51:11, 31.67s/it, loss=0.567, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  36%|███▌      | 89/250 [15:32<28:07, 10.48s/it, loss=0.763, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  36%|███▌      | 89/250 [15:32<28:07, 10.48s/it, loss=0.758, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-25.4195, grad_fn=<MinBackward1>) tensor(14.1812, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  36%|███▌      | 90/250 [15:43<27:57, 10.48s/it, loss=0.758, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  36%|███▌      | 90/250 [15:43<27:57, 10.48s/it, loss=0.766, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  36%|███▋      | 91/250 [15:53<27:46, 10.48s/it, loss=0.766, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  36%|███▋      | 91/250 [15:53<27:46, 10.48s/it, loss=0.765, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  24%|██▍       | 30/126 [15:50<50:40, 31.67s/it, loss=0.567, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  24%|██▍       | 30/126 [15:50<50:40, 31.67s/it, loss=0.549, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  37%|███▋      | 92/250 [16:03<27:35, 10.48s/it, loss=0.765, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  37%|███▋      | 92/250 [16:03<27:35, 10.48s/it, loss=0.771, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-19.2544, grad_fn=<MinBackward1>) tensor(14.8803, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  37%|███▋      | 93/250 [16:14<27:24, 10.48s/it, loss=0.771, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  37%|███▋      | 93/250 [16:14<27:24, 10.48s/it, loss=0.743, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  38%|███▊      | 94/250 [16:24<27:13, 10.47s/it, loss=0.743, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  38%|███▊      | 94/250 [16:24<27:13, 10.47s/it, loss=0.738, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  25%|██▍       | 31/126 [16:21<50:08, 31.66s/it, loss=0.549, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  25%|██▍       | 31/126 [16:21<50:08, 31.66s/it, loss=0.546, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  38%|███▊      | 95/250 [16:34<27:02, 10.47s/it, loss=0.738, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  38%|███▊      | 95/250 [16:34<27:02, 10.47s/it, loss=0.751, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-21.6038, grad_fn=<MinBackward1>) tensor(14.8809, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  38%|███▊      | 96/250 [16:45<26:52, 10.47s/it, loss=0.751, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  38%|███▊      | 96/250 [16:45<26:52, 10.47s/it, loss=0.762, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  39%|███▉      | 97/250 [16:56<26:42, 10.47s/it, loss=0.762, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  39%|███▉      | 97/250 [16:56<26:42, 10.47s/it, loss=0.744, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  25%|██▌       | 32/126 [16:52<49:35, 31.65s/it, loss=0.546, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  25%|██▌       | 32/126 [16:52<49:35, 31.65s/it, loss=0.543, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  39%|███▉      | 98/250 [17:06<26:32, 10.47s/it, loss=0.744, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  39%|███▉      | 98/250 [17:06<26:32, 10.47s/it, loss=0.743, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-16.8097, grad_fn=<MinBackward1>) tensor(14.7522, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  40%|███▉      | 99/250 [17:16<26:21, 10.47s/it, loss=0.743, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  40%|███▉      | 99/250 [17:16<26:21, 10.47s/it, loss=0.75, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000] 
+[2m[36m(pid=11617)[0m Epoch 0:  40%|████      | 100/250 [17:27<26:10, 10.47s/it, loss=0.75, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  40%|████      | 100/250 [17:27<26:10, 10.47s/it, loss=0.753, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  26%|██▌       | 33/126 [17:23<49:00, 31.62s/it, loss=0.543, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  26%|██▌       | 33/126 [17:23<49:00, 31.62s/it, loss=0.537, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  40%|████      | 101/250 [17:37<26:00, 10.47s/it, loss=0.753, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  40%|████      | 101/250 [17:37<26:00, 10.47s/it, loss=0.754, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-18.4595, grad_fn=<MinBackward1>) tensor(15.6835, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  41%|████      | 102/250 [17:47<25:49, 10.47s/it, loss=0.754, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  41%|████      | 102/250 [17:47<25:49, 10.47s/it, loss=0.75, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000] 
+[2m[36m(pid=11617)[0m Epoch 0:  41%|████      | 103/250 [17:58<25:38, 10.47s/it, loss=0.75, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  41%|████      | 103/250 [17:58<25:38, 10.47s/it, loss=0.74, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  27%|██▋       | 34/126 [17:54<48:27, 31.60s/it, loss=0.537, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  27%|██▋       | 34/126 [17:54<48:27, 31.60s/it, loss=0.531, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  42%|████▏     | 104/250 [18:08<25:27, 10.46s/it, loss=0.74, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  42%|████▏     | 104/250 [18:08<25:27, 10.46s/it, loss=0.746, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-27.8016, grad_fn=<MinBackward1>) tensor(15.2201, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  42%|████▏     | 105/250 [18:18<25:17, 10.46s/it, loss=0.746, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  42%|████▏     | 105/250 [18:18<25:17, 10.46s/it, loss=0.755, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  42%|████▏     | 106/250 [18:28<25:06, 10.46s/it, loss=0.755, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  42%|████▏     | 106/250 [18:28<25:06, 10.46s/it, loss=0.775, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  28%|██▊       | 35/126 [18:25<47:55, 31.59s/it, loss=0.531, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  28%|██▊       | 35/126 [18:25<47:55, 31.59s/it, loss=0.527, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  43%|████▎     | 107/250 [18:39<24:55, 10.46s/it, loss=0.775, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  43%|████▎     | 107/250 [18:39<24:55, 10.46s/it, loss=0.774, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-21.3659, grad_fn=<MinBackward1>) tensor(16.0337, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  43%|████▎     | 108/250 [18:49<24:44, 10.46s/it, loss=0.774, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  43%|████▎     | 108/250 [18:49<24:44, 10.46s/it, loss=0.764, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  44%|████▎     | 109/250 [18:59<24:34, 10.45s/it, loss=0.764, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  44%|████▎     | 109/250 [18:59<24:34, 10.45s/it, loss=0.77, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000] 
+[2m[36m(pid=11620)[0m Epoch 0:  29%|██▊       | 36/126 [18:56<47:21, 31.58s/it, loss=0.527, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  29%|██▊       | 36/126 [18:56<47:21, 31.58s/it, loss=0.53, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000] 
+[2m[36m(pid=11617)[0m Epoch 0:  44%|████▍     | 110/250 [19:09<24:23, 10.45s/it, loss=0.77, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  44%|████▍     | 110/250 [19:09<24:23, 10.45s/it, loss=0.763, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-15.8817, grad_fn=<MinBackward1>) tensor(15.6572, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  44%|████▍     | 111/250 [19:19<24:12, 10.45s/it, loss=0.763, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  44%|████▍     | 111/250 [19:19<24:12, 10.45s/it, loss=0.757, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  45%|████▍     | 112/250 [19:30<24:01, 10.45s/it, loss=0.757, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  45%|████▍     | 112/250 [19:30<24:01, 10.45s/it, loss=0.751, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  29%|██▉       | 37/126 [19:27<46:49, 31.57s/it, loss=0.53, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  29%|██▉       | 37/126 [19:27<46:49, 31.57s/it, loss=0.527, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  45%|████▌     | 113/250 [19:40<23:50, 10.44s/it, loss=0.751, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  45%|████▌     | 113/250 [19:40<23:50, 10.44s/it, loss=0.765, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-19.7681, grad_fn=<MinBackward1>) tensor(15.6376, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  46%|████▌     | 114/250 [19:50<23:39, 10.44s/it, loss=0.765, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  46%|████▌     | 114/250 [19:50<23:39, 10.44s/it, loss=0.772, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  46%|████▌     | 115/250 [20:00<23:29, 10.44s/it, loss=0.772, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  46%|████▌     | 115/250 [20:00<23:29, 10.44s/it, loss=0.771, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  30%|███       | 38/126 [19:59<46:17, 31.57s/it, loss=0.527, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  30%|███       | 38/126 [19:59<46:17, 31.57s/it, loss=0.546, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  46%|████▋     | 116/250 [20:10<23:18, 10.44s/it, loss=0.771, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  46%|████▋     | 116/250 [20:10<23:18, 10.44s/it, loss=0.754, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-17.6018, grad_fn=<MinBackward1>) tensor(15.7048, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  47%|████▋     | 117/250 [20:21<23:08, 10.44s/it, loss=0.754, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  47%|████▋     | 117/250 [20:21<23:08, 10.44s/it, loss=0.762, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  47%|████▋     | 118/250 [20:31<22:57, 10.44s/it, loss=0.762, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  47%|████▋     | 118/250 [20:31<22:57, 10.44s/it, loss=0.755, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  31%|███       | 39/126 [20:31<45:46, 31.57s/it, loss=0.546, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  31%|███       | 39/126 [20:31<45:46, 31.57s/it, loss=0.55, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000] 
+[2m[36m(pid=11617)[0m Epoch 0:  48%|████▊     | 119/250 [20:42<22:47, 10.44s/it, loss=0.755, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  48%|████▊     | 119/250 [20:42<22:47, 10.44s/it, loss=0.764, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-18.9286, grad_fn=<MinBackward1>) tensor(16.0303, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  48%|████▊     | 120/250 [20:52<22:37, 10.44s/it, loss=0.764, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  48%|████▊     | 120/250 [20:52<22:37, 10.44s/it, loss=0.769, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  48%|████▊     | 121/250 [21:03<22:26, 10.44s/it, loss=0.769, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  48%|████▊     | 121/250 [21:03<22:26, 10.44s/it, loss=0.76, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000] 
+[2m[36m(pid=11620)[0m Epoch 0:  32%|███▏      | 40/126 [21:01<45:12, 31.54s/it, loss=0.55, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  32%|███▏      | 40/126 [21:01<45:12, 31.54s/it, loss=0.549, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  49%|████▉     | 122/250 [21:13<22:16, 10.44s/it, loss=0.76, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  49%|████▉     | 122/250 [21:13<22:16, 10.44s/it, loss=0.774, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-19.6424, grad_fn=<MinBackward1>) tensor(16.0310, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  49%|████▉     | 123/250 [21:24<22:05, 10.44s/it, loss=0.774, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  49%|████▉     | 123/250 [21:24<22:05, 10.44s/it, loss=0.767, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  50%|████▉     | 124/250 [21:34<21:55, 10.44s/it, loss=0.767, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  50%|████▉     | 124/250 [21:34<21:55, 10.44s/it, loss=0.761, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  33%|███▎      | 41/126 [21:32<44:38, 31.51s/it, loss=0.549, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  33%|███▎      | 41/126 [21:32<44:38, 31.51s/it, loss=0.544, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  50%|█████     | 125/250 [21:45<21:45, 10.44s/it, loss=0.761, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  50%|█████     | 125/250 [21:45<21:45, 10.44s/it, loss=0.752, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-16.1090, grad_fn=<MinBackward1>) tensor(15.9287, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  50%|█████     | 126/250 [21:55<21:34, 10.44s/it, loss=0.752, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  50%|█████     | 126/250 [21:55<21:34, 10.44s/it, loss=0.738, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  51%|█████     | 127/250 [22:05<21:23, 10.44s/it, loss=0.738, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  51%|█████     | 127/250 [22:05<21:23, 10.44s/it, loss=0.728, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  33%|███▎      | 42/126 [22:02<44:05, 31.49s/it, loss=0.544, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  33%|███▎      | 42/126 [22:02<44:05, 31.49s/it, loss=0.553, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  51%|█████     | 128/250 [22:16<21:13, 10.44s/it, loss=0.728, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  51%|█████     | 128/250 [22:16<21:13, 10.44s/it, loss=0.721, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-21.2662, grad_fn=<MinBackward1>) tensor(15.7745, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  52%|█████▏    | 129/250 [22:27<21:03, 10.44s/it, loss=0.721, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  52%|█████▏    | 129/250 [22:27<21:03, 10.44s/it, loss=0.71, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000] 
+[2m[36m(pid=11617)[0m Epoch 0:  52%|█████▏    | 130/250 [22:38<20:53, 10.45s/it, loss=0.71, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  52%|█████▏    | 130/250 [22:38<20:53, 10.45s/it, loss=0.708, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  34%|███▍      | 43/126 [22:33<43:32, 31.48s/it, loss=0.553, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  34%|███▍      | 43/126 [22:33<43:32, 31.48s/it, loss=0.56, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000] 
+[2m[36m(pid=11617)[0m Epoch 0:  52%|█████▏    | 131/250 [22:48<20:43, 10.45s/it, loss=0.708, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  52%|█████▏    | 131/250 [22:48<20:43, 10.45s/it, loss=0.708, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-21.5653, grad_fn=<MinBackward1>) tensor(15.3758, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  53%|█████▎    | 132/250 [22:58<20:32, 10.45s/it, loss=0.708, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  53%|█████▎    | 132/250 [22:58<20:32, 10.45s/it, loss=0.703, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  53%|█████▎    | 133/250 [23:09<20:22, 10.45s/it, loss=0.703, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  53%|█████▎    | 133/250 [23:09<20:22, 10.45s/it, loss=0.712, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  35%|███▍      | 44/126 [23:04<42:59, 31.46s/it, loss=0.56, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  35%|███▍      | 44/126 [23:04<42:59, 31.46s/it, loss=0.563, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000][2m[36m(pid=11620)[0m GPU available: False, used: False
+[2m[36m(pid=11620)[0m GPU available: False, used: False
+[2m[36m(pid=11620)[0m TPU available: False, using: 0 TPU cores
+[2m[36m(pid=11620)[0m TPU available: False, using: 0 TPU cores
+[2m[36m(pid=11620)[0m 
+[2m[36m(pid=11620)[0m   | Name    | Type     | Params
+[2m[36m(pid=11620)[0m -------------------------------------
+[2m[36m(pid=11620)[0m 0 | model   | AttU_Net | 34.9 M
+[2m[36m(pid=11620)[0m 1 | loss_fn | DiceLoss | 0     
+[2m[36m(pid=11620)[0m -------------------------------------
+[2m[36m(pid=11620)[0m 34.9 M    Trainable params
+[2m[36m(pid=11620)[0m 0         Non-trainable params
+[2m[36m(pid=11620)[0m 34.9 M    Total params
+[2m[36m(pid=11620)[0m 139.514   Total estimated model params size (MB)
+[2m[36m(pid=11620)[0m 
+[2m[36m(pid=11620)[0m   | Name    | Type     | Params
+[2m[36m(pid=11620)[0m -------------------------------------
+[2m[36m(pid=11620)[0m 0 | model   | AttU_Net | 34.9 M
+[2m[36m(pid=11620)[0m 1 | loss_fn | DiceLoss | 0     
+[2m[36m(pid=11620)[0m -------------------------------------
+[2m[36m(pid=11620)[0m 34.9 M    Trainable params
+[2m[36m(pid=11620)[0m 0         Non-trainable params
+[2m[36m(pid=11620)[0m 34.9 M    Total params
+[2m[36m(pid=11620)[0m 139.514   Total estimated model params size (MB)
+[2m[36m(pid=11620)[0m /cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/data_loading.py:348: UserWarning: Your val_dataloader has `shuffle=True`, it is best practice to turn this off for val/test/predict dataloaders.
+[2m[36m(pid=11620)[0m   rank_zero_warn(
+[2m[36m(pid=11620)[0m /cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/data_loading.py:102: UserWarning: The dataloader, val dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 40 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+[2m[36m(pid=11620)[0m   rank_zero_warn(
+[2m[36m(pid=11620)[0m /cluster/apps/python/3.8.5_gpu_gcc820/x86_64/lib64/python3.8/site-packages/torch/nn/functional.py:718: UserWarning: Named tensors and all their associated APIs are an experimental feature and subject to change. Please do not use them for anything important until they are released as stable. (Triggered internally at  /pytorch/c10/core/TensorImpl.h:1156.)
+[2m[36m(pid=11620)[0m   return torch.max_pool2d(input, kernel_size, stride, padding, dilation, ceil_mode)
+[2m[36m(pid=11617)[0m GPU available: False, used: False
+[2m[36m(pid=11617)[0m GPU available: False, used: False
+[2m[36m(pid=11617)[0m TPU available: False, using: 0 TPU cores
+[2m[36m(pid=11617)[0m TPU available: False, using: 0 TPU cores
+[2m[36m(pid=11617)[0m 
+[2m[36m(pid=11617)[0m   | Name    | Type                | Params
+[2m[36m(pid=11617)[0m ------------------------------------------------
+[2m[36m(pid=11617)[0m 0 | model   | UNet                | 31.0 M
+[2m[36m(pid=11617)[0m 1 | loss_fn | NoiseRobustDiceLoss | 0     
+[2m[36m(pid=11617)[0m ------------------------------------------------
+[2m[36m(pid=11617)[0m 31.0 M    Trainable params
+[2m[36m(pid=11617)[0m 0         Non-trainable params
+[2m[36m(pid=11617)[0m 31.0 M    Total params
+[2m[36m(pid=11617)[0m 124.151   Total estimated model params size (MB)
+[2m[36m(pid=11617)[0m 
+[2m[36m(pid=11617)[0m   | Name    | Type                | Params
+[2m[36m(pid=11617)[0m ------------------------------------------------
+[2m[36m(pid=11617)[0m 0 | model   | UNet                | 31.0 M
+[2m[36m(pid=11617)[0m 1 | loss_fn | NoiseRobustDiceLoss | 0     
+[2m[36m(pid=11617)[0m ------------------------------------------------
+[2m[36m(pid=11617)[0m 31.0 M    Trainable params
+[2m[36m(pid=11617)[0m 0         Non-trainable params
+[2m[36m(pid=11617)[0m 31.0 M    Total params
+[2m[36m(pid=11617)[0m 124.151   Total estimated model params size (MB)
+[2m[36m(pid=11617)[0m /cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/data_loading.py:348: UserWarning: Your val_dataloader has `shuffle=True`, it is best practice to turn this off for val/test/predict dataloaders.
+[2m[36m(pid=11617)[0m   rank_zero_warn(
+[2m[36m(pid=11617)[0m /cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/data_loading.py:102: UserWarning: The dataloader, val dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 40 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+[2m[36m(pid=11617)[0m   rank_zero_warn(
+[2m[36m(pid=11617)[0m /cluster/apps/python/3.8.5_gpu_gcc820/x86_64/lib64/python3.8/site-packages/torch/nn/functional.py:718: UserWarning: Named tensors and all their associated APIs are an experimental feature and subject to change. Please do not use them for anything important until they are released as stable. (Triggered internally at  /pytorch/c10/core/TensorImpl.h:1156.)
+[2m[36m(pid=11617)[0m   return torch.max_pool2d(input, kernel_size, stride, padding, dilation, ceil_mode)
+[2m[36m(pid=11617)[0m /cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/deprecated_api.py:151: LightningDeprecationWarning: `Trainer.running_sanity_check` has been renamed to `Trainer.sanity_checking` and will be removed in v1.5.
+[2m[36m(pid=11617)[0m   rank_zero_deprecation(
+[2m[36m(pid=11617)[0m Global seed set to 1337
+[2m[36m(pid=11617)[0m Global seed set to 1337
+[2m[36m(pid=11617)[0m /cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/data_loading.py:102: UserWarning: The dataloader, train dataloader, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 40 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+[2m[36m(pid=11617)[0m   rank_zero_warn(
+[2m[36m(pid=11620)[0m /cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/deprecated_api.py:151: LightningDeprecationWarning: `Trainer.running_sanity_check` has been renamed to `Trainer.sanity_checking` and will be removed in v1.5.
+[2m[36m(pid=11620)[0m   rank_zero_deprecation(
+[2m[36m(pid=11620)[0m Global seed set to 1337
+[2m[36m(pid=11620)[0m Global seed set to 1337
+[2m[36m(pid=11620)[0m /cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/data_loading.py:102: UserWarning: The dataloader, train dataloader, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 40 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+[2m[36m(pid=11620)[0m   rank_zero_warn(
+2021-07-27 19:44:02,207	ERROR trial_runner.py:748 -- Trial train_segmentation_2c9f4_00001: Error processing event.
+Traceback (most recent call last):
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/trial_runner.py", line 726, in _process_trial
+    decision = self._process_trial_result(trial, result)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/trial_runner.py", line 766, in _process_trial_result
+    self._validate_result_metrics(flat_result)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/trial_runner.py", line 875, in _validate_result_metrics
+    raise ValueError(
+ValueError: Trial returned a result which did not include the specified metric(s) `val_accuracy` that `tune.run()` expects. Make sure your calls to `tune.report()` include the metric, or set the TUNE_DISABLE_STRICT_METRIC_CHECKING environment variable to 1. Result: {'loss': 0.757774829864502, 'acc': 0.17966613173484802, 'val_iou': 0.17966613173484802, 'time_this_iter_s': 2595.659950017929, 'done': False, 'timesteps_total': None, 'episodes_total': None, 'training_iteration': 1, 'experiment_id': 'e6dd275aec3f41eaabafd7c07f5b7507', 'date': '2021-07-27_19-44-02', 'timestamp': 1627407842, 'time_total_s': 2595.659950017929, 'pid': 11617, 'hostname': 'lo-s4-024', 'node_ip': '10.204.3.74', 'time_since_restore': 2595.659950017929, 'timesteps_since_restore': 0, 'iterations_since_restore': 1, 'trial_id': '2c9f4_00001', 'config/model_name': 'unet', 'config/lr': 0.02626809826395795, 'config/loss_fn': 'noise_robust_dice', 'config/batch_size': 2, 'config/num_epochs': 2, 'config/patch_size': 256, 'config/mode': 'patch_random', 'config/blend_mode': 'cover', 'config/noise': False, 'config/threshold': 0.6814215796572347}
+
+[2m[36m(pid=11617)[0m Epoch 0:  54%|█████▎    | 134/250 [23:19<20:11, 10.45s/it, loss=0.712, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  54%|█████▎    | 134/250 [23:19<20:11, 10.45s/it, loss=0.709, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-21.7056, grad_fn=<MinBackward1>) tensor(15.5367, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  54%|█████▍    | 135/250 [23:30<20:01, 10.45s/it, loss=0.709, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  54%|█████▍    | 135/250 [23:30<20:01, 10.45s/it, loss=0.705, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  54%|█████▍    | 136/250 [23:40<19:50, 10.44s/it, loss=0.705, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  54%|█████▍    | 136/250 [23:40<19:50, 10.44s/it, loss=0.701, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  36%|███▌      | 45/126 [23:35<42:27, 31.45s/it, loss=0.563, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  36%|███▌      | 45/126 [23:35<42:27, 31.45s/it, loss=0.563, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  55%|█████▍    | 137/250 [23:50<19:39, 10.44s/it, loss=0.701, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  55%|█████▍    | 137/250 [23:50<19:39, 10.44s/it, loss=0.694, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-25.3835, grad_fn=<MinBackward1>) tensor(15.8611, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  55%|█████▌    | 138/250 [24:01<19:29, 10.44s/it, loss=0.694, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  55%|█████▌    | 138/250 [24:01<19:29, 10.44s/it, loss=0.691, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  56%|█████▌    | 139/250 [24:11<19:19, 10.44s/it, loss=0.691, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  56%|█████▌    | 139/250 [24:11<19:19, 10.44s/it, loss=0.674, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  37%|███▋      | 46/126 [24:06<41:55, 31.45s/it, loss=0.563, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  37%|███▋      | 46/126 [24:06<41:55, 31.45s/it, loss=0.571, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  56%|█████▌    | 140/250 [24:21<19:08, 10.44s/it, loss=0.674, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  56%|█████▌    | 140/250 [24:21<19:08, 10.44s/it, loss=0.67, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000] 
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-25.1125, grad_fn=<MinBackward1>) tensor(15.2258, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  56%|█████▋    | 141/250 [24:31<18:57, 10.44s/it, loss=0.67, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  56%|█████▋    | 141/250 [24:31<18:57, 10.44s/it, loss=0.676, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  57%|█████▋    | 142/250 [24:42<18:47, 10.44s/it, loss=0.676, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  57%|█████▋    | 142/250 [24:42<18:47, 10.44s/it, loss=0.684, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  37%|███▋      | 47/126 [24:37<41:23, 31.43s/it, loss=0.571, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  37%|███▋      | 47/126 [24:37<41:23, 31.43s/it, loss=0.571, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  57%|█████▋    | 143/250 [24:52<18:36, 10.44s/it, loss=0.684, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  57%|█████▋    | 143/250 [24:52<18:36, 10.44s/it, loss=0.708, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-21.0876, grad_fn=<MinBackward1>) tensor(17.6175, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  58%|█████▊    | 144/250 [25:02<18:25, 10.43s/it, loss=0.708, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  58%|█████▊    | 144/250 [25:02<18:25, 10.43s/it, loss=0.707, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  58%|█████▊    | 145/250 [25:12<18:15, 10.43s/it, loss=0.707, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  58%|█████▊    | 145/250 [25:12<18:15, 10.43s/it, loss=0.704, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  38%|███▊      | 48/126 [25:08<40:51, 31.43s/it, loss=0.571, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  38%|███▊      | 48/126 [25:08<40:51, 31.43s/it, loss=0.573, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  58%|█████▊    | 146/250 [25:23<18:05, 10.43s/it, loss=0.704, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  58%|█████▊    | 146/250 [25:23<18:05, 10.43s/it, loss=0.697, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-22.1374, grad_fn=<MinBackward1>) tensor(17.0287, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  59%|█████▉    | 147/250 [25:33<17:54, 10.43s/it, loss=0.697, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  59%|█████▉    | 147/250 [25:33<17:54, 10.43s/it, loss=0.71, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000] 
+[2m[36m(pid=11617)[0m Epoch 0:  59%|█████▉    | 148/250 [25:43<17:43, 10.43s/it, loss=0.71, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  59%|█████▉    | 148/250 [25:43<17:43, 10.43s/it, loss=0.73, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  39%|███▉      | 49/126 [25:39<40:19, 31.43s/it, loss=0.573, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  39%|███▉      | 49/126 [25:39<40:19, 31.43s/it, loss=0.566, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  60%|█████▉    | 149/250 [25:53<17:33, 10.43s/it, loss=0.73, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  60%|█████▉    | 149/250 [25:53<17:33, 10.43s/it, loss=0.735, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-19.7693, grad_fn=<MinBackward1>) tensor(17.7292, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  60%|██████    | 150/250 [26:03<17:22, 10.43s/it, loss=0.735, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  60%|██████    | 150/250 [26:03<17:22, 10.43s/it, loss=0.731, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  60%|██████    | 151/250 [26:14<17:12, 10.43s/it, loss=0.731, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  60%|██████    | 151/250 [26:14<17:12, 10.43s/it, loss=0.743, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  40%|███▉      | 50/126 [26:11<39:48, 31.42s/it, loss=0.566, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  40%|███▉      | 50/126 [26:11<39:48, 31.42s/it, loss=0.577, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  61%|██████    | 152/250 [26:24<17:01, 10.42s/it, loss=0.743, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  61%|██████    | 152/250 [26:24<17:01, 10.42s/it, loss=0.759, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-23.0930, grad_fn=<MinBackward1>) tensor(18.6219, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  61%|██████    | 153/250 [26:34<16:50, 10.42s/it, loss=0.759, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  61%|██████    | 153/250 [26:34<16:50, 10.42s/it, loss=0.754, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  62%|██████▏   | 154/250 [26:44<16:40, 10.42s/it, loss=0.754, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  62%|██████▏   | 154/250 [26:44<16:40, 10.42s/it, loss=0.765, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  40%|████      | 51/126 [26:42<39:16, 31.42s/it, loss=0.577, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  40%|████      | 51/126 [26:42<39:16, 31.42s/it, loss=0.578, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  62%|██████▏   | 155/250 [26:55<16:30, 10.42s/it, loss=0.765, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  62%|██████▏   | 155/250 [26:55<16:30, 10.42s/it, loss=0.769, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  
+[2m[36m(pid=11620)[0m tensor(-17.0000, grad_fn=<MinBackward1>) tensor(20.7013, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  62%|██████▏   | 156/250 [27:05<16:19, 10.42s/it, loss=0.769, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  62%|██████▏   | 156/250 [27:05<16:19, 10.42s/it, loss=0.775, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  63%|██████▎   | 157/250 [27:15<16:09, 10.42s/it, loss=0.775, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  63%|██████▎   | 157/250 [27:15<16:09, 10.42s/it, loss=0.76, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000] 
+[2m[36m(pid=11620)[0m Epoch 0:  41%|████▏     | 52/126 [27:13<38:45, 31.42s/it, loss=0.578, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  41%|████▏     | 52/126 [27:13<38:45, 31.42s/it, loss=0.575, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  63%|██████▎   | 158/250 [27:26<15:58, 10.42s/it, loss=0.76, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  63%|██████▎   | 158/250 [27:26<15:58, 10.42s/it, loss=0.771, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-12.7453, grad_fn=<MinBackward1>) tensor(23.4246, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  64%|██████▎   | 159/250 [27:36<15:48, 10.42s/it, loss=0.771, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  64%|██████▎   | 159/250 [27:36<15:48, 10.42s/it, loss=0.783, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  64%|██████▍   | 160/250 [27:47<15:37, 10.42s/it, loss=0.783, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  64%|██████▍   | 160/250 [27:47<15:37, 10.42s/it, loss=0.784, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  42%|████▏     | 53/126 [27:45<38:13, 31.42s/it, loss=0.575, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  42%|████▏     | 53/126 [27:45<38:13, 31.42s/it, loss=0.59, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000] 
+[2m[36m(pid=11617)[0m Epoch 0:  64%|██████▍   | 161/250 [27:57<15:27, 10.42s/it, loss=0.784, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  64%|██████▍   | 161/250 [27:57<15:27, 10.42s/it, loss=0.795, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-13.7620, grad_fn=<MinBackward1>) tensor(31.5910, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  65%|██████▍   | 162/250 [28:07<15:16, 10.42s/it, loss=0.795, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  65%|██████▍   | 162/250 [28:07<15:16, 10.42s/it, loss=0.797, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  65%|██████▌   | 163/250 [28:17<15:06, 10.42s/it, loss=0.797, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  65%|██████▌   | 163/250 [28:17<15:06, 10.42s/it, loss=0.774, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  43%|████▎     | 54/126 [28:16<37:42, 31.42s/it, loss=0.59, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  43%|████▎     | 54/126 [28:16<37:42, 31.42s/it, loss=0.593, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  66%|██████▌   | 164/250 [28:28<14:55, 10.42s/it, loss=0.774, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  66%|██████▌   | 164/250 [28:28<14:55, 10.42s/it, loss=0.78, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000] 
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-14.4788, grad_fn=<MinBackward1>) tensor(42.7910, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  66%|██████▌   | 165/250 [28:38<14:45, 10.42s/it, loss=0.78, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  66%|██████▌   | 165/250 [28:38<14:45, 10.42s/it, loss=0.774, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  66%|██████▋   | 166/250 [28:48<14:34, 10.41s/it, loss=0.774, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  66%|██████▋   | 166/250 [28:48<14:34, 10.41s/it, loss=0.79, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000] 
+[2m[36m(pid=11620)[0m Epoch 0:  44%|████▎     | 55/126 [28:47<37:09, 31.41s/it, loss=0.593, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  44%|████▎     | 55/126 [28:47<37:09, 31.41s/it, loss=0.602, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  67%|██████▋   | 167/250 [28:58<14:24, 10.41s/it, loss=0.79, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  67%|██████▋   | 167/250 [28:58<14:24, 10.41s/it, loss=0.784, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-15.2467, grad_fn=<MinBackward1>) tensor(33.6095, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  67%|██████▋   | 168/250 [29:09<14:13, 10.41s/it, loss=0.784, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  67%|██████▋   | 168/250 [29:09<14:13, 10.41s/it, loss=0.77, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000] 
+[2m[36m(pid=11617)[0m Epoch 0:  68%|██████▊   | 169/250 [29:19<14:03, 10.41s/it, loss=0.77, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  68%|██████▊   | 169/250 [29:19<14:03, 10.41s/it, loss=0.766, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  44%|████▍     | 56/126 [29:18<36:37, 31.40s/it, loss=0.602, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  44%|████▍     | 56/126 [29:18<36:37, 31.40s/it, loss=0.607, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  68%|██████▊   | 170/250 [29:29<13:52, 10.41s/it, loss=0.766, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  68%|██████▊   | 170/250 [29:29<13:52, 10.41s/it, loss=0.761, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-16.5508, grad_fn=<MinBackward1>) tensor(37.8330, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  68%|██████▊   | 171/250 [29:39<13:42, 10.41s/it, loss=0.761, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  68%|██████▊   | 171/250 [29:39<13:42, 10.41s/it, loss=0.76, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000] 
+[2m[36m(pid=11617)[0m Epoch 0:  69%|██████▉   | 172/250 [29:49<13:31, 10.41s/it, loss=0.76, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  69%|██████▉   | 172/250 [29:49<13:31, 10.41s/it, loss=0.732, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  45%|████▌     | 57/126 [29:49<36:06, 31.40s/it, loss=0.607, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  45%|████▌     | 57/126 [29:49<36:06, 31.40s/it, loss=0.616, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  69%|██████▉   | 173/250 [29:59<13:21, 10.40s/it, loss=0.732, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  69%|██████▉   | 173/250 [29:59<13:21, 10.40s/it, loss=0.736, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-14.7324, grad_fn=<MinBackward1>) tensor(57.5393, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  70%|██████▉   | 174/250 [30:10<13:10, 10.40s/it, loss=0.736, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  70%|██████▉   | 174/250 [30:10<13:10, 10.40s/it, loss=0.719, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  70%|███████   | 175/250 [30:20<13:00, 10.40s/it, loss=0.719, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  70%|███████   | 175/250 [30:20<13:00, 10.40s/it, loss=0.71, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000] 
+[2m[36m(pid=11620)[0m Epoch 0:  46%|████▌     | 58/126 [30:20<35:34, 31.40s/it, loss=0.616, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  46%|████▌     | 58/126 [30:20<35:34, 31.40s/it, loss=0.608, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  70%|███████   | 176/250 [30:30<12:49, 10.40s/it, loss=0.71, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  70%|███████   | 176/250 [30:30<12:49, 10.40s/it, loss=0.714, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-15.5500, grad_fn=<MinBackward1>) tensor(41.3680, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  71%|███████   | 177/250 [30:40<12:39, 10.40s/it, loss=0.714, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  71%|███████   | 177/250 [30:40<12:39, 10.40s/it, loss=0.736, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  71%|███████   | 178/250 [30:50<12:28, 10.40s/it, loss=0.736, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  71%|███████   | 178/250 [30:50<12:28, 10.40s/it, loss=0.732, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  47%|████▋     | 59/126 [30:52<35:03, 31.40s/it, loss=0.608, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  47%|████▋     | 59/126 [30:52<35:03, 31.40s/it, loss=0.6, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]  
+[2m[36m(pid=11617)[0m Epoch 0:  72%|███████▏  | 179/250 [31:00<12:18, 10.40s/it, loss=0.732, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  72%|███████▏  | 179/250 [31:00<12:18, 10.40s/it, loss=0.725, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-16.7042, grad_fn=<MinBackward1>) tensor(39.8777, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  72%|███████▏  | 180/250 [31:10<12:07, 10.39s/it, loss=0.725, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  72%|███████▏  | 180/250 [31:10<12:07, 10.39s/it, loss=0.726, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  72%|███████▏  | 181/250 [31:21<11:57, 10.39s/it, loss=0.726, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  72%|███████▏  | 181/250 [31:21<11:57, 10.39s/it, loss=0.716, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  48%|████▊     | 60/126 [31:23<34:32, 31.40s/it, loss=0.6, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  48%|████▊     | 60/126 [31:23<34:32, 31.40s/it, loss=0.611, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  73%|███████▎  | 182/250 [31:31<11:46, 10.39s/it, loss=0.716, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  73%|███████▎  | 182/250 [31:31<11:46, 10.39s/it, loss=0.701, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-18.8544, grad_fn=<MinBackward1>) tensor(44.6456, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  73%|███████▎  | 183/250 [31:41<11:36, 10.39s/it, loss=0.701, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  73%|███████▎  | 183/250 [31:41<11:36, 10.39s/it, loss=0.71, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000] 
+[2m[36m(pid=11617)[0m Epoch 0:  74%|███████▎  | 184/250 [31:51<11:25, 10.39s/it, loss=0.71, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  74%|███████▎  | 184/250 [31:51<11:25, 10.39s/it, loss=0.705, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  74%|███████▍  | 185/250 [32:01<11:15, 10.39s/it, loss=0.705, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  74%|███████▍  | 185/250 [32:01<11:15, 10.39s/it, loss=0.708, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  48%|████▊     | 61/126 [31:55<34:00, 31.39s/it, loss=0.611, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  48%|████▊     | 61/126 [31:55<34:00, 31.39s/it, loss=0.614, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  74%|███████▍  | 186/250 [32:11<11:04, 10.39s/it, loss=0.708, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  74%|███████▍  | 186/250 [32:11<11:04, 10.39s/it, loss=0.689, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-17.5617, grad_fn=<MinBackward1>) tensor(37.9710, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  75%|███████▍  | 187/250 [32:21<10:54, 10.38s/it, loss=0.689, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  75%|███████▍  | 187/250 [32:21<10:54, 10.38s/it, loss=0.697, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  75%|███████▌  | 188/250 [32:32<10:43, 10.38s/it, loss=0.697, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  75%|███████▌  | 188/250 [32:32<10:43, 10.38s/it, loss=0.701, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  49%|████▉     | 62/126 [32:26<33:28, 31.39s/it, loss=0.614, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  49%|████▉     | 62/126 [32:26<33:28, 31.39s/it, loss=0.609, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  76%|███████▌  | 189/250 [32:42<10:33, 10.38s/it, loss=0.701, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  76%|███████▌  | 189/250 [32:42<10:33, 10.38s/it, loss=0.709, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-18.3040, grad_fn=<MinBackward1>) tensor(48.9715, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  76%|███████▌  | 190/250 [32:52<10:22, 10.38s/it, loss=0.709, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  76%|███████▌  | 190/250 [32:52<10:22, 10.38s/it, loss=0.715, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  76%|███████▋  | 191/250 [33:03<10:12, 10.38s/it, loss=0.715, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  76%|███████▋  | 191/250 [33:03<10:12, 10.38s/it, loss=0.723, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  50%|█████     | 63/126 [32:56<32:56, 31.38s/it, loss=0.609, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  50%|█████     | 63/126 [32:56<32:56, 31.38s/it, loss=0.615, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-18.6934, grad_fn=<MinBackward1>) tensor(47.1775, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  77%|███████▋  | 192/250 [33:13<10:02, 10.38s/it, loss=0.723, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  77%|███████▋  | 192/250 [33:13<10:02, 10.38s/it, loss=0.734, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  77%|███████▋  | 193/250 [33:23<09:51, 10.38s/it, loss=0.734, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  77%|███████▋  | 193/250 [33:23<09:51, 10.38s/it, loss=0.733, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  78%|███████▊  | 194/250 [33:34<09:41, 10.38s/it, loss=0.733, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  78%|███████▊  | 194/250 [33:34<09:41, 10.38s/it, loss=0.73, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000] 
+[2m[36m(pid=11620)[0m Epoch 0:  51%|█████     | 64/126 [33:27<32:24, 31.36s/it, loss=0.615, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  51%|█████     | 64/126 [33:27<32:24, 31.36s/it, loss=0.603, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-17.4702, grad_fn=<MinBackward1>) tensor(40.2264, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  78%|███████▊  | 195/250 [33:44<09:31, 10.38s/it, loss=0.73, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  78%|███████▊  | 195/250 [33:44<09:31, 10.38s/it, loss=0.732, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  78%|███████▊  | 196/250 [33:55<09:20, 10.38s/it, loss=0.732, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  78%|███████▊  | 196/250 [33:55<09:20, 10.38s/it, loss=0.732, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  79%|███████▉  | 197/250 [34:05<09:10, 10.38s/it, loss=0.732, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  79%|███████▉  | 197/250 [34:05<09:10, 10.38s/it, loss=0.737, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  52%|█████▏    | 65/126 [33:58<31:53, 31.37s/it, loss=0.603, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  52%|█████▏    | 65/126 [33:58<31:53, 31.37s/it, loss=0.598, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-17.3105, grad_fn=<MinBackward1>) tensor(40.3434, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  79%|███████▉  | 198/250 [34:15<08:59, 10.38s/it, loss=0.737, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  79%|███████▉  | 198/250 [34:15<08:59, 10.38s/it, loss=0.731, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  80%|███████▉  | 199/250 [34:26<08:49, 10.38s/it, loss=0.731, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  80%|███████▉  | 199/250 [34:26<08:49, 10.38s/it, loss=0.738, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  80%|████████  | 200/250 [34:36<08:39, 10.38s/it, loss=0.738, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  80%|████████  | 200/250 [34:36<08:39, 10.38s/it, loss=0.736, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  52%|█████▏    | 66/126 [34:30<31:21, 31.37s/it, loss=0.598, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  52%|█████▏    | 66/126 [34:30<31:21, 31.37s/it, loss=0.589, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-16.4916, grad_fn=<MinBackward1>) tensor(39.4872, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  80%|████████  | 201/250 [34:46<08:28, 10.38s/it, loss=0.736, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  80%|████████  | 201/250 [34:46<08:28, 10.38s/it, loss=0.734, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  81%|████████  | 202/250 [34:56<08:18, 10.38s/it, loss=0.734, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  81%|████████  | 202/250 [34:56<08:18, 10.38s/it, loss=0.732, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  81%|████████  | 203/250 [35:07<08:07, 10.38s/it, loss=0.732, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  81%|████████  | 203/250 [35:07<08:07, 10.38s/it, loss=0.727, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  53%|█████▎    | 67/126 [35:01<30:50, 31.36s/it, loss=0.589, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  53%|█████▎    | 67/126 [35:01<30:50, 31.36s/it, loss=0.59, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000] 
+[2m[36m(pid=11617)[0m Epoch 0:  82%|████████▏ | 204/250 [35:17<07:57, 10.38s/it, loss=0.727, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  82%|████████▏ | 204/250 [35:17<07:57, 10.38s/it, loss=0.734, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-17.4191, grad_fn=<MinBackward1>) tensor(45.1690, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  82%|████████▏ | 205/250 [35:27<07:46, 10.38s/it, loss=0.734, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  82%|████████▏ | 205/250 [35:27<07:46, 10.38s/it, loss=0.737, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  82%|████████▏ | 206/250 [35:37<07:36, 10.38s/it, loss=0.737, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  82%|████████▏ | 206/250 [35:37<07:36, 10.38s/it, loss=0.743, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  54%|█████▍    | 68/126 [35:32<30:18, 31.36s/it, loss=0.59, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  54%|█████▍    | 68/126 [35:32<30:18, 31.36s/it, loss=0.589, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  83%|████████▎ | 207/250 [35:47<07:26, 10.38s/it, loss=0.743, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  83%|████████▎ | 207/250 [35:47<07:26, 10.38s/it, loss=0.732, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  
+[2m[36m(pid=11620)[0m tensor(-16.5042, grad_fn=<MinBackward1>) tensor(37.4560, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  83%|████████▎ | 208/250 [35:58<07:15, 10.38s/it, loss=0.732, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  83%|████████▎ | 208/250 [35:58<07:15, 10.38s/it, loss=0.738, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  84%|████████▎ | 209/250 [36:08<07:05, 10.38s/it, loss=0.738, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  84%|████████▎ | 209/250 [36:08<07:05, 10.38s/it, loss=0.735, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  55%|█████▍    | 69/126 [36:03<29:47, 31.36s/it, loss=0.589, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  55%|█████▍    | 69/126 [36:03<29:47, 31.36s/it, loss=0.586, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  84%|████████▍ | 210/250 [36:18<06:54, 10.37s/it, loss=0.735, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  84%|████████▍ | 210/250 [36:18<06:54, 10.37s/it, loss=0.739, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-19.8574, grad_fn=<MinBackward1>) tensor(36.8434, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  84%|████████▍ | 211/250 [36:28<06:44, 10.37s/it, loss=0.739, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  84%|████████▍ | 211/250 [36:28<06:44, 10.37s/it, loss=0.738, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  85%|████████▍ | 212/250 [36:38<06:34, 10.37s/it, loss=0.738, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  85%|████████▍ | 212/250 [36:38<06:34, 10.37s/it, loss=0.75, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000] 
+[2m[36m(pid=11620)[0m Epoch 0:  56%|█████▌    | 70/126 [36:35<29:16, 31.36s/it, loss=0.586, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  56%|█████▌    | 70/126 [36:35<29:16, 31.36s/it, loss=0.582, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  85%|████████▌ | 213/250 [36:48<06:23, 10.37s/it, loss=0.75, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  85%|████████▌ | 213/250 [36:48<06:23, 10.37s/it, loss=0.767, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-19.8392, grad_fn=<MinBackward1>) tensor(39.9427, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  86%|████████▌ | 214/250 [36:59<06:13, 10.37s/it, loss=0.767, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  86%|████████▌ | 214/250 [36:59<06:13, 10.37s/it, loss=0.77, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000] 
+[2m[36m(pid=11617)[0m Epoch 0:  86%|████████▌ | 215/250 [37:09<06:02, 10.37s/it, loss=0.77, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  86%|████████▌ | 215/250 [37:09<06:02, 10.37s/it, loss=0.754, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  56%|█████▋    | 71/126 [37:06<28:44, 31.36s/it, loss=0.582, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  56%|█████▋    | 71/126 [37:06<28:44, 31.36s/it, loss=0.59, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000] 
+[2m[36m(pid=11617)[0m Epoch 0:  86%|████████▋ | 216/250 [37:19<05:52, 10.37s/it, loss=0.754, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  86%|████████▋ | 216/250 [37:19<05:52, 10.37s/it, loss=0.752, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-20.9197, grad_fn=<MinBackward1>) tensor(27.8954, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  87%|████████▋ | 217/250 [37:29<05:42, 10.37s/it, loss=0.752, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  87%|████████▋ | 217/250 [37:29<05:42, 10.37s/it, loss=0.743, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  87%|████████▋ | 218/250 [37:39<05:31, 10.37s/it, loss=0.743, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  87%|████████▋ | 218/250 [37:39<05:31, 10.37s/it, loss=0.739, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  57%|█████▋    | 72/126 [37:37<28:13, 31.36s/it, loss=0.59, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  57%|█████▋    | 72/126 [37:37<28:13, 31.36s/it, loss=0.594, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  88%|████████▊ | 219/250 [37:49<05:21, 10.36s/it, loss=0.739, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  88%|████████▊ | 219/250 [37:49<05:21, 10.36s/it, loss=0.735, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-18.7860, grad_fn=<MinBackward1>) tensor(29.0218, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  88%|████████▊ | 220/250 [37:59<05:10, 10.36s/it, loss=0.735, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  88%|████████▊ | 220/250 [37:59<05:10, 10.36s/it, loss=0.743, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  88%|████████▊ | 221/250 [38:09<05:00, 10.36s/it, loss=0.743, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  88%|████████▊ | 221/250 [38:09<05:00, 10.36s/it, loss=0.746, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  58%|█████▊    | 73/126 [38:09<27:42, 31.36s/it, loss=0.594, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  58%|█████▊    | 73/126 [38:09<27:42, 31.36s/it, loss=0.571, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  89%|████████▉ | 222/250 [38:19<04:50, 10.36s/it, loss=0.746, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  89%|████████▉ | 222/250 [38:19<04:50, 10.36s/it, loss=0.74, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000] 
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-20.7093, grad_fn=<MinBackward1>) tensor(26.8606, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m Epoch 0:  89%|████████▉ | 223/250 [38:29<04:39, 10.36s/it, loss=0.74, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  89%|████████▉ | 223/250 [38:29<04:39, 10.36s/it, loss=0.742, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  90%|████████▉ | 224/250 [38:40<04:29, 10.36s/it, loss=0.742, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  90%|████████▉ | 224/250 [38:40<04:29, 10.36s/it, loss=0.749, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  59%|█████▊    | 74/126 [38:40<27:10, 31.36s/it, loss=0.571, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  59%|█████▊    | 74/126 [38:40<27:10, 31.36s/it, loss=0.582, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m Epoch 0:  90%|█████████ | 225/250 [38:50<04:18, 10.36s/it, loss=0.749, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]Epoch 0:  90%|█████████ | 225/250 [38:50<04:18, 10.36s/it, loss=0.746, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m 
+[2m[36m(pid=11617)[0m Validating: 0it [00:00, ?it/s][A
+[2m[36m(pid=11617)[0m Validating:   0%|          | 0/25 [00:00<?, ?it/s][A
+[2m[36m(pid=11617)[0m 
+[2m[36m(pid=11617)[0m Validating:   4%|▍         | 1/25 [00:02<01:10,  2.93s/it][AEpoch 0:  91%|█████████ | 227/250 [38:53<03:56, 10.28s/it, loss=0.746, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m 
+[2m[36m(pid=11617)[0m Validating:   8%|▊         | 2/25 [00:05<01:06,  2.91s/it][A
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-21.1832, grad_fn=<MinBackward1>) tensor(20.8078, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m 
+[2m[36m(pid=11617)[0m Validating:  12%|█▏        | 3/25 [00:08<01:03,  2.90s/it][AEpoch 0:  92%|█████████▏| 229/250 [38:59<03:34, 10.21s/it, loss=0.746, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m 
+[2m[36m(pid=11617)[0m Validating:  16%|█▌        | 4/25 [00:11<01:00,  2.90s/it][A
+[2m[36m(pid=11617)[0m 
+[2m[36m(pid=11617)[0m Validating:  20%|██        | 5/25 [00:14<00:57,  2.89s/it][AEpoch 0:  92%|█████████▏| 231/250 [39:04<03:12, 10.15s/it, loss=0.746, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m 
+[2m[36m(pid=11617)[0m Validating:  24%|██▍       | 6/25 [00:17<00:54,  2.89s/it][A
+[2m[36m(pid=11617)[0m 
+[2m[36m(pid=11617)[0m Validating:  28%|██▊       | 7/25 [00:20<00:52,  2.90s/it][A
+[2m[36m(pid=11617)[0m Epoch 0:  93%|█████████▎| 233/250 [39:10<02:51, 10.09s/it, loss=0.746, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m 
+[2m[36m(pid=11617)[0m Validating:  32%|███▏      | 8/25 [00:23<00:49,  2.89s/it][A
+[2m[36m(pid=11617)[0m 
+[2m[36m(pid=11617)[0m Validating:  36%|███▌      | 9/25 [00:26<00:46,  2.90s/it][AEpoch 0:  94%|█████████▍| 235/250 [39:16<02:30, 10.03s/it, loss=0.746, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  60%|█████▉    | 75/126 [39:11<26:39, 31.36s/it, loss=0.582, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  60%|█████▉    | 75/126 [39:11<26:39, 31.36s/it, loss=0.578, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m 
+[2m[36m(pid=11617)[0m Validating:  40%|████      | 10/25 [00:28<00:43,  2.90s/it][A
+[2m[36m(pid=11617)[0m 
+[2m[36m(pid=11617)[0m Validating:  44%|████▍     | 11/25 [00:31<00:40,  2.90s/it][AEpoch 0:  95%|█████████▍| 237/250 [39:22<02:09,  9.97s/it, loss=0.746, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m 
+[2m[36m(pid=11617)[0m Validating:  48%|████▊     | 12/25 [00:34<00:37,  2.89s/it][A
+[2m[36m(pid=11617)[0m 
+[2m[36m(pid=11617)[0m Validating:  52%|█████▏    | 13/25 [00:37<00:34,  2.90s/it][AEpoch 0:  96%|█████████▌| 239/250 [39:27<01:48,  9.91s/it, loss=0.746, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-20.7729, grad_fn=<MinBackward1>) tensor(24.9621, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m 
+[2m[36m(pid=11617)[0m Validating:  56%|█████▌    | 14/25 [00:40<00:31,  2.90s/it][A
+[2m[36m(pid=11617)[0m 
+[2m[36m(pid=11617)[0m Validating:  60%|██████    | 15/25 [00:43<00:29,  2.92s/it][AEpoch 0:  96%|█████████▋| 241/250 [39:33<01:28,  9.85s/it, loss=0.746, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m 
+[2m[36m(pid=11617)[0m Validating:  64%|██████▍   | 16/25 [00:46<00:26,  2.93s/it][A
+[2m[36m(pid=11617)[0m 
+[2m[36m(pid=11617)[0m Validating:  68%|██████▊   | 17/25 [00:49<00:23,  2.93s/it][AEpoch 0:  97%|█████████▋| 243/250 [39:39<01:08,  9.79s/it, loss=0.746, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m 
+[2m[36m(pid=11617)[0m Validating:  72%|███████▏  | 18/25 [00:52<00:20,  2.93s/it][A
+[2m[36m(pid=11617)[0m 
+[2m[36m(pid=11617)[0m Validating:  76%|███████▌  | 19/25 [00:55<00:17,  2.93s/it][AEpoch 0:  98%|█████████▊| 245/250 [39:45<00:48,  9.74s/it, loss=0.746, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m 
+[2m[36m(pid=11617)[0m Validating:  80%|████████  | 20/25 [00:58<00:14,  2.93s/it][A
+[2m[36m(pid=11620)[0m Epoch 0:  60%|██████    | 76/126 [39:42<26:07, 31.35s/it, loss=0.578, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  60%|██████    | 76/126 [39:42<26:07, 31.35s/it, loss=0.572, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m 
+[2m[36m(pid=11617)[0m Validating:  84%|████████▍ | 21/25 [01:01<00:11,  2.94s/it][AEpoch 0:  99%|█████████▉| 247/250 [39:51<00:29,  9.68s/it, loss=0.746, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11617)[0m 
+[2m[36m(pid=11617)[0m Validating:  88%|████████▊ | 22/25 [01:04<00:08,  2.94s/it][A
+[2m[36m(pid=11617)[0m 
+[2m[36m(pid=11617)[0m Validating:  92%|█████████▏| 23/25 [01:07<00:05,  2.95s/it][AEpoch 0: 100%|█████████▉| 249/250 [39:57<00:09,  9.63s/it, loss=0.746, v_num=0, ptl/val_accuracy=0.831, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-20.0680, grad_fn=<MinBackward1>) tensor(19.9030, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11617)[0m 
+[2m[36m(pid=11617)[0m Validating:  96%|█████████▌| 24/25 [01:10<00:03,  3.01s/it][A
+Result for train_segmentation_2c9f4_00001:
+  {}
+  
+== Status ==
+Memory usage on this node: 32.6/251.8 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 1.0/40 CPUs, 0/1 GPUs, 0.0/148.28 GiB heap, 0.0/67.54 GiB objects (0.0/1.0 accelerator_type:GTX)
+Result logdir: /cluster/home/samuelbe/ray_results/tune_segmentation_proof_of_concept_only_on_cpu
+Number of trials: 2/2 (1 ERROR, 1 RUNNING)
++--------------------------------+----------+-------+--------------+------------------+-------------------+-----------+--------------+--------------+---------+--------------+--------------+-------------+
+| Trial name                     | status   | loc   |   batch_size | blend_mode       | loss_fn           |        lr | mode         | model_name   | noise   |   num_epochs |   patch_size |   threshold |
+|--------------------------------+----------+-------+--------------+------------------+-------------------+-----------+--------------+--------------+---------+--------------+--------------+-------------|
+| train_segmentation_2c9f4_00000 | RUNNING  |       |            4 | weighted_average | dice_loss         | 0.0159525 | patch_random | attUnet      | True    |            2 |          256 |    0.341233 |
+| train_segmentation_2c9f4_00001 | ERROR    |       |            2 | cover            | noise_robust_dice | 0.0262681 | patch_random | unet         | False   |            2 |          256 |    0.681422 |
++--------------------------------+----------+-------+--------------+------------------+-------------------+-----------+--------------+--------------+---------+--------------+--------------+-------------+
+Number of errored trials: 1
++--------------------------------+--------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Trial name                     |   # failures | error file                                                                                                                                                                                                                                         |
+|--------------------------------+--------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| train_segmentation_2c9f4_00001 |            1 | /cluster/home/samuelbe/ray_results/tune_segmentation_proof_of_concept_only_on_cpu/train_segmentation_2c9f4_00001_1_batch_size=2,blend_mode=cover,loss_fn=noise_robust_dice,lr=0.026268,mode=patch_random,model_name=_2021-07-27_19-00-41/error.txt |
++--------------------------------+--------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+[2m[36m(pid=11617)[0m 
+[2m[36m(pid=11617)[0m Validating: 100%|██████████| 25/25 [01:13<00:00,  3.00s/it][A
+[2m[36m(pid=11620)[0m Epoch 0:  61%|██████    | 77/126 [40:13<25:35, 31.34s/it, loss=0.572, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  61%|██████    | 77/126 [40:13<25:35, 31.34s/it, loss=0.57, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000] 
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-24.4490, grad_fn=<MinBackward1>) tensor(23.6566, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  62%|██████▏   | 78/126 [40:44<25:04, 31.34s/it, loss=0.57, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  62%|██████▏   | 78/126 [40:44<25:04, 31.34s/it, loss=0.575, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-24.9399, grad_fn=<MinBackward1>) tensor(23.8513, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  63%|██████▎   | 79/126 [41:15<24:32, 31.34s/it, loss=0.575, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  63%|██████▎   | 79/126 [41:15<24:32, 31.34s/it, loss=0.562, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-23.5315, grad_fn=<MinBackward1>) tensor(25.5415, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  63%|██████▎   | 80/126 [41:46<24:01, 31.33s/it, loss=0.562, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  63%|██████▎   | 80/126 [41:46<24:01, 31.33s/it, loss=0.549, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-21.0322, grad_fn=<MinBackward1>) tensor(19.2776, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  64%|██████▍   | 81/126 [42:16<23:29, 31.31s/it, loss=0.549, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  64%|██████▍   | 81/126 [42:16<23:29, 31.31s/it, loss=0.552, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-23.2341, grad_fn=<MinBackward1>) tensor(22.4802, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  65%|██████▌   | 82/126 [42:46<22:57, 31.30s/it, loss=0.552, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  65%|██████▌   | 82/126 [42:46<22:57, 31.30s/it, loss=0.556, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-21.0041, grad_fn=<MinBackward1>) tensor(21.9026, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  66%|██████▌   | 83/126 [43:16<22:25, 31.28s/it, loss=0.556, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  66%|██████▌   | 83/126 [43:16<22:25, 31.28s/it, loss=0.548, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-19.9228, grad_fn=<MinBackward1>) tensor(22.1953, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  67%|██████▋   | 84/126 [43:47<21:53, 31.28s/it, loss=0.548, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  67%|██████▋   | 84/126 [43:47<21:53, 31.28s/it, loss=0.546, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-19.2749, grad_fn=<MinBackward1>) tensor(22.6131, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  67%|██████▋   | 85/126 [44:18<21:22, 31.28s/it, loss=0.546, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  67%|██████▋   | 85/126 [44:18<21:22, 31.28s/it, loss=0.547, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-22.2270, grad_fn=<MinBackward1>) tensor(21.5782, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  68%|██████▊   | 86/126 [44:49<20:50, 31.27s/it, loss=0.547, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  68%|██████▊   | 86/126 [44:49<20:50, 31.27s/it, loss=0.539, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-18.4334, grad_fn=<MinBackward1>) tensor(22.0194, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  69%|██████▉   | 87/126 [45:19<20:19, 31.26s/it, loss=0.539, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  69%|██████▉   | 87/126 [45:19<20:19, 31.26s/it, loss=0.532, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-21.6385, grad_fn=<MinBackward1>) tensor(23.4812, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  70%|██████▉   | 88/126 [45:49<19:47, 31.25s/it, loss=0.532, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  70%|██████▉   | 88/126 [45:49<19:47, 31.25s/it, loss=0.523, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-17.5825, grad_fn=<MinBackward1>) tensor(26.1582, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  71%|███████   | 89/126 [46:20<19:15, 31.24s/it, loss=0.523, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  71%|███████   | 89/126 [46:20<19:15, 31.24s/it, loss=0.536, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-17.9015, grad_fn=<MinBackward1>) tensor(25.0778, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  71%|███████▏  | 90/126 [46:50<18:44, 31.23s/it, loss=0.536, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  71%|███████▏  | 90/126 [46:50<18:44, 31.23s/it, loss=0.534, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-19.2859, grad_fn=<MinBackward1>) tensor(23.4768, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  72%|███████▏  | 91/126 [47:20<18:12, 31.22s/it, loss=0.534, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  72%|███████▏  | 91/126 [47:20<18:12, 31.22s/it, loss=0.518, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-15.8952, grad_fn=<MinBackward1>) tensor(30.9209, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  73%|███████▎  | 92/126 [47:50<17:40, 31.20s/it, loss=0.518, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  73%|███████▎  | 92/126 [47:50<17:40, 31.20s/it, loss=0.519, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-18.6280, grad_fn=<MinBackward1>) tensor(23.7853, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  74%|███████▍  | 93/126 [48:20<17:09, 31.19s/it, loss=0.519, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  74%|███████▍  | 93/126 [48:20<17:09, 31.19s/it, loss=0.536, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-17.9252, grad_fn=<MinBackward1>) tensor(25.5606, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  75%|███████▍  | 94/126 [48:51<16:37, 31.18s/it, loss=0.536, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  75%|███████▍  | 94/126 [48:51<16:37, 31.18s/it, loss=0.527, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-18.0476, grad_fn=<MinBackward1>) tensor(26.2312, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  75%|███████▌  | 95/126 [49:20<16:06, 31.17s/it, loss=0.527, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  75%|███████▌  | 95/126 [49:20<16:06, 31.17s/it, loss=0.53, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000] 
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-17.3857, grad_fn=<MinBackward1>) tensor(29.3982, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  76%|███████▌  | 96/126 [49:51<15:34, 31.16s/it, loss=0.53, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  76%|███████▌  | 96/126 [49:51<15:34, 31.16s/it, loss=0.526, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]2021-07-27 20:04:16,929	ERROR trial_runner.py:748 -- Trial train_segmentation_2c9f4_00000: Error processing event.
+Traceback (most recent call last):
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/trial_runner.py", line 726, in _process_trial
+    decision = self._process_trial_result(trial, result)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/trial_runner.py", line 766, in _process_trial_result
+    self._validate_result_metrics(flat_result)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/trial_runner.py", line 875, in _validate_result_metrics
+    raise ValueError(
+ValueError: Trial returned a result which did not include the specified metric(s) `val_accuracy` that `tune.run()` expects. Make sure your calls to `tune.report()` include the metric, or set the TUNE_DISABLE_STRICT_METRIC_CHECKING environment variable to 1. Result: {'loss': 0.6420220732688904, 'acc': 0.7437286376953125, 'val_iou': 0.21994918584823608, 'time_this_iter_s': 3810.3817451000214, 'done': False, 'timesteps_total': None, 'episodes_total': None, 'training_iteration': 1, 'experiment_id': '70fb2832e80d447589b3283f3b37e4b2', 'date': '2021-07-27_20-04-16', 'timestamp': 1627409056, 'time_total_s': 3810.3817451000214, 'pid': 11620, 'hostname': 'lo-s4-024', 'node_ip': '10.204.3.74', 'time_since_restore': 3810.3817451000214, 'timesteps_since_restore': 0, 'iterations_since_restore': 1, 'trial_id': '2c9f4_00000', 'config/model_name': 'attUnet', 'config/lr': 0.015952528818231115, 'config/loss_fn': 'dice_loss', 'config/batch_size': 4, 'config/num_epochs': 2, 'config/patch_size': 256, 'config/mode': 'patch_random', 'config/blend_mode': 'weighted_average', 'config/noise': True, 'config/threshold': 0.34123326473709714}
+
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-19.1768, grad_fn=<MinBackward1>) tensor(31.4993, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  77%|███████▋  | 97/126 [50:22<15:03, 31.16s/it, loss=0.526, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  77%|███████▋  | 97/126 [50:22<15:03, 31.16s/it, loss=0.521, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-19.5411, grad_fn=<MinBackward1>) tensor(28.7139, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  78%|███████▊  | 98/126 [50:53<14:32, 31.16s/it, loss=0.521, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  78%|███████▊  | 98/126 [50:53<14:32, 31.16s/it, loss=0.521, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-18.9695, grad_fn=<MinBackward1>) tensor(35.2252, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  79%|███████▊  | 99/126 [51:23<14:01, 31.15s/it, loss=0.521, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  79%|███████▊  | 99/126 [51:23<14:01, 31.15s/it, loss=0.533, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-19.6701, grad_fn=<MinBackward1>) tensor(32.2047, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  79%|███████▉  | 100/126 [51:53<13:29, 31.14s/it, loss=0.533, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  79%|███████▉  | 100/126 [51:53<13:29, 31.14s/it, loss=0.534, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-19.0763, grad_fn=<MinBackward1>) tensor(38.2208, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  80%|████████  | 101/126 [52:25<12:58, 31.14s/it, loss=0.534, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  80%|████████  | 101/126 [52:25<12:58, 31.14s/it, loss=0.519, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-19.7643, grad_fn=<MinBackward1>) tensor(34.3870, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  81%|████████  | 102/126 [52:56<12:27, 31.14s/it, loss=0.519, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  81%|████████  | 102/126 [52:56<12:27, 31.14s/it, loss=0.511, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-17.0854, grad_fn=<MinBackward1>) tensor(36.7671, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  82%|████████▏ | 103/126 [53:26<11:55, 31.13s/it, loss=0.511, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  82%|████████▏ | 103/126 [53:26<11:55, 31.13s/it, loss=0.505, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-16.0705, grad_fn=<MinBackward1>) tensor(38.9092, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  83%|████████▎ | 104/126 [53:56<11:24, 31.12s/it, loss=0.505, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Epoch 0:  83%|████████▎ | 104/126 [53:56<11:24, 31.12s/it, loss=0.511, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-16.4220, grad_fn=<MinBackward1>) tensor(40.7643, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  83%|████████▎ | 105/126 [54:26<10:53, 31.11s/it, loss=0.511, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  83%|████████▎ | 105/126 [54:26<10:53, 31.11s/it, loss=0.513, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-18.6758, grad_fn=<MinBackward1>) tensor(33.5740, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  84%|████████▍ | 106/126 [54:57<10:22, 31.11s/it, loss=0.513, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  84%|████████▍ | 106/126 [54:57<10:22, 31.11s/it, loss=0.525, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-14.9740, grad_fn=<MinBackward1>) tensor(34.4895, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  85%|████████▍ | 107/126 [55:27<09:50, 31.10s/it, loss=0.525, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  85%|████████▍ | 107/126 [55:27<09:50, 31.10s/it, loss=0.54, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000] 
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-16.5671, grad_fn=<MinBackward1>) tensor(35.6096, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  86%|████████▌ | 108/126 [55:59<09:19, 31.11s/it, loss=0.54, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  86%|████████▌ | 108/126 [55:59<09:19, 31.11s/it, loss=0.536, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-19.7982, grad_fn=<MinBackward1>) tensor(37.6505, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  87%|████████▋ | 109/126 [56:30<08:48, 31.10s/it, loss=0.536, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  87%|████████▋ | 109/126 [56:30<08:48, 31.10s/it, loss=0.523, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-19.4394, grad_fn=<MinBackward1>) tensor(32.1748, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  87%|████████▋ | 110/126 [57:01<08:17, 31.10s/it, loss=0.523, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  87%|████████▋ | 110/126 [57:01<08:17, 31.10s/it, loss=0.522, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-18.4828, grad_fn=<MinBackward1>) tensor(28.3951, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  88%|████████▊ | 111/126 [57:32<07:46, 31.10s/it, loss=0.522, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  88%|████████▊ | 111/126 [57:32<07:46, 31.10s/it, loss=0.527, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-22.1661, grad_fn=<MinBackward1>) tensor(29.2089, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  89%|████████▉ | 112/126 [58:02<07:15, 31.09s/it, loss=0.527, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  89%|████████▉ | 112/126 [58:02<07:15, 31.09s/it, loss=0.536, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-23.3949, grad_fn=<MinBackward1>) tensor(29.9667, grad_fn=<MaxBackward1>)
+[2m[36m(pid=11620)[0m Epoch 0:  90%|████████▉ | 113/126 [58:16<06:42, 30.95s/it, loss=0.536, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]Epoch 0:  90%|████████▉ | 113/126 [58:16<06:42, 30.95s/it, loss=0.539, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m 
+[2m[36m(pid=11620)[0m Validating: 0it [00:00, ?it/s][A
+[2m[36m(pid=11620)[0m Validating:   0%|          | 0/13 [00:00<?, ?it/s][A
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-12.3420) tensor(36.0415)
+[2m[36m(pid=11620)[0m 
+[2m[36m(pid=11620)[0m Validating:   8%|▊         | 1/13 [00:08<01:47,  8.96s/it][AEpoch 0:  91%|█████████▏| 115/126 [58:25<05:35, 30.49s/it, loss=0.539, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-12.6729) tensor(28.8007)
+[2m[36m(pid=11620)[0m 
+[2m[36m(pid=11620)[0m Validating:  15%|█▌        | 2/13 [00:17<01:38,  8.98s/it][A
+[2m[36m(pid=11620)[0m Epoch 0:  92%|█████████▏| 116/126 [58:40<05:03, 30.35s/it, loss=0.539, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-12.4740) tensor(28.1507)
+[2m[36m(pid=11620)[0m 
+[2m[36m(pid=11620)[0m Validating:  23%|██▎       | 3/13 [00:26<01:29,  8.98s/it][AEpoch 0:  93%|█████████▎| 117/126 [58:43<04:31, 30.12s/it, loss=0.539, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-12.1757) tensor(33.6578)
+[2m[36m(pid=11620)[0m 
+[2m[36m(pid=11620)[0m Validating:  31%|███       | 4/13 [00:36<01:21,  9.04s/it][AEpoch 0:  94%|█████████▎| 118/126 [58:52<03:59, 29.94s/it, loss=0.539, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-11.9982) tensor(32.4690)
+[2m[36m(pid=11620)[0m 
+[2m[36m(pid=11620)[0m Validating:  38%|███▊      | 5/13 [00:45<01:13,  9.20s/it][AEpoch 0:  94%|█████████▍| 119/126 [59:02<03:28, 29.77s/it, loss=0.539, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-12.1110) tensor(30.5305)
+[2m[36m(pid=11620)[0m 
+[2m[36m(pid=11620)[0m Validating:  46%|████▌     | 6/13 [00:55<01:05,  9.36s/it][AEpoch 0:  95%|█████████▌| 120/126 [59:12<02:57, 29.60s/it, loss=0.539, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-13.2069) tensor(34.1770)
+[2m[36m(pid=11620)[0m 
+[2m[36m(pid=11620)[0m Validating:  54%|█████▍    | 7/13 [01:04<00:56,  9.37s/it][AEpoch 0:  96%|█████████▌| 121/126 [59:21<02:27, 29.43s/it, loss=0.539, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-11.8364) tensor(31.8851)
+[2m[36m(pid=11620)[0m 
+[2m[36m(pid=11620)[0m Validating:  62%|██████▏   | 8/13 [01:13<00:46,  9.27s/it][AEpoch 0:  97%|█████████▋| 122/126 [59:30<01:57, 29.27s/it, loss=0.539, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-12.8778) tensor(29.0552)
+[2m[36m(pid=11620)[0m 
+[2m[36m(pid=11620)[0m Validating:  69%|██████▉   | 9/13 [01:23<00:37,  9.31s/it][AEpoch 0:  98%|█████████▊| 123/126 [59:39<01:27, 29.11s/it, loss=0.539, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-12.8485) tensor(31.2566)
+[2m[36m(pid=11620)[0m 
+[2m[36m(pid=11620)[0m Validating:  77%|███████▋  | 10/13 [01:32<00:27,  9.30s/it][AEpoch 0:  98%|█████████▊| 124/126 [59:49<00:57, 28.95s/it, loss=0.539, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-12.2357) tensor(28.4019)
+[2m[36m(pid=11620)[0m 
+[2m[36m(pid=11620)[0m Validating:  85%|████████▍ | 11/13 [01:41<00:18,  9.19s/it][AEpoch 0:  99%|█████████▉| 125/126 [59:58<00:28, 28.79s/it, loss=0.539, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-13.7203) tensor(28.7827)
+[2m[36m(pid=11620)[0m 
+[2m[36m(pid=11620)[0m Validating:  92%|█████████▏| 12/13 [01:50<00:09,  9.12s/it][AEpoch 0: 100%|██████████| 126/126 [1:00:07<00:00, 28.63s/it, loss=0.539, v_num=0, ptl/val_accuracy=0.817, ptl/val_iou=0.000]
+Result for train_segmentation_2c9f4_00000:
+  {}
+  
+== Status ==
+Memory usage on this node: 27.4/251.8 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 0/40 CPUs, 0/1 GPUs, 0.0/148.28 GiB heap, 0.0/67.54 GiB objects (0.0/1.0 CPU_group_976d3a514fa7775187a03543dfe0cef6, 0.0/1.0 CPU_group_0_976d3a514fa7775187a03543dfe0cef6, 0.0/1.0 accelerator_type:GTX, 0.0/1.0 CPU_group_a550d17629b564bb9280cd95d5311b3a, 0.0/1.0 CPU_group_0_a550d17629b564bb9280cd95d5311b3a)
+Result logdir: /cluster/home/samuelbe/ray_results/tune_segmentation_proof_of_concept_only_on_cpu
+Number of trials: 2/2 (2 ERROR)
++--------------------------------+----------+-------+--------------+------------------+-------------------+-----------+--------------+--------------+---------+--------------+--------------+-------------+
+| Trial name                     | status   | loc   |   batch_size | blend_mode       | loss_fn           |        lr | mode         | model_name   | noise   |   num_epochs |   patch_size |   threshold |
+|--------------------------------+----------+-------+--------------+------------------+-------------------+-----------+--------------+--------------+---------+--------------+--------------+-------------|
+| train_segmentation_2c9f4_00000 | ERROR    |       |            4 | weighted_average | dice_loss         | 0.0159525 | patch_random | attUnet      | True    |            2 |          256 |    0.341233 |
+| train_segmentation_2c9f4_00001 | ERROR    |       |            2 | cover            | noise_robust_dice | 0.0262681 | patch_random | unet         | False   |            2 |          256 |    0.681422 |
++--------------------------------+----------+-------+--------------+------------------+-------------------+-----------+--------------+--------------+---------+--------------+--------------+-------------+
+Number of errored trials: 2
++--------------------------------+--------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Trial name                     |   # failures | error file                                                                                                                                                                                                                                         |
+|--------------------------------+--------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| train_segmentation_2c9f4_00000 |            1 | /cluster/home/samuelbe/ray_results/tune_segmentation_proof_of_concept_only_on_cpu/train_segmentation_2c9f4_00000_0_batch_size=4,blend_mode=weighted_average,loss_fn=dice_loss,lr=0.015953,mode=patch_random,model_na_2021-07-27_19-00-41/error.txt |
+| train_segmentation_2c9f4_00001 |            1 | /cluster/home/samuelbe/ray_results/tune_segmentation_proof_of_concept_only_on_cpu/train_segmentation_2c9f4_00001_1_batch_size=2,blend_mode=cover,loss_fn=noise_robust_dice,lr=0.026268,mode=patch_random,model_name=_2021-07-27_19-00-41/error.txt |
++--------------------------------+--------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+== Status ==
+Memory usage on this node: 27.4/251.8 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 0/40 CPUs, 0/1 GPUs, 0.0/148.28 GiB heap, 0.0/67.54 GiB objects (0.0/1.0 CPU_group_976d3a514fa7775187a03543dfe0cef6, 0.0/1.0 CPU_group_0_976d3a514fa7775187a03543dfe0cef6, 0.0/1.0 accelerator_type:GTX, 0.0/1.0 CPU_group_a550d17629b564bb9280cd95d5311b3a, 0.0/1.0 CPU_group_0_a550d17629b564bb9280cd95d5311b3a)
+Result logdir: /cluster/home/samuelbe/ray_results/tune_segmentation_proof_of_concept_only_on_cpu
+Number of trials: 2/2 (2 ERROR)
++--------------------------------+----------+-------+--------------+------------------+-------------------+-----------+--------------+--------------+---------+--------------+--------------+-------------+
+| Trial name                     | status   | loc   |   batch_size | blend_mode       | loss_fn           |        lr | mode         | model_name   | noise   |   num_epochs |   patch_size |   threshold |
+|--------------------------------+----------+-------+--------------+------------------+-------------------+-----------+--------------+--------------+---------+--------------+--------------+-------------|
+| train_segmentation_2c9f4_00000 | ERROR    |       |            4 | weighted_average | dice_loss         | 0.0159525 | patch_random | attUnet      | True    |            2 |          256 |    0.341233 |
+| train_segmentation_2c9f4_00001 | ERROR    |       |            2 | cover            | noise_robust_dice | 0.0262681 | patch_random | unet         | False   |            2 |          256 |    0.681422 |
++--------------------------------+----------+-------+--------------+------------------+-------------------+-----------+--------------+--------------+---------+--------------+--------------+-------------+
+Number of errored trials: 2
++--------------------------------+--------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Trial name                     |   # failures | error file                                                                                                                                                                                                                                         |
+|--------------------------------+--------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| train_segmentation_2c9f4_00000 |            1 | /cluster/home/samuelbe/ray_results/tune_segmentation_proof_of_concept_only_on_cpu/train_segmentation_2c9f4_00000_0_batch_size=4,blend_mode=weighted_average,loss_fn=dice_loss,lr=0.015953,mode=patch_random,model_na_2021-07-27_19-00-41/error.txt |
+| train_segmentation_2c9f4_00001 |            1 | /cluster/home/samuelbe/ray_results/tune_segmentation_proof_of_concept_only_on_cpu/train_segmentation_2c9f4_00001_1_batch_size=2,blend_mode=cover,loss_fn=noise_robust_dice,lr=0.026268,mode=patch_random,model_name=_2021-07-27_19-00-41/error.txt |
++--------------------------------+--------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+[2m[36m(pid=11620)[0m Not in 0..1 range:  tensor(-11.5775) tensor(26.8883)
+[2m[36m(pid=11620)[0m 
+[2m[36m(pid=11620)[0m Validating: 100%|██████████| 13/13 [01:54<00:00,  7.59s/it][A
+Traceback (most recent call last):
+  File "tune_hyperparameters.py", line 112, in <module>
+    analysis = tune.run(
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/tune.py", line 543, in run
+    raise TuneError("Trials did not complete", incomplete_trials)
+ray.tune.error.TuneError: ('Trials did not complete', [train_segmentation_2c9f4_00000, train_segmentation_2c9f4_00001])

@@ -31,6 +31,8 @@ def predict(trainer, model, data):
     predictions = np.asarray(predictions).squeeze(1)
 
     # Project values into interval [0, 1]
+    predictions = np.add(predictions, abs(predictions.min()))
+    predictions = np.divide(predictions, predictions.max())
 
     # np.save("predictions.npy", predictions)
 
@@ -117,6 +119,7 @@ def handle_train(trainer, config, model_name):
 
     data = RoadDataModule(
         batch_size=config["batch_size"],
+        resize_to=config["resize_to"],
         patch_size=config["patch_size"],
         mode=config["mode"],
         variants=config["variants"],

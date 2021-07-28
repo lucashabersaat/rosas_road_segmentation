@@ -1,0 +1,12 @@
+{
+  "batch_size": 4,
+  "blend_mode": "cover",
+  "loss_fn": "noise_robust_dice",
+  "lr": 0.08637080325152624,
+  "mode": "breed",
+  "model_name": "attUnet",
+  "noise": true,
+  "num_epochs": 35,
+  "patch_size": 256,
+  "threshold": 0.4478847808547954
+}
