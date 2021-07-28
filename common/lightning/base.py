@@ -71,6 +71,8 @@ class LitBase(pl.LightningModule):
         acc = LitBase.accuracy(y_hat, y)
         iou = LitBase.IoU(y_hat, y)
 
+        self.log("hp_metric", acc)
+
         return {"val_loss": loss, "val_accuracy": acc, "val_iou": iou}
 
     def configure_optimizers(self):
