@@ -115,7 +115,8 @@ if __name__ == "__main__":
         mode="max",
         config=config,
         num_samples=num_samples,
-        name="tune_segmentation_config_lucas_suggestion")
+        local_dir="/cluster/scratch/samuelbe",
+        name="tune_segmentation_config_learning_rate_lucas")
 
     print("stayin alive, aha aha aha")
 
