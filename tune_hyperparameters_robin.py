@@ -64,11 +64,12 @@ if __name__ == "__main__":
     callbacks = [TuneReportCallback(metrics, on="validation_end")]
     trainer = pl.Trainer(callbacks=callbacks)
 
-    num_samples = 12
     num_epochs = 35
     gpus_per_trial = 1#int(torch.cuda.is_available())  # set this to higher if using GPU
 
+    # CONFIG 1
 
+    num_samples = 9
     config = {
         "model_name": tune.choice(["transunet"]),
         "lr": tune.choice([1e-4]),
@@ -76,12 +77,28 @@ if __name__ == "__main__":
         "batch_size": tune.choice([4]),
         "num_epochs": tune.choice([num_epochs]),
         "patch_size": tune.choice([256]),
-        "mode": tune.choice(["breed", "patch", "patch_random"]),
+        "mode": tune.choice(["breed", "patch_random"]),
+        "variants": tune.choice([3, 5, 7]),
         "blend_mode": tune.choice(["weighted_average"]),
-        "noise": tune.choice([True, False]),
-        "enhance": tune.choice([True, False]),
-        # "threshold": tune.uniform(0.2, 0.8)
+        "noise": tune.choice([True]),
+        "enhance": tune.choice([True]),
     }
+
+    # CONFIG 2
+
+    # num_samples = 4
+    # config = {
+    #     "model_name": tune.choice(["transunet"]),
+    #     "lr": tune.choice([1e-4]),
+    #     "loss_fn": tune.choice(['noise_robust_dice']),
+    #     "batch_size": tune.choice([4]),
+    #     "num_epochs": tune.choice([num_epochs]),
+    #     "patch_size": tune.choice([256]),
+    #     "mode": tune.choice(["patch"]),
+    #     "blend_mode": tune.choice(["weighted_average"]),
+    #     "noise": tune.choice([True, False]),
+    #     "enhance": tune.choice([True, False]),
+    # }
 
     trainable = tune.with_parameters(
         train_segmentation,
