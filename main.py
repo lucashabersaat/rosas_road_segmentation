@@ -31,8 +31,6 @@ def predict(trainer, model, data):
     predictions = np.asarray(predictions).squeeze(1)
 
     # Project values into interval [0, 1]
-    predictions = np.add(predictions, abs(predictions.min()))
-    predictions = np.divide(predictions, predictions.max())
 
     # np.save("predictions.npy", predictions)
 
@@ -119,14 +117,16 @@ def handle_train(trainer, config, model_name):
 
     data = RoadDataModule(
         batch_size=config["batch_size"],
-        resize_to=config["resize_to"],
         patch_size=config["patch_size"],
         mode=config["mode"],
         variants=config["variants"],
         enhance=config["enhance"],
         offset=config["offset"],
         blend_mode=config["blend_mode"],
-        noise=config["noise"]
+        noise=config["noise"],
+        lr=config["lr"],
+        loss_fn=config["loss_fn"]
+
     )
     lit_model = LitBase(config, model)
 
@@ -144,9 +144,9 @@ if __name__ == "__main__":
 
     # default
     config = {
-        "lr": 0.001,
+        "lr": 0.056097,
         "loss_fn": "noise_robust_dice",
-        "batch_size": 4,
+        "batch_size": 8,
         "num_epochs": 35,
         "resize_to": None,
         "patch_size": 256,
@@ -156,7 +156,7 @@ if __name__ == "__main__":
         "offset": 100,
         "blend_mode": "weighted_average",
         "noise": True,
-        "threshold": 0.5
+	    "threshold": 0.7
     }
 
     if args.load is not None:
