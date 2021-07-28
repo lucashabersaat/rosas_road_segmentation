@@ -1,0 +1,91 @@
+Failure # 1 (occurred at 2021-07-28_01-18-20)
+Traceback (most recent call last):
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/trial_runner.py", line 718, in _process_trial
+    results = self.trial_executor.fetch_result(trial)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/ray_trial_executor.py", line 688, in fetch_result
+    result = ray.get(trial_future[0], timeout=DEFAULT_GET_TIMEOUT)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/_private/client_mode_hook.py", line 62, in wrapper
+    return func(*args, **kwargs)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/worker.py", line 1495, in get
+    raise value.as_instanceof_cause()
+ray.exceptions.RayTaskError(TuneError): [36mray::ImplicitFunc.train_buffered()[39m (pid=9395, ip=10.204.3.205)
+  File "python/ray/_raylet.pyx", line 501, in ray._raylet.execute_task
+  File "python/ray/_raylet.pyx", line 451, in ray._raylet.execute_task.function_executor
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/_private/function_manager.py", line 563, in actor_method_executor
+    return method(__ray_actor, *args, **kwargs)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/trainable.py", line 173, in train_buffered
+    result = self.train()
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/trainable.py", line 232, in train
+    result = self.step()
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/function_runner.py", line 366, in step
+    self._report_thread_runner_error(block=True)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/function_runner.py", line 512, in _report_thread_runner_error
+    raise TuneError(
+ray.tune.error.TuneError: Trial raised an exception. Traceback:
+[36mray::ImplicitFunc.train_buffered()[39m (pid=9395, ip=10.204.3.205)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/function_runner.py", line 248, in run
+    self._entrypoint()
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/function_runner.py", line 315, in entrypoint
+    return self._trainable_func(self.config, self._status_reporter,
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/function_runner.py", line 580, in _trainable_func
+    output = fn()
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/utils/trainable.py", line 340, in _inner
+    inner(config, checkpoint_dir=None)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/ray/tune/utils/trainable.py", line 331, in inner
+    trainable(config, **fn_kwargs)
+  File "tune_hyperparameters_only_unet.py", line 38, in train_segmentation
+    trainer.fit(lit_model, data)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 460, in fit
+    self._run(model)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 758, in _run
+    self.dispatch()
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 799, in dispatch
+    self.accelerator.start_training(self)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/accelerators/accelerator.py", line 96, in start_training
+    self.training_type_plugin.start_training(trainer)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/plugins/training_type/training_type_plugin.py", line 144, in start_training
+    self._results = trainer.run_stage()
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 809, in run_stage
+    return self.run_train()
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 871, in run_train
+    self.train_loop.run_training_epoch()
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/training_loop.py", line 584, in run_training_epoch
+    self.trainer.run_evaluation(on_epoch=True)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 1011, in run_evaluation
+    self.evaluation_loop.on_evaluation_end()
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/evaluation_loop.py", line 102, in on_evaluation_end
+    self.trainer.call_hook('on_validation_end', *args, **kwargs)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py", line 1228, in call_hook
+    trainer_hook(*args, **kwargs)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/callback_hook.py", line 227, in on_validation_end
+    callback.on_validation_end(self, self.lightning_module)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/callbacks/model_checkpoint.py", line 249, in on_validation_end
+    self.save_checkpoint(trainer)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/callbacks/model_checkpoint.py", line 300, in save_checkpoint
+    self._save_none_monitor_checkpoint(trainer, monitor_candidates)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/callbacks/model_checkpoint.py", line 680, in _save_none_monitor_checkpoint
+    self._save_model(trainer, filepath)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/callbacks/model_checkpoint.py", line 449, in _save_model
+    self._do_save(trainer, filepath)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/callbacks/model_checkpoint.py", line 460, in _do_save
+    trainer.save_checkpoint(filepath, self.save_weights_only)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/properties.py", line 330, in save_checkpoint
+    self.checkpoint_connector.save_checkpoint(filepath, weights_only)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/trainer/connectors/checkpoint_connector.py", line 392, in save_checkpoint
+    self.trainer.accelerator.save_checkpoint(_checkpoint, filepath)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/accelerators/accelerator.py", line 516, in save_checkpoint
+    self.training_type_plugin.save_checkpoint(checkpoint, filepath)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/plugins/training_type/training_type_plugin.py", line 256, in save_checkpoint
+    atomic_save(checkpoint, filepath)
+  File "/cluster/home/samuelbe/.local/lib/python3.8/site-packages/pytorch_lightning/utilities/cloud_io.py", line 66, in atomic_save
+    f.write(bytesbuffer.getvalue())
+  File "/cluster/apps/python/3.8.5_gpu_gcc820/x86_64/lib64/python3.8/site-packages/fsspec/core.py", line 121, in __exit__
+    self.close()
+  File "/cluster/apps/python/3.8.5_gpu_gcc820/x86_64/lib64/python3.8/site-packages/fsspec/core.py", line 150, in close
+    _close(self.fobjects, self.mode)
+  File "/cluster/apps/python/3.8.5_gpu_gcc820/x86_64/lib64/python3.8/site-packages/fsspec/core.py", line 210, in _close
+    f.close()
+  File "/cluster/apps/python/3.8.5_gpu_gcc820/x86_64/lib64/python3.8/site-packages/fsspec/implementations/local.py", line 317, in close
+    return self.f.close()
+OSError: [Errno 122] Disk quota exceeded
+

@@ -1,0 +1,12 @@
+{
+  "batch_size": 2,
+  "blend_mode": "weighted_average",
+  "loss_fn": "dice_loss",
+  "lr": 0.01161589524564663,
+  "mode": "patch",
+  "model_name": "transunet",
+  "noise": true,
+  "num_epochs": 35,
+  "patch_size": 256,
+  "threshold": 0.6446933209160653
+}
