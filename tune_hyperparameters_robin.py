@@ -113,7 +113,7 @@ if __name__ == "__main__":
     analysis = tune.run(
         trainable,
         resources_per_trial={
-            #"cpu": args.cpu,
+            "cpu": args.cpu,
             "gpu": gpus_per_trial
         },
         metric="acc",

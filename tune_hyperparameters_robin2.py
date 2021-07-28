@@ -94,7 +94,7 @@ if __name__ == "__main__":
         "batch_size": tune.choice([4]),
         "num_epochs": tune.choice([num_epochs]),
         "patch_size": tune.choice([256]),
-        "variants": tune.choice([3, 5, 7]),
+        "variants": tune.grid_search([3, 5, 7]),
         "mode": tune.choice(["patch"]),
         "blend_mode": tune.choice(["weighted_average"]),
         "noise": tune.choice([True, False]),
@@ -110,7 +110,7 @@ if __name__ == "__main__":
     analysis = tune.run(
         trainable,
         resources_per_trial={
-            #"cpu": args.cpu,
+            "cpu": args.cpu,
             "gpu": gpus_per_trial
         },
         metric="acc",
