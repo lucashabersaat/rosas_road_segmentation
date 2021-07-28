@@ -119,14 +119,16 @@ def handle_train(trainer, config, model_name):
 
     data = RoadDataModule(
         batch_size=config["batch_size"],
-        resize_to=config["resize_to"],
         patch_size=config["patch_size"],
         mode=config["mode"],
         variants=config["variants"],
         enhance=config["enhance"],
         offset=config["offset"],
         blend_mode=config["blend_mode"],
-        noise=config["noise"]
+        noise=config["noise"],
+        lr=config["lr"],
+        loss_fn=config["loss_fn"]
+
     )
     lit_model = LitBase(config, model)
 
