@@ -24,7 +24,8 @@ def get_model(model_name, config):
         transunet_config = CONFIGS['R50-ViT-B_16']
         model = VisionTransformer(transunet_config, img_size=config['patch_size'], num_classes=transunet_config.n_classes)
     elif model_name == "unet_transformer":
-        config["resize_to"] = 256
+        # config["resize_to"] = 256
+        config["batch_size"] = 1
         model = U_Transformer(3, 1)
     else:
         raise Exception("unknown model")
