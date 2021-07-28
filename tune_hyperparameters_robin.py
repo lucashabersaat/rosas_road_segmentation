@@ -17,12 +17,15 @@ def train_segmentation(config, num_epochs=35, num_gpus=1):
     model = get_model(model_name, config)
     lit_model = LitBase(config, model)
     # print(config["model_name"])
-    data = RoadDataModule(batch_size=config["batch_size"],
-                     # resize_to=config["resize_to"],
-                      patch_size= config["patch_size"],
-                      mode=config["mode"],
-                      blend_mode=config["blend_mode"],
-                      noise=config["noise"])
+    data = RoadDataModule(
+        batch_size=config["batch_size"],
+        patch_size= config["patch_size"],
+        mode=config["mode"],
+        blend_mode=config["blend_mode"],
+        noise=config["noise"],
+        variants=config["variants"],
+        enhance=config["enhance"]
+    )
 
     metrics = {"loss": "ptl/val_loss", "acc": "ptl/val_accuracy", "val_iou": "ptl/val_iou"}
 
@@ -95,6 +98,7 @@ if __name__ == "__main__":
     #     "num_epochs": tune.choice([num_epochs]),
     #     "patch_size": tune.choice([256]),
     #     "mode": tune.choice(["patch"]),
+    #     "variants": tune.choice([5]),
     #     "blend_mode": tune.choice(["weighted_average"]),
     #     "noise": tune.choice([True, False]),
     #     "enhance": tune.choice([True, False]),
@@ -116,7 +120,7 @@ if __name__ == "__main__":
         mode="max",
         config=config,
         num_samples=num_samples,
-        name="tune_segmentation_config_lucas_suggestion")
+        name="tune_segmentation_config_robin_suggestion")
 
     print("stayin alive, aha aha aha")
 
