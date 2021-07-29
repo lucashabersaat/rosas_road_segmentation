@@ -17,7 +17,7 @@ class RoadDataModule(pl.LightningDataModule):
         enhance: bool = True,
         offset: int = 100,
         blend_mode: str = "cover",
-        noise: bool = True
+        noise: bool = True,
     ):
         super().__init__()
 
@@ -46,7 +46,7 @@ class RoadDataModule(pl.LightningDataModule):
             variants=variants,
             patch_size=patch_size,
             enhance=enhance,
-            noise=noise
+            noise=noise,
         )
         self.val_dataset = ImageDataSet(
             path="data/validation",
@@ -56,7 +56,7 @@ class RoadDataModule(pl.LightningDataModule):
             variants=variants,
             patch_size=patch_size,
             enhance=enhance,
-            noise=False
+            noise=False,
         )
 
         if mode in ["none", "breed"]:

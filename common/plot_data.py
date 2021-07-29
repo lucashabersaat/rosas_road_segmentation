@@ -81,7 +81,8 @@ def prepare(image):
 
     if s[c] == s[c + 1] == s[c + 2]:
         print(
-            "Same width and height and channel_number are the same. Can't decide how to rearange. Letting it like that.")
+            "Same width and height and channel_number are the same. Can't decide how to rearange. Letting it like that."
+        )
         return image
 
     if s[c + 1] == s[c + 2]:

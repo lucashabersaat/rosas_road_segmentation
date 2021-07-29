@@ -17,10 +17,10 @@ def load_all_from_path(path):
     # images are loaded as floats with values in the interval [0., 1.]
     absolute_path = os.path.join(ROOT_DIR, path)
     return (
-            np.stack(
-                [np.array(Image.open(f)) for f in sorted(glob(absolute_path + "/*.png"))]
-            ).astype(np.float32)
-            / 255.0
+        np.stack(
+            [np.array(Image.open(f)) for f in sorted(glob(absolute_path + "/*.png"))]
+        ).astype(np.float32)
+        / 255.0
     )
 
 
@@ -31,7 +31,7 @@ def image_to_patches(images, masks=None):
     n_images = images.shape[0]  # number of images
     h, w = images.shape[1:3]  # shape of images
     assert (h % PATCH_SIZE) + (
-            w % PATCH_SIZE
+        w % PATCH_SIZE
     ) == 0  # make sure images can be patched exactly
 
     h_patches = h // PATCH_SIZE

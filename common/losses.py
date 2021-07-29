@@ -16,17 +16,14 @@ class DiceLoss(nn.Module):
         targets = targets.view(-1)
 
         intersection = (inputs * targets).sum()
-        dice = (2. * intersection + smooth) / (inputs.sum() + targets.sum() + smooth)
+        dice = (2.0 * intersection + smooth) / (inputs.sum() + targets.sum() + smooth)
 
         return 1 - dice
 
 
-def noise_robust_dice(pr,
-                      gt,
-                      eps=1e-7,
-                      gamma=1.5,
-                      threshold=None,
-                      ignore_channels=None):
+def noise_robust_dice(
+    pr, gt, eps=1e-7, gamma=1.5, threshold=None, ignore_channels=None
+):
     """Calculate Noise Robust Dice cofficient between ground truth and prediction
     Args:
         pr (torch.Tensor): predicted tensor
@@ -49,11 +46,12 @@ def noise_robust_dice(pr,
 
 
 class NoiseRobustDiceLoss(nn.Module):
-    def __init__(self,
-                 eps=1.,
-                 gamma=1.5,
-                 ignore_channels=None,
-                 ):
+    def __init__(
+        self,
+        eps=1.0,
+        gamma=1.5,
+        ignore_channels=None,
+    ):
         super().__init__()
         self.eps = eps
         self.activation = nn.Sigmoid()
@@ -77,13 +75,12 @@ def _take_channels(*xs, ignore_channels=None):
         return xs
     else:
         channels = [
-            channel for channel in range(xs[0].shape[1])
+            channel
+            for channel in range(xs[0].shape[1])
             if channel not in ignore_channels
         ]
         xs = [
-            torch.index_select(x,
-                               dim=1,
-                               index=torch.tensor(channels).to(x.device))
+            torch.index_select(x, dim=1, index=torch.tensor(channels).to(x.device))
             for x in xs
         ]
         return xs
@@ -94,6 +91,8 @@ def _threshold(x, threshold=None):
         return (x > threshold).type(x.dtype)
     else:
         return x
+
+
 class CrossEntropyLoss2d(nn.Module):
     """Cross-entropy.
     See: http://cs231n.github.io/neural-networks-2/#losses
@@ -131,7 +130,9 @@ class FocalLoss2d(nn.Module):
 
     def forward(self, inputs, targets):
         penalty = (1 - nn.functional.softmax(inputs, dim=1)) ** self.gamma
-        return self.nll_loss(penalty * nn.functional.log_softmax(inputs, dim=1), targets)
+        return self.nll_loss(
+            penalty * nn.functional.log_softmax(inputs, dim=1), targets
+        )
 
 
 class mIoULoss2d(nn.Module):
@@ -155,14 +156,23 @@ class mIoULoss2d(nn.Module):
         N, C, H, W = inputs.size()
 
         softs = nn.functional.softmax(inputs, dim=1).permute(1, 0, 2, 3)
-        masks = torch.zeros(N, C, H, W).to(targets.device).scatter_(1, targets.view(N, 1, H, W), 1).permute(1, 0, 2, 3)
+        masks = (
+            torch.zeros(N, C, H, W)
+            .to(targets.device)
+            .scatter_(1, targets.view(N, 1, H, W), 1)
+            .permute(1, 0, 2, 3)
+        )
 
         inters = softs * masks
         unions = (softs + masks) - (softs * masks)
 
-        miou = 1. - (inters.view(C, N, -1).sum(2) / unions.view(C, N, -1).sum(2)).mean()
+        miou = (
+            1.0 - (inters.view(C, N, -1).sum(2) / unions.view(C, N, -1).sum(2)).mean()
+        )
 
-        return max(miou, self.nll_loss(nn.functional.log_softmax(inputs, dim=1), targets))
+        return max(
+            miou, self.nll_loss(nn.functional.log_softmax(inputs, dim=1), targets)
+        )
 
 
 class LovaszLoss2d(nn.Module):
@@ -177,19 +187,23 @@ class LovaszLoss2d(nn.Module):
     def forward(self, inputs, targets):
 
         N, C, H, W = inputs.size()
-        masks = torch.zeros(N, C, H, W).to(targets.device).scatter_(1, targets.view(N, 1, H, W), 1)
+        masks = (
+            torch.zeros(N, C, H, W)
+            .to(targets.device)
+            .scatter_(1, targets.view(N, 1, H, W), 1)
+        )
 
-        loss = 0.
+        loss = 0.0
 
         for mask, input in zip(masks.view(N, -1), inputs.view(N, -1)):
 
-            max_margin_errors = 1. - ((mask * 2 - 1) * input)
+            max_margin_errors = 1.0 - ((mask * 2 - 1) * input)
             errors_sorted, indices = torch.sort(max_margin_errors, descending=True)
             labels_sorted = mask[indices.data]
 
             inter = labels_sorted.sum() - labels_sorted.cumsum(0)
-            union = labels_sorted.sum() + (1. - labels_sorted).cumsum(0)
-            iou = 1. - inter / union
+            union = labels_sorted.sum() + (1.0 - labels_sorted).cumsum(0)
+            iou = 1.0 - inter / union
 
             p = len(labels_sorted)
             if p > 1:

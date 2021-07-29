@@ -8,9 +8,9 @@ def np_to_tensor(x, device):
     else:
         return (
             torch.from_numpy(x)
-                .contiguous()
-                .pin_memory()
-                .to(device=device, non_blocking=True)
+            .contiguous()
+            .pin_memory()
+            .to(device=device, non_blocking=True)
         )
 
 
@@ -32,9 +32,9 @@ def print_model_memory(model):
 def print_tensor_info(t, name=None):
     """Print shape & num elements of a tensor."""
     if name is not None:
-        print(name, end=': ')
+        print(name, end=": ")
 
-    print("Size:", list(t.shape), "(" + str(t.nelement()) + ")", end=' ')
+    print("Size:", list(t.shape), "(" + str(t.nelement()) + ")", end=" ")
 
     size = t.element_size() * t.nelement()
     print_memory(size)

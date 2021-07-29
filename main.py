@@ -100,7 +100,7 @@ def handle_load(config, version: int):
         enhance=config["enhance"],
         offset=config["offset"],
         blend_mode=config["blend_mode"],
-        noise=config["noise"]
+        noise=config["noise"],
     )
 
     if torch.cuda.is_available():
@@ -122,7 +122,7 @@ def handle_train(trainer, config, model_name):
         enhance=config["enhance"],
         offset=config["offset"],
         blend_mode=config["blend_mode"],
-        noise=config["noise"]
+        noise=config["noise"],
     )
     lit_model = LitBase(config, model)
 
@@ -151,7 +151,7 @@ if __name__ == "__main__":
         "enhance": True,
         "offset": 100,
         "blend_mode": "weighted_average",
-        "noise": True
+        "noise": True,
     }
 
     if args.load is not None:

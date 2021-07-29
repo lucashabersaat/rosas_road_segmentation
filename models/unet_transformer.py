@@ -48,9 +48,7 @@ class Up(nn.Module):
 
         # if bilinear, use the normal convolutions to reduce the number of channels
         if bilinear:
-            self.up = nn.Upsample(scale_factor=2,
-                                  mode='bilinear',
-                                  align_corners=True)
+            self.up = nn.Upsample(scale_factor=2, mode="bilinear", align_corners=True)
             self.conv = DoubleConv(in_channels, out_channels, in_channels // 2)
         else:
             self.up = nn.ConvTranspose2d(
@@ -58,7 +56,7 @@ class Up(nn.Module):
                 in_channels // 2,
                 kernel_size=2,
                 stride=2,
-                )
+            )
             self.conv = DoubleConv(in_channels, out_channels)
 
     def forward(self, x1, x2):
@@ -67,9 +65,7 @@ class Up(nn.Module):
         diffY = x2.size()[2] - x1.size()[2]
         diffX = x2.size()[3] - x1.size()[3]
 
-        x1 = F.pad(
-            x1,
-            [diffX // 2, diffX - diffX // 2, diffY // 2, diffY - diffY // 2])
+        x1 = F.pad(x1, [diffX // 2, diffX - diffX // 2, diffY // 2, diffY - diffY // 2])
         # if you have padding issues, see
         # https://github.com/HaiyongJiang/U-Net-Pytorch-Unstructured-Buggy/commit/0e854509c2cea854e247a9c615f175f76fbb2e3a
         # https://github.com/xiaopeng-liao/Pytorch-UNet/commit/8ebac70e633bac59fc22bb5195e513d5832fb3bd
@@ -81,8 +77,7 @@ class OutConv(nn.Module):
     def __init__(self, in_channels, out_channels):
         super(OutConv, self).__init__()
         self.conv = nn.Sequential(
-            nn.Conv2d(in_channels, out_channels, kernel_size=1),
-            nn.Sigmoid()
+            nn.Conv2d(in_channels, out_channels, kernel_size=1), nn.Sigmoid()
         )
 
     def forward(self, x):
@@ -97,7 +92,7 @@ class MultiHeadDense(nn.Module):
             raise NotImplementedError()
             self.bias = Parameter(torch.Tensor(d, d))
         else:
-            self.register_parameter('bias', None)
+            self.register_parameter("bias", None)
         self.reset_parameters()
 
     def reset_parameters(self) -> None:
@@ -129,8 +124,10 @@ class MultiHeadAttention(nn.Module):
         :return: d_model*height*width position matrix
         """
         if d_model % 4 != 0:
-            raise ValueError("Cannot use sin/cos positional encoding with "
-                             "odd dimension (got dim={:d})".format(d_model))
+            raise ValueError(
+                "Cannot use sin/cos positional encoding with "
+                "odd dimension (got dim={:d})".format(d_model)
+            )
         pe = torch.zeros(d_model, height, width)
         try:
             pe = pe.to(torch.device("cuda:0"))
@@ -139,17 +136,28 @@ class MultiHeadAttention(nn.Module):
         # Each dimension use half of d_model
         d_model = int(d_model / 2)
         div_term = torch.exp(
-            torch.arange(0., d_model, 2) * -(math.log(10000.0) / d_model))
-        pos_w = torch.arange(0., width).unsqueeze(1)
-        pos_h = torch.arange(0., height).unsqueeze(1)
-        pe[0:d_model:2, :, :] = torch.sin(pos_w * div_term).transpose(
-            0, 1).unsqueeze(1).repeat(1, height, 1)
-        pe[1:d_model:2, :, :] = torch.cos(pos_w * div_term).transpose(
-            0, 1).unsqueeze(1).repeat(1, height, 1)
-        pe[d_model::2, :, :] = torch.sin(pos_h * div_term).transpose(
-            0, 1).unsqueeze(2).repeat(1, 1, width)
-        pe[d_model + 1::2, :, :] = torch.cos(pos_h * div_term).transpose(
-            0, 1).unsqueeze(2).repeat(1, 1, width)
+            torch.arange(0.0, d_model, 2) * -(math.log(10000.0) / d_model)
+        )
+        pos_w = torch.arange(0.0, width).unsqueeze(1)
+        pos_h = torch.arange(0.0, height).unsqueeze(1)
+        pe[0:d_model:2, :, :] = (
+            torch.sin(pos_w * div_term)
+            .transpose(0, 1)
+            .unsqueeze(1)
+            .repeat(1, height, 1)
+        )
+        pe[1:d_model:2, :, :] = (
+            torch.cos(pos_w * div_term)
+            .transpose(0, 1)
+            .unsqueeze(1)
+            .repeat(1, height, 1)
+        )
+        pe[d_model::2, :, :] = (
+            torch.sin(pos_h * div_term).transpose(0, 1).unsqueeze(2).repeat(1, 1, width)
+        )
+        pe[d_model + 1 :: 2, :, :] = (
+            torch.cos(pos_h * div_term).transpose(0, 1).unsqueeze(2).repeat(1, 1, width)
+        )
         return pe
 
     def forward(self, x):
@@ -164,9 +172,8 @@ class PositionalEncoding2D(nn.Module):
         super(PositionalEncoding2D, self).__init__()
         channels = int(np.ceil(channels / 2))
         self.channels = channels
-        inv_freq = 1. / (10000
-                         ** (torch.arange(0, channels, 2).float() / channels))
-        self.register_buffer('inv_freq', inv_freq)
+        inv_freq = 1.0 / (10000 ** (torch.arange(0, channels, 2).float() / channels))
+        self.register_buffer("inv_freq", inv_freq)
 
     def forward(self, tensor):
         """
@@ -176,19 +183,17 @@ class PositionalEncoding2D(nn.Module):
         if len(tensor.shape) != 4:
             raise RuntimeError("The input tensor has to be 4d!")
         batch_size, x, y, orig_ch = tensor.shape
-        pos_x = torch.arange(x,
-                             device=tensor.device).type(self.inv_freq.type())
-        pos_y = torch.arange(y,
-                             device=tensor.device).type(self.inv_freq.type())
+        pos_x = torch.arange(x, device=tensor.device).type(self.inv_freq.type())
+        pos_y = torch.arange(y, device=tensor.device).type(self.inv_freq.type())
         sin_inp_x = torch.einsum("i,j->ij", pos_x, self.inv_freq)
         sin_inp_y = torch.einsum("i,j->ij", pos_y, self.inv_freq)
-        emb_x = torch.cat((sin_inp_x.sin(), sin_inp_x.cos()),
-                          dim=-1).unsqueeze(1)
+        emb_x = torch.cat((sin_inp_x.sin(), sin_inp_x.cos()), dim=-1).unsqueeze(1)
         emb_y = torch.cat((sin_inp_y.sin(), sin_inp_y.cos()), dim=-1)
-        emb = torch.zeros((x, y, self.channels * 2),
-                          device=tensor.device).type(tensor.type())
-        emb[:, :, :self.channels] = emb_x
-        emb[:, :, self.channels:2 * self.channels] = emb_y
+        emb = torch.zeros((x, y, self.channels * 2), device=tensor.device).type(
+            tensor.type()
+        )
+        emb[:, :, : self.channels] = emb_x
+        emb[:, :, self.channels : 2 * self.channels] = emb_y
 
         return emb[None, :, :, :orig_ch].repeat(batch_size, 1, 1, 1)
 
@@ -224,8 +229,9 @@ class MultiHeadSelfAttention(MultiHeadAttention):
         x = x.reshape(b, c, h * w).permute(0, 2, 1)  # [b, h*w, d]
         Q = self.query(x)
         K = self.key(x)
-        A = self.softmax(torch.bmm(Q, K.permute(0, 2, 1)) /
-                         math.sqrt(c))  # [b, h*w, h*w]
+        A = self.softmax(
+            torch.bmm(Q, K.permute(0, 2, 1)) / math.sqrt(c)
+        )  # [b, h*w, h*w]
         V = self.value(x)
         x = torch.bmm(A, V).permute(0, 2, 1).reshape(b, c, h, w)
         return x
@@ -235,27 +241,38 @@ class MultiHeadCrossAttention(MultiHeadAttention):
     def __init__(self, channelY, channelS, skip_connection=True):
         super(MultiHeadCrossAttention, self).__init__()
         self.Sconv = nn.Sequential(
-            nn.MaxPool2d(2), nn.Conv2d(channelS, channelS, kernel_size=1),
-            nn.BatchNorm2d(channelS), nn.ReLU(inplace=True))
+            nn.MaxPool2d(2),
+            nn.Conv2d(channelS, channelS, kernel_size=1),
+            nn.BatchNorm2d(channelS),
+            nn.ReLU(inplace=True),
+        )
         self.Yconv = nn.Sequential(
             nn.Conv2d(channelY, channelS, kernel_size=1),
-            nn.BatchNorm2d(channelS), nn.ReLU(inplace=True))
+            nn.BatchNorm2d(channelS),
+            nn.ReLU(inplace=True),
+        )
         self.query = MultiHeadDense(channelS, bias=False)
         self.key = MultiHeadDense(channelS, bias=False)
         self.value = MultiHeadDense(channelS, bias=False)
         self.conv = nn.Sequential(
             nn.Conv2d(channelS, channelS, kernel_size=1),
-            nn.BatchNorm2d(channelS), nn.ReLU(inplace=True),
-            nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True))
+            nn.BatchNorm2d(channelS),
+            nn.ReLU(inplace=True),
+            nn.Upsample(scale_factor=2, mode="bilinear", align_corners=True),
+        )
         self.Yconv2 = nn.Sequential(
-            nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True),
+            nn.Upsample(scale_factor=2, mode="bilinear", align_corners=True),
             nn.Conv2d(channelY, channelY, kernel_size=3, padding=1),
             nn.Conv2d(channelY, channelS, kernel_size=1),
-            nn.BatchNorm2d(channelS), nn.ReLU(inplace=True))
+            nn.BatchNorm2d(channelS),
+            nn.ReLU(inplace=True),
+        )
         self.Yconv_NoSkip = nn.Sequential(
-            nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True),
+            nn.Upsample(scale_factor=2, mode="bilinear", align_corners=True),
             nn.Conv2d(channelY, channelY, kernel_size=3, padding=1),
-            nn.BatchNorm2d(channelY), nn.ReLU(inplace=True))
+            nn.BatchNorm2d(channelY),
+            nn.ReLU(inplace=True),
+        )
         self.softmax = nn.Softmax(dim=1)
         self.Spe = PositionalEncodingPermute2D(channelS)
         self.Ype = PositionalEncodingPermute2D(channelY)
@@ -290,20 +307,17 @@ class TransformerUp(nn.Module):
         super(TransformerUp, self).__init__()
         self.MHCA = MultiHeadCrossAttention(Ychannels, Schannels, skip_connection)
         self.conv = nn.Sequential(
-            nn.Conv2d(Ychannels,
-                      Schannels,
-                      kernel_size=3,
-                      stride=1,
-                      padding=1,
-                      bias=True), nn.BatchNorm2d(Schannels),
+            nn.Conv2d(
+                Ychannels, Schannels, kernel_size=3, stride=1, padding=1, bias=True
+            ),
+            nn.BatchNorm2d(Schannels),
             nn.ReLU(inplace=True),
-            nn.Conv2d(Schannels,
-                      Schannels,
-                      kernel_size=3,
-                      stride=1,
-                      padding=1,
-                      bias=True), nn.BatchNorm2d(Schannels),
-            nn.ReLU(inplace=True))
+            nn.Conv2d(
+                Schannels, Schannels, kernel_size=3, stride=1, padding=1, bias=True
+            ),
+            nn.BatchNorm2d(Schannels),
+            nn.ReLU(inplace=True),
+        )
 
     def forward(self, Y, S):
         x = self.MHCA(Y, S)
@@ -343,4 +357,3 @@ class U_Transformer(nn.Module):
         x = self.up3(x, x1)
         logits = self.outc(x)
         return logits
-

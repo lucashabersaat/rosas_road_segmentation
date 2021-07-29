@@ -66,8 +66,7 @@ def graph_cut(images, originals):
     # sig = nn.Sigmoid()
     # images = sig(images)
 
-    images = 1/(1 + np.exp(-images))
-
+    images = 1 / (1 + np.exp(-images))
 
     binary_masks = np.zeros_like(images)
 

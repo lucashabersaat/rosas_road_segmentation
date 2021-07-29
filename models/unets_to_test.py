@@ -18,7 +18,8 @@ class conv_block(nn.Module):
             nn.ReLU(inplace=True),
             nn.Conv2d(out_ch, out_ch, kernel_size=3, stride=1, padding=1, bias=True),
             nn.BatchNorm2d(out_ch),
-            nn.ReLU(inplace=True))
+            nn.ReLU(inplace=True),
+        )
 
     def forward(self, x):
         x = self.conv(x)
@@ -36,7 +37,7 @@ class up_conv(nn.Module):
             nn.Upsample(scale_factor=2),
             nn.Conv2d(in_ch, out_ch, kernel_size=3, stride=1, padding=1, bias=True),
             nn.BatchNorm2d(out_ch),
-            nn.ReLU(inplace=True)
+            nn.ReLU(inplace=True),
         )
 
     def forward(self, x):
@@ -135,7 +136,7 @@ class Recurrent_block(nn.Module):
         self.conv = nn.Sequential(
             nn.Conv2d(out_ch, out_ch, kernel_size=3, stride=1, padding=1, bias=True),
             nn.BatchNorm2d(out_ch),
-            nn.ReLU(inplace=True)
+            nn.ReLU(inplace=True),
         )
 
     def forward(self, x):
@@ -155,8 +156,7 @@ class RRCNN_block(nn.Module):
         super(RRCNN_block, self).__init__()
 
         self.RCNN = nn.Sequential(
-            Recurrent_block(out_ch, t=t),
-            Recurrent_block(out_ch, t=t)
+            Recurrent_block(out_ch, t=t), Recurrent_block(out_ch, t=t)
         )
         self.Conv = nn.Conv2d(in_ch, out_ch, kernel_size=1, stride=1, padding=0)
 
@@ -260,18 +260,18 @@ class Attention_block(nn.Module):
 
         self.W_g = nn.Sequential(
             nn.Conv2d(F_l, F_int, kernel_size=1, stride=1, padding=0, bias=True),
-            nn.BatchNorm2d(F_int)
+            nn.BatchNorm2d(F_int),
         )
 
         self.W_x = nn.Sequential(
             nn.Conv2d(F_g, F_int, kernel_size=1, stride=1, padding=0, bias=True),
-            nn.BatchNorm2d(F_int)
+            nn.BatchNorm2d(F_int),
         )
 
         self.psi = nn.Sequential(
             nn.Conv2d(F_int, 1, kernel_size=1, stride=1, padding=0, bias=True),
             nn.BatchNorm2d(1),
-            nn.Sigmoid()
+            nn.Sigmoid(),
         )
 
         self.relu = nn.ReLU(inplace=True)
@@ -459,8 +459,8 @@ class R2AttU_Net(nn.Module):
 
 # For nested 3 channels are required
 
-class conv_block_nested(nn.Module):
 
+class conv_block_nested(nn.Module):
     def __init__(self, in_ch, mid_ch, out_ch):
         super(conv_block_nested, self).__init__()
         self.activation = nn.ReLU(inplace=True)
@@ -483,6 +483,7 @@ class conv_block_nested(nn.Module):
 
 # Nested Unet
 
+
 class NestedUNet(nn.Module):
     """
     Implementation of this paper:
@@ -496,7 +497,7 @@ class NestedUNet(nn.Module):
         filters = [n1, n1 * 2, n1 * 4, n1 * 8, n1 * 16]
 
         self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
-        self.Up = nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True)
+        self.Up = nn.Upsample(scale_factor=2, mode="bilinear", align_corners=True)
 
         self.conv0_0 = conv_block_nested(in_ch, filters[0], filters[0])
         self.conv1_0 = conv_block_nested(filters[0], filters[1], filters[1])
@@ -504,19 +505,39 @@ class NestedUNet(nn.Module):
         self.conv3_0 = conv_block_nested(filters[2], filters[3], filters[3])
         self.conv4_0 = conv_block_nested(filters[3], filters[4], filters[4])
 
-        self.conv0_1 = conv_block_nested(filters[0] + filters[1], filters[0], filters[0])
-        self.conv1_1 = conv_block_nested(filters[1] + filters[2], filters[1], filters[1])
-        self.conv2_1 = conv_block_nested(filters[2] + filters[3], filters[2], filters[2])
-        self.conv3_1 = conv_block_nested(filters[3] + filters[4], filters[3], filters[3])
+        self.conv0_1 = conv_block_nested(
+            filters[0] + filters[1], filters[0], filters[0]
+        )
+        self.conv1_1 = conv_block_nested(
+            filters[1] + filters[2], filters[1], filters[1]
+        )
+        self.conv2_1 = conv_block_nested(
+            filters[2] + filters[3], filters[2], filters[2]
+        )
+        self.conv3_1 = conv_block_nested(
+            filters[3] + filters[4], filters[3], filters[3]
+        )
 
-        self.conv0_2 = conv_block_nested(filters[0] * 2 + filters[1], filters[0], filters[0])
-        self.conv1_2 = conv_block_nested(filters[1] * 2 + filters[2], filters[1], filters[1])
-        self.conv2_2 = conv_block_nested(filters[2] * 2 + filters[3], filters[2], filters[2])
+        self.conv0_2 = conv_block_nested(
+            filters[0] * 2 + filters[1], filters[0], filters[0]
+        )
+        self.conv1_2 = conv_block_nested(
+            filters[1] * 2 + filters[2], filters[1], filters[1]
+        )
+        self.conv2_2 = conv_block_nested(
+            filters[2] * 2 + filters[3], filters[2], filters[2]
+        )
 
-        self.conv0_3 = conv_block_nested(filters[0] * 3 + filters[1], filters[0], filters[0])
-        self.conv1_3 = conv_block_nested(filters[1] * 3 + filters[2], filters[1], filters[1])
+        self.conv0_3 = conv_block_nested(
+            filters[0] * 3 + filters[1], filters[0], filters[0]
+        )
+        self.conv1_3 = conv_block_nested(
+            filters[1] * 3 + filters[2], filters[1], filters[1]
+        )
 
-        self.conv0_4 = conv_block_nested(filters[0] * 4 + filters[1], filters[0], filters[0])
+        self.conv0_4 = conv_block_nested(
+            filters[0] * 4 + filters[1], filters[0], filters[0]
+        )
 
         self.final = nn.Conv2d(filters[0], out_ch, kernel_size=1)
 
@@ -547,10 +568,13 @@ class NestedUNet(nn.Module):
 # Dictioary Unet
 # if required for getting the filters and model parameters for each step
 
+
 class ConvolutionBlock(nn.Module):
     """Convolution block"""
 
-    def __init__(self, in_filters, out_filters, kernel_size=3, batchnorm=True, last_active=F.relu):
+    def __init__(
+        self, in_filters, out_filters, kernel_size=3, batchnorm=True, last_active=F.relu
+    ):
         super(ConvolutionBlock, self).__init__()
 
         self.bn = batchnorm
@@ -575,10 +599,22 @@ class ConvolutionBlock(nn.Module):
 class ContractiveBlock(nn.Module):
     """Deconvuling Block"""
 
-    def __init__(self, in_filters, out_filters, conv_kern=3, pool_kern=2, dropout=0.5, batchnorm=True):
+    def __init__(
+        self,
+        in_filters,
+        out_filters,
+        conv_kern=3,
+        pool_kern=2,
+        dropout=0.5,
+        batchnorm=True,
+    ):
         super(ContractiveBlock, self).__init__()
-        self.c1 = ConvolutionBlock(in_filters=in_filters, out_filters=out_filters, kernel_size=conv_kern,
-                                   batchnorm=batchnorm)
+        self.c1 = ConvolutionBlock(
+            in_filters=in_filters,
+            out_filters=out_filters,
+            kernel_size=conv_kern,
+            batchnorm=batchnorm,
+        )
         self.p1 = nn.MaxPool2d(kernel_size=pool_kern, ceil_mode=True)
         self.d1 = nn.Dropout2d(dropout)
 
@@ -590,9 +626,20 @@ class ContractiveBlock(nn.Module):
 class ExpansiveBlock(nn.Module):
     """Upconvole Block"""
 
-    def __init__(self, in_filters1, in_filters2, out_filters, tr_kern=3, conv_kern=3, stride=2, dropout=0.5):
+    def __init__(
+        self,
+        in_filters1,
+        in_filters2,
+        out_filters,
+        tr_kern=3,
+        conv_kern=3,
+        stride=2,
+        dropout=0.5,
+    ):
         super(ExpansiveBlock, self).__init__()
-        self.t1 = nn.ConvTranspose2d(in_filters1, out_filters, tr_kern, stride=2, padding=1, output_padding=1)
+        self.t1 = nn.ConvTranspose2d(
+            in_filters1, out_filters, tr_kern, stride=2, padding=1, output_padding=1
+        )
         self.d1 = nn.Dropout(dropout)
         self.c1 = ConvolutionBlock(out_filters + in_filters2, out_filters, conv_kern)
 
@@ -612,23 +659,32 @@ class Unet_dict(nn.Module):
         filt_pair = [3, n_filters]
 
         for i in range(4):
-            self.add_module('contractive_' + str(i), ContractiveBlock(filt_pair[0], filt_pair[1], batchnorm=batchnorm))
-            filters_dict['contractive_' + str(i)] = (filt_pair[0], filt_pair[1])
+            self.add_module(
+                "contractive_" + str(i),
+                ContractiveBlock(filt_pair[0], filt_pair[1], batchnorm=batchnorm),
+            )
+            filters_dict["contractive_" + str(i)] = (filt_pair[0], filt_pair[1])
             filt_pair[0] = filt_pair[1]
             filt_pair[1] = filt_pair[1] * 2
 
-        self.bottleneck = ConvolutionBlock(filt_pair[0], filt_pair[1], batchnorm=batchnorm)
-        filters_dict['bottleneck'] = (filt_pair[0], filt_pair[1])
+        self.bottleneck = ConvolutionBlock(
+            filt_pair[0], filt_pair[1], batchnorm=batchnorm
+        )
+        filters_dict["bottleneck"] = (filt_pair[0], filt_pair[1])
 
         for i in reversed(range(4)):
-            self.add_module('expansive_' + str(i),
-                            ExpansiveBlock(filt_pair[1], filters_dict['contractive_' + str(i)][1], filt_pair[0]))
-            filters_dict['expansive_' + str(i)] = (filt_pair[1], filt_pair[0])
+            self.add_module(
+                "expansive_" + str(i),
+                ExpansiveBlock(
+                    filt_pair[1], filters_dict["contractive_" + str(i)][1], filt_pair[0]
+                ),
+            )
+            filters_dict["expansive_" + str(i)] = (filt_pair[1], filt_pair[0])
             filt_pair[1] = filt_pair[0]
             filt_pair[0] = filt_pair[0] // 2
 
         self.output = nn.Conv2d(filt_pair[1], n_labels, kernel_size=1)
-        filters_dict['output'] = (filt_pair[1], n_labels)
+        filters_dict["output"] = (filt_pair[1], n_labels)
         self.filters_dict = filters_dict
 
     # final_forward

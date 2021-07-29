@@ -18,15 +18,15 @@ class ImageDataSet(torch.utils.data.Dataset):
     """
 
     def __init__(
-            self,
-            path: str,
-            device: str,
-            size: int = 400,
-            mode: str = "none",
-            variants: int = 5,
-            patch_size: int = 256,
-            enhance: bool = True,
-            noise: bool = True,
+        self,
+        path: str,
+        device: str,
+        size: int = 400,
+        mode: str = "none",
+        variants: int = 5,
+        patch_size: int = 256,
+        enhance: bool = True,
+        noise: bool = True,
     ):
         """
         Init initializes the dataset by loading the images from the file system
@@ -403,14 +403,14 @@ class TestImageDataSet(torch.utils.data.Dataset):
     """
 
     def __init__(
-            self,
-            path: str,
-            device: str,
-            size: int = 400,
-            enhance: bool = True,
-            patch_size: int = 256,
-            offset: int = 100,
-            blend_mode: str = "cover",
+        self,
+        path: str,
+        device: str,
+        size: int = 400,
+        enhance: bool = True,
+        patch_size: int = 256,
+        offset: int = 100,
+        blend_mode: str = "cover",
     ):
         """
         Init initializes the dataset by loading the images from the file system
@@ -509,8 +509,8 @@ class TestImageDataSet(torch.utils.data.Dataset):
 
                 for pos_y in range(0, self.size - self.patch_size + 1):
                     if (
-                            pos_y % self.offset != 0
-                            and pos_y + self.patch_size != self.size
+                        pos_y % self.offset != 0
+                        and pos_y + self.patch_size != self.size
                     ):
                         continue
 
@@ -547,7 +547,7 @@ class TestImageDataSet(torch.utils.data.Dataset):
             img_combined = np.zeros([self.size, self.size], dtype=np.ndarray)
 
             index = img_index * self.variants
-            img_patches = y[index: index + self.variants, :, :, :]
+            img_patches = y[index : index + self.variants, :, :, :]
 
             for patch_x_index in range(self.variants_x):
                 for patch_y_index in range(self.variants_y):
@@ -619,8 +619,8 @@ class TestImageDataSet(torch.utils.data.Dataset):
                             sum_weights = 0.0
                             for value_index in range(len(weighted_values)):
                                 sum_values += (
-                                        weighted_values[value_index][1]
-                                        * weighted_values[value_index][0]
+                                    weighted_values[value_index][1]
+                                    * weighted_values[value_index][0]
                                 )
                                 sum_weights += weighted_values[value_index][1]
                             img_reassembled[0, x_pos, y_pos] = sum_values / sum_weights

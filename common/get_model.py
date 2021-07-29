@@ -21,8 +21,12 @@ def get_model(model_name, config):
     elif model_name == "nestedUnet":
         model = NestedUNet()
     elif model_name == "transunet" or model_name == "visiontransformer":
-        transunet_config = CONFIGS['R50-ViT-B_16']
-        model = VisionTransformer(transunet_config, img_size=config['patch_size'], num_classes=transunet_config.n_classes)
+        transunet_config = CONFIGS["R50-ViT-B_16"]
+        model = VisionTransformer(
+            transunet_config,
+            img_size=config["patch_size"],
+            num_classes=transunet_config.n_classes,
+        )
     elif model_name == "unet_transformer" or model_name == "u_transformer":
         # config["resize_to"] = 256
         config["batch_size"] = 1
