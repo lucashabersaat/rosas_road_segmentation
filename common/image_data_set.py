@@ -77,10 +77,11 @@ class ImageDataSet(torch.utils.data.Dataset):
         y = torch.round(np_to_tensor(self.y_preprocessed[[item]], self.device))
 
         if self.noise:
-            gaussian_noise = 0.02 * np.random.normal(size=x.shape).astype(np.float32)
+            gaussian_noise = 0.03 * np.random.normal(size=x.shape).astype(np.float32)
             gaussian_noise = np_to_tensor(gaussian_noise, self.device)
 
             x = torch.add(x, gaussian_noise)
+            x = ImageDataSet._color(x)
 
         # x = ImageDataSet._normalize(x)
         if self.mean is not None:
@@ -142,7 +143,7 @@ class ImageDataSet(torch.utils.data.Dataset):
 
         if self.enhance:
             for img_index in range(self.n_preprocessed):
-                x, _ = self.__getitem__(img_index)
+                x = np_to_tensor(self.x_preprocessed[img_index], self.device)
                 self.x_preprocessed[img_index] = ImageDataSet.enhance(x).cpu().numpy()
 
         self.mean = self.x.mean()
@@ -355,7 +356,7 @@ class ImageDataSet(torch.utils.data.Dataset):
         """
         Colour randomly changes the contrast, brightness and hue of the image.
         """
-        color = T.ColorJitter(brightness=0.1, contrast=0.3, hue=0.1)
+        color = T.ColorJitter(brightness=0.2, contrast=0.2, hue=0.1, saturation=0.2)
 
         return color(x)
 
