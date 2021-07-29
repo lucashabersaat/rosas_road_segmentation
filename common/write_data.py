@@ -35,13 +35,7 @@ def write_submission(original, predictions, name, test_path, size, graph_cut=Fal
     if graph_cut:
         predictions = classify_graph_cut(predictions, original)
 
-    predictions = classify_cutoff(predictions, size)
-
-    # for i in range(predictions.shape[0]):
-    #     resized = cv2.resize(predictions[i].astype(float), dsize=original[i].shape[:2])
-    #     show_two_imgs_overlay(original[i], resized)
-    #     if i == 4:
-    #         exit()
+    predictions = classify_cutoff(predictions, size, CUTOFF)
 
     append_submission(
         predictions,
@@ -50,12 +44,12 @@ def write_submission(original, predictions, name, test_path, size, graph_cut=Fal
     )
 
 
-def classify_cutoff(predictions, size):
+def classify_cutoff(predictions, size, cutoff):
     predictions = predictions.reshape(
         (-1, size[0] // PATCH_SIZE, PATCH_SIZE, size[0] // PATCH_SIZE, PATCH_SIZE)
     )
     predictions = np.moveaxis(predictions, 2, 3)
-    return np.round(np.mean(predictions, (-1, -2)) > CUTOFF)
+    return np.round(np.mean(predictions, (-1, -2)) > cutoff)
 
 
 def classify_graph_cut(predictions, original):

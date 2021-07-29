@@ -30,8 +30,6 @@ def predict(trainer, model, data):
     predictions = data.test_dataset.reassemble(predictions)
     predictions = np.asarray(predictions).squeeze(1)
 
-    # Project values into interval [0, 1]
-
     # np.save("predictions.npy", predictions)
 
     post_process = True
