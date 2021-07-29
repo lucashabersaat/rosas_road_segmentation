@@ -7,4 +7,4 @@ lightning_logs
 exercises
 archived_lightning_logs
 checkpoints
-data/models/imagenet*
+data/models/imagenet2*
