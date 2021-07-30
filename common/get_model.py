@@ -18,7 +18,7 @@ def get_model(model_name, config):
         model = R2U_Net()
     elif model_name == "r2attUnet":
         model = R2AttU_Net()
-    elif model_name == "nestedUnet":
+    elif model_name == "nestedUnet" or model_name == "nestedunet":
         model = NestedUNet()
     elif model_name == "transunet" or model_name == "visiontransformer":
         transunet_config = CONFIGS["R50-ViT-B_16"]

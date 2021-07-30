@@ -439,7 +439,6 @@ class VisionTransformer(nn.Module):
         x, attn_weights, features = self.transformer(x)  # (B, n_patch, hidden)
         x = self.decoder(x, features)
         logits = self.segmentation_head(x)
-        logits = self.sigmoid(logits)
         return logits
 
     def load_from(self, weights):

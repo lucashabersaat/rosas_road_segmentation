@@ -154,6 +154,22 @@ if __name__ == "__main__":
         "noise": True,
     }
 
+    config_no_preprocessing = {
+        "lr": 0.001,
+        "loss_fn": "noise_robust_dice",
+        "batch_size": 4,
+        "num_epochs": 35,
+        "resize_to": 400,
+        "patch_size": 400,
+        "mode": "none",
+        "variants": 1,
+        "enhance": False,
+        "offset": 100,
+        "blend_mode": "weighted_average",
+        "noise": False,
+    }
+
+
     if args.load is not None:
         # load
         trainer = pl.Trainer(gpus=gpu(), default_root_dir="data", logger=False)
